@@ -1,0 +1,83 @@
+###===Description===###
+
+libelle<-read.csv2("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\AFF_XY.csv",stringsAsFactors = FALSE)
+res_geo$MA___NumMalade<-as.character(res_geo$MA___NumMalade)
+affectation<-merge(res_geo[,c("AFF","MA___NumMalade","IRIS","IRIS_2012","iris_diff")],cas_temoinsexpoi[,c("numunique","cas")],by.x="MA___NumMalade",by.y="numunique")
+
+affectation<-affectation[,c("AFF","MA___NumMalade","IRIS","IRIS_2012","iris_diff")]
+names(affectation)<-c("AFF","Référence.Enfant","IRIS","IRIS_2012","iris_diff")
+res_geo_95_suite$IRIS<-as.factor(res_geo_95_suite$IRIS)
+affectation<-rbind(affectation,res_geo_95_suite[c("Référence.Enfant","AFF","IRIS","IRIS_2012","iris_diff")])
+
+dim(affectation)
+prop.table(table(affectation$AFF))
+
+
+
+libelle$AFF<-libelle$Nom_Index
+libelle$AFF<-gsub(pattern = "(^[0-9]{1})([0-9]{2})",replacement="\\2",x=libelle$AFF)
+libelle$AFF<-gsub(pattern = "(^[0]{1})([0-9]{1,})",replacement="\\2",x=libelle$AFF)
+affectation<-merge(affectation,libelle,by="AFF")
+affectation$lib<-as.factor(affectation$Lib_Affectation)
+
+summary(affectation)
+
+### géocoadge
+quali(x=c("lib"),nomx=c("Qualité du géocodage"), data=affectation,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="geo")
+
+### iris
+
+affectation$codage_iris<-ifelse( grepl("^[0-9]{9}",x=affectation$IRIS) & affectation$IRIS_2012=="-1"  & !is.na(affectation$IRIS_2012)& affectation$iris_diff==0,1,0)
+affectation$codage_iris<-ifelse( grepl("^[0-9]{9}",x=affectation$IRIS) & is.na(affectation$IRIS_2012) & affectation$iris_diff==1 & affectation$AFF %in% c("0","1","10","11"),2,affectation$codage_iris)
+affectation$codage_iris<-ifelse( grepl("^[0-9]{9}",x=affectation$IRIS) & affectation$IRIS_2012=="-1" & !is.na(affectation$IRIS_2012) & affectation$iris_diff==1 ,3,affectation$codage_iris)
+affectation$codage_iris<-ifelse( !grepl("^[0-9]{9}",x=affectation$IRIS) & affectation$AFF %in% c("0","1","10","11"),4,affectation$codage_iris)
+
+affectation$codage_iris<-factor(affectation$codage_iris,labels=c("Attribution à l'IRIS base impossible et géolocalisation imprécise","Attribution à l'IRIS base correcte","IRIS base supprimé et géolocalisation correcte","Discordance","IRIS base non affecté mais géolocalisation correcte"))
+table(affectation$codage_iris)
+
+
+quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
+
+
+### caractéristiques périnatales 
+
+cas_temoinsexpoi$tailles<-cas_temoinsexpoi$tailles/10
+
+
+quantifb(xc=c("age","agegestationnel","tailles","poids","perimetre2"),nomx=c("age en an","terme","taille en cm","poids en g","perimetre en cm"), data=cas_temoinsexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="peri")
+test.quant(varquant=c("age","agegestationnel","tailles","poids","perimetre2"),nomquant=c("age en an","terme","taille en cm","poids en g","perimetre en cm"), varqual=c("cas"),nomqual=c("cas"),data=cas_temoinsexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="peric")
+
+
+
+#quali(x=c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","coeffapgar1mn","coeffapgar5mn"),nomx=c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","Apgar 1 min","Apgar 5 min"), data=cas_temoinsexpoi,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+
+#desc.qual2(x=c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2"),y=cas_temoinsexpoi$cas,nomx=c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar"), data=cas_temoins_parisexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/")
+
+
+nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar")
+j<-1
+B<-NULL
+for (i in cas_temoins_parishbis[,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2")] ){
+  b<-test.qual(x=i,y=cas_temoins_parishbis$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
+
+write.table(B,sep="/t",file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/pericc.xls")
+
+
+### on va faire les catégories pour age mater, poids terme...;
+ggplot(cas_temoinsexpoi,aes(age))+geom_freqpoly()
+cas_temoinsexpoi$age.f<-cut(cas_temoinsexpoi$age,breaks=c(0,25,30,35,40,80),include.lowest = T,right = F)
+
+table(cas_temoinsexpoi$age.f,cas_temoinsexpoi$age)
+table(cas_temoinsexpoi$age.f)
+
+
+ggplot(cas_temoinsexpoi,aes(poids))+geom_freqpoly()
+cas_temoinsexpoi$poids.f<-cut(cas_temoinsexpoi$poids,breaks=c(0,2500,3000,3500,4000,8000),include.lowest = T,right = F)
+table(cas_temoinsexpoi$poids.f)
+
+plot(cas_temoinsexpoi$agegestationnel,cas_temoinsexpoi$poids)
+
+ggplot(cas_temoinsexpoi,aes(agegestationnel))+geom_freqpoly()
