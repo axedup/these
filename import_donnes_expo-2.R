@@ -52,7 +52,7 @@ resume_expo<-join_expo %>%
             moyenne_no2=mean(no2_airp,na.rm=T))
 
 ### faisons fusionner nos patients avec la base resume_expo : c'est fait base par base ....
-join_bn<-merge(join,resume_expo,by= "DCOMIRIS",all.x=T)
+join_bn<-merge(join,resume_expo,by= "DCOMIRIS",all.x=T) ### 95 les 7 adresses en sus a faire retourner 
 
 averif1<-join_bn[is.na(join_bn$moyenne_no2),"res_geo_95_suite@data[, \"Référence.Enfant\"]"]
 

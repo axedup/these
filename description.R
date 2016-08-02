@@ -149,59 +149,59 @@ j<-j+1
 
 ### pour les 95###
 
-cas_temoins_95_help$tailles<-gsub(pattern="(^[0-9]{2})\\.([0-9]{1})$", replacement="\\1\\2",x=as.character(cas_temoins_95_help$taille))
-cas_temoins_95_help$tailles<-gsub(pattern="(^[0-9]{2})$", replacement="\\10",x=as.character(cas_temoins_95_help$tailles))
-cas_temoins_95_help$tailles<-ifelse(cas_temoins_95_help$tailles=="48.5999984741211","486",cas_temoins_95_help$tailles)
-cas_temoins_95_help$tailles<-ifelse(cas_temoins_95_help$tailles=="0",NA,cas_temoins_95_help$tailles)                                   
-cas_temoins_95_help$tailles<-as.numeric(cas_temoins_95_help$tailles)
-cas_temoins_95_help$niveauetudes<-as.factor(as.character(cas_temoins_95_help$niveauetudes)) 
-cas_temoins_95_help$sexe<-as.factor(as.character(cas_temoins_95_help$sexe)) 
-cas_temoins_95_help$gestite.f<-as.factor(as.character(cas_temoins_95_help$gestite)) 
-cas_temoins_95_help$gestite.f2<-ifelse(cas_temoins_95_help$gestite >= 4,"4 et +", cas_temoins_95_help$gestite) 
-cas_temoins_95_help$gestite.f2<-as.factor(cas_temoins_95_help$gestite.f2) 
+cas_temoins_95_help2$tailles<-gsub(pattern="(^[0-9]{2})\\.([0-9]{1})$", replacement="\\1\\2",x=as.character(cas_temoins_95_help2$taille))
+cas_temoins_95_help2$tailles<-gsub(pattern="(^[0-9]{2})$", replacement="\\10",x=as.character(cas_temoins_95_help2$tailles))
+cas_temoins_95_help2$tailles<-ifelse(cas_temoins_95_help2$tailles=="48.5999984741211","486",cas_temoins_95_help2$tailles)
+cas_temoins_95_help2$tailles<-ifelse(cas_temoins_95_help2$tailles=="0",NA,cas_temoins_95_help2$tailles)                                   
+cas_temoins_95_help2$tailles<-as.numeric(cas_temoins_95_help2$tailles)
+cas_temoins_95_help2$niveauetudes<-as.factor(as.character(cas_temoins_95_help2$niveauetudes)) 
+cas_temoins_95_help2$sexe<-as.factor(as.character(cas_temoins_95_help2$sexe)) 
+cas_temoins_95_help2$gestite.f<-as.factor(as.character(cas_temoins_95_help2$gestite)) 
+cas_temoins_95_help2$gestite.f2<-ifelse(cas_temoins_95_help2$gestite >= 4,"4 et +", cas_temoins_95_help2$gestite) 
+cas_temoins_95_help2$gestite.f2<-as.factor(cas_temoins_95_help2$gestite.f2) 
 
 
-cas_temoins_95_help$parite.f<-as.factor(as.character(cas_temoins_95_help$parite)) 
-cas_temoins_95_help$parite.f2<-ifelse(cas_temoins_95_help$parite >= 4,"4 et +", cas_temoins_95_help$parite) 
-cas_temoins_95_help$parite.f2<-as.factor(cas_temoins_95_help$parite.f2) 
+cas_temoins_95_help2$parite.f<-as.factor(as.character(cas_temoins_95_help2$parite)) 
+cas_temoins_95_help2$parite.f2<-ifelse(cas_temoins_95_help2$parite >= 4,"4 et +", cas_temoins_95_help2$parite) 
+cas_temoins_95_help2$parite.f2<-as.factor(cas_temoins_95_help2$parite.f2) 
 
-cas_temoins_95_help$naissancepar<-factor(cas_temoins_95_help$naissancepar,labels=c("vbni","vbi","cesar prog","cesar urg"))
-cas_temoins_95_help$naissancepar.f2<-cas_temoins_95_help$naissancepar
-levels(cas_temoins_95_help$naissancepar.f2)<-c("vbni","vbi" ,"cesar" ,"cesar","cesar") 
-table(cas_temoins_95_help$naissancepar.f2)
+cas_temoins_95_help2$naissancepar<-factor(cas_temoins_95_help2$naissancepar,labels=c("vbni","vbi","cesar prog","cesar urg"))
+cas_temoins_95_help2$naissancepar.f2<-cas_temoins_95_help2$naissancepar
+levels(cas_temoins_95_help2$naissancepar.f2)<-c("vbni","vbi" ,"cesar" ,"cesar","cesar") 
+table(cas_temoins_95_help2$naissancepar.f2)
 
 
-table(cas_temoins_95_help$datenaissance_mere,exclude=NULL)
-table(cas_temoins_95_help$datenaissance_mere,is.na(as.Date(as.character(cas_temoins_95_help$datenaissance_mere),format="%d/%m/%Y")),exclude=NULL)
+table(cas_temoins_95_help2$datenaissance_mere,exclude=NULL)
+table(cas_temoins_95_help2$datenaissance_mere,is.na(as.Date(as.character(cas_temoins_95_help2$datenaissance_mere),format="%d/%m/%Y")),exclude=NULL)
 
-#cas_temoins_95_help$datenaissance_meres<-gsub(pattern="(^[0-9]{4})\\-([0-9]{2})\\-([0-9]{2})$", replacement="\\3\\/\\2\\/\\1",x=cas_temoins_95_help$datenaissance_mere)
+#cas_temoins_95_help2$datenaissance_meres<-gsub(pattern="(^[0-9]{4})\\-([0-9]{2})\\-([0-9]{2})$", replacement="\\3\\/\\2\\/\\1",x=cas_temoins_95_help2$datenaissance_mere)
 
-table(cas_temoins_95_helpbis$datenaissance_mere,exclude=NULL)
-table(cas_temoins_95_help$datenaissance_mere,is.na(as.Date(as.character(cas_temoins_95_help$datenaissance_mere),format="%d/%m/%Y")),exclude=NULL)
+table(cas_temoins_95_help2bis$datenaissance_mere,exclude=NULL)
+table(cas_temoins_95_help2$datenaissance_mere,is.na(as.Date(as.character(cas_temoins_95_help2$datenaissance_mere),format="%d/%m/%Y")),exclude=NULL)
 
-table(is.na(as.Date(as.character(cas_temoins_95_help$datenaissance_meres),format="%d/%m/%Y")),exclude=NULL)
+table(is.na(as.Date(as.character(cas_temoins_95_help2$datenaissance_meres),format="%d/%m/%Y")),exclude=NULL)
 
-#cas_temoins_95_help$datenaissance_meres<-as.Date(as.character(cas_temoins_95_help$datenaissance_meres),format="%d/%m/%Y")
-table(cas_temoins_95_helpbis$datenaissance,exclude=NULL)
-cas_temoins_95_help$datenaissance_meres<-cas_temoins_95_help$datenaissance_mere
+#cas_temoins_95_help2$datenaissance_meres<-as.Date(as.character(cas_temoins_95_help2$datenaissance_meres),format="%d/%m/%Y")
+table(cas_temoins_95_help2bis$datenaissance,exclude=NULL)
+cas_temoins_95_help2$datenaissance_meres<-cas_temoins_95_help2$datenaissance_mere
 
-cas_temoins_95_help$age<-round(difftime(cas_temoins_95_help$datenaissance,cas_temoins_95_help$datenaissance_mere)/365,0)
-cas_temoins_95_help$age<-as.numeric(cas_temoins_95_help$age)
+cas_temoins_95_help2$age<-round(difftime(cas_temoins_95_help2$datenaissance,cas_temoins_95_help2$datenaissance_mere)/365,0)
+cas_temoins_95_help2$age<-as.numeric(cas_temoins_95_help2$age)
 
-cas_temoins_95_help$cas<-as.factor(cas_temoins_95_help$cas)
+cas_temoins_95_help2$cas<-as.factor(cas_temoins_95_help2$cas)
 
-cas_temoins_95_help$coeffapgar1mn<-as.factor(cas_temoins_95_help$coeffapgar1mn)
-cas_temoins_95_help$coeffapgar5mn<-as.factor(cas_temoins_95_help$coeffapgar5mn)
+cas_temoins_95_help2$coeffapgar1mn<-as.factor(cas_temoins_95_help2$coeffapgar1mn)
+cas_temoins_95_help2$coeffapgar5mn<-as.factor(cas_temoins_95_help2$coeffapgar5mn)
 
-cas_temoins_95_help$perimetre2<-as.character(cas_temoins_95_help$perimetre)
-table(cas_temoins_95_help$perimetre,exclude=NULL)
-table(cas_temoins_95_help$perimetre2)
-cas_temoins_95_help$perimetre2<-gsub(pattern="^([0-9]{2})([0-9]{1})$",replacement = "\\1\\.\\2",x=cas_temoins_95_help$perimetre2)
-table(cas_temoins_95_help$perimetre2)
-cas_temoins_95_help$perimetre2<-as.numeric(cas_temoins_95_help$perimetre2)
-table(cas_temoins_95_help$perimetre2)
-cas_temoins_95_help$perimetre2<-ifelse(cas_temoins_95_help$perimetre2==0,NA,cas_temoins_95_help$perimetre2)
-table(cas_temoins_95_help$perimetre2,exclude=NULL)
+cas_temoins_95_help2$perimetre2<-as.character(cas_temoins_95_help2$perimetre)
+table(cas_temoins_95_help2$perimetre,exclude=NULL)
+table(cas_temoins_95_help2$perimetre2)
+cas_temoins_95_help2$perimetre2<-gsub(pattern="^([0-9]{2})([0-9]{1})$",replacement = "\\1\\.\\2",x=cas_temoins_95_help2$perimetre2)
+table(cas_temoins_95_help2$perimetre2)
+cas_temoins_95_help2$perimetre2<-as.numeric(cas_temoins_95_help2$perimetre2)
+table(cas_temoins_95_help2$perimetre2)
+cas_temoins_95_help2$perimetre2<-ifelse(cas_temoins_95_help2$perimetre2==0,NA,cas_temoins_95_help2$perimetre2)
+table(cas_temoins_95_help2$perimetre2,exclude=NULL)
 
 
 

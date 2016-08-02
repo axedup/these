@@ -76,6 +76,7 @@ table(cas_temoinsexpoi$age.f)
 
 ggplot(cas_temoinsexpoi,aes(poids))+geom_freqpoly()
 cas_temoinsexpoi$poids.f<-cut(cas_temoinsexpoi$poids,breaks=c(0,2500,3000,3500,4000,8000),include.lowest = T,right = F)
+table(cas_temoinsexpoi$poids)
 table(cas_temoinsexpoi$poids.f)
 
 plot(cas_temoinsexpoi$agegestationnel,cas_temoinsexpoi$poids)

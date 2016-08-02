@@ -304,7 +304,7 @@ cas_temoins_95expoi_trier<-cas_temoins_95expoi_trier[,order(colnames(cas_temoins
 cas_temoins_parisexpoi_trier<-cas_temoins_parisexpoi_trier[,order(colnames(cas_temoins_parisexpoi_trier))]
 
 
-cas_temoinsexpoi<-rbind(cas_temoins_parisexpoi_trier,cas_temoins_95expoi_trier)
+cas_temoinsexpoi<-rbind(cas_temoins_parisexpoi_trier,cas_temoins_95expoi_trier) # bien avoir fait tourner description avant pour créer tailles, gestite.f etc...
 dim(cas_temoinsexpoi)
  
 

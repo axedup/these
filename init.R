@@ -30,9 +30,14 @@ library(ggplot2)
 # merge temoins_95
 
 #merge_3_bases
+#correction-erreur 
 #description
 
 
 #iris
 #import_donnes_expo-2
 #corr-cor2
+
+
+#debut descri
+# test univarié

@@ -474,12 +474,20 @@ table(test_95$numt %in% fait_95$numt) # pas de cas
 
 #table(cas_temoins_95_help$numunique %in% fait_95$numt)
 
+temoins_95helpp<-test_95
+temoins_95helpp$cas<-0
+temoins_95helpp$tbis<-FALSE
+
+# historique des tables temoins_95help : avec les 6 de provinces et le décès
+#temoins_95helpp : avec le décès
+# cas_temoins_95_help : avec les cas et le décès sans les 6 provinciaux
+# cas_temoins_95_help2 : sans le décès avec les cas 
 
 ####X FIN 
 
 
 
-temoins_95helpp[,!names(temoins_95helpp) %in% c("X","cas","tbis")]->test_95
+temoins_95helpp[,!names(temoins_95helpp) %in% c("X","cas","tbis")]->test_95 # pour corriger erreur
 test_95$datenaissance<-as.Date(test_95$datenaissance,format="%Y-%m-%d")
 test_95$datenaissance_mere<-as.Date(test_95$datenaissance_mere,format="%Y-%m-%d")
 

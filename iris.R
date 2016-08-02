@@ -60,6 +60,8 @@ dim(iris_paris_erreur)
 
 table(iris_paris_erreur$id %in% erreur_iris$id)
 
+
+### refaire retourner si changement tirage au sort témoins 95 
 iris_95<-merge(cas_temoins_95_help2,res_geo[,!names(res_geo) %in% c("numunique")],by.x="numunique",by.y="MA___NumMalade",all.x=TRUE)
 dim(iris_95)
 iris_95<-merge(iris_95,res_geo_95_suite[,names(res_geo_95_suite) %in% c("latitude","longitude","result_score","result_type","result_house","result_name","Référence.Enfant")],by.x="numunique",by.y="Référence.Enfant",all.x=TRUE)
@@ -74,7 +76,7 @@ dim(iris_95_erreur)
 match(iris_95_erreur$id,erreur_iris$id)
 
 
-### Liste finale des IRIS
+######### Liste finale des IRIS : concerne les adresses géocodés par géocibles 
 ### sans probleme
 
 iris_sp_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX" & iris_paris$iris_diff==0 & !is.na(iris_paris$iris_diff),c("numunique","IRIS")]
@@ -90,20 +92,20 @@ iris_p1_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX" & is.na(iris_pari
 iris_p1_95<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & is.na(iris_95$IRIS_2012)& iris_95$AFF %in% c("0","1","10","11"),c("numunique","TOPO_IRIS")]
 
 
-# pas d'iris base mais la géoloc correcte permet de prendre les ccordonnées Navteq
+### pas d'iris base mais la géoloc correcte permet de prendre les ccordonnées Navteq
 
 iris_p2_paris<-iris_paris[substr(iris_paris$IRIS,6,9)=="XXXX"  & iris_paris$AFF %in% c("0","1","10","11"),c("numunique","TOPO_IRIS")]
 
 iris_p2_95<-iris_95[substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$AFF %in% c("0","1","10","11") & !is.na(iris_95$AFF),c("numunique","TOPO_IRIS")]
 
-# iris discordant (iris 2000 existe en 2012): c'est la faute a Navteq
+### iris discordant (iris 2000 existe en 2012): c'est la faute a Navteq
 
 iris_p3_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX"  & iris_paris$iris_diff=="1" & !is.na(iris_paris$IRIS_2012),c("numunique","IRIS")]
 
 iris_p3_95<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==1 & !is.na(iris_95$iris_diff) &  !is.na(iris_95$IRIS_2012),c("numunique","IRIS")]
 
 
-# attribuer iris
+######### attribuer iris :  ça concerne les iris en erreur corrigés et les 95 en extra non géocodés par géocible 
 
 erreur_iris$correction_xl93<-as.numeric(as.character(erreur_iris$correction_x))
 erreur_iris$correction_yl93<-as.numeric(as.character(erreur_iris$correction_y))
@@ -113,8 +115,7 @@ coordinates(erreur_iris)=~correction_yl93 + correction_xl93
 proj4string(erreur_iris)<-CRS("+init=epsg:4326")
 erreur_iris <- spTransform(erreur_iris, CRS("+init=epsg:2154")) 
 
-
-
+# a retourner si changment 95 
 res_geo_95_suite$longitude<-as.numeric(as.character(res_geo_95_suite$longitude))
 res_geo_95_suite$latitude<-as.numeric(as.character(res_geo_95_suite$latitude))
 coordinates(res_geo_95_suite)=~longitude + latitude
@@ -122,7 +123,7 @@ proj4string(res_geo_95_suite)<-CRS("+init=epsg:4326")
 res_geo_95_suite <- spTransform(res_geo_95_suite, CRS("+init=epsg:2154")) 
 
 
-
+# fixe
 c_iris_75 <- shapefile("~/Desespoir/Bases/contours_iris_2013/CONTOURS-IRIS/1_DONNEES_LIVRAISON_2014-06-00379/CONTOURS-IRIS_1-0_SHP_LAMB93_R11-2013/CONTOURS-IRIS_1-0_SHP_LAMB93_D75-2013/CONTOURS-IRIS75.shp")
 c_iris_77 <- shapefile("~/Desespoir/Bases/contours_iris_2013/CONTOURS-IRIS/1_DONNEES_LIVRAISON_2014-06-00379/CONTOURS-IRIS_1-0_SHP_LAMB93_R11-2013/CONTOURS-IRIS_1-0_SHP_LAMB93_D77-2013/CONTOURS-IRIS77.shp")
 c_iris_78 <- shapefile("~/Desespoir/Bases/contours_iris_2013/CONTOURS-IRIS/1_DONNEES_LIVRAISON_2014-06-00379/CONTOURS-IRIS_1-0_SHP_LAMB93_R11-2013/CONTOURS-IRIS_1-0_SHP_LAMB93_D78-2013/CONTOURS-IRIS78.shp")
@@ -161,7 +162,7 @@ aus2 <- spTransform(aus2, CRS("+init=epsg:2154"))
 ### aus2 c'est le fichier geo de touttes les iris d'ilde de france 
 
 
-join<-over(res_geo_95_suite,aus2) # les 6 adresses 
+join<-over(res_geo_95_suite,aus2) # les 6 adresses à refaire retourner en cas de changement 
 join<-cbind(join,res_geo_95_suite@data[,"Référence.Enfant"])
 
 join2<-over(erreur_iris,aus2)
