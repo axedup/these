@@ -70,7 +70,7 @@ averif5<-iris_p3_paris_bn[is.na(iris_p3_paris_bn$moyenne_no2),"numunique"]
 
 
 
-iris_sp_95_bn<-merge(iris_sp_95,resume_expo,by.x="IRIS",by.y= "DCOMIRIS",all.x=T)
+iris_sp_95_bn<-merge(iris_sp_955,resume_expo,by.x="IRIS",by.y= "DCOMIRIS",all.x=T)
 averif6<-iris_sp_95_bn[is.na(iris_sp_95_bn$moyenne_no2),"numunique"]
 
 iris_p1_95_bn<-merge(iris_p1_95,resume_expo,by.x="TOPO_IRIS",by.y= "DCOMIRIS",all.x=T)

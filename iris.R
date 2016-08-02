@@ -7,7 +7,7 @@ library(maptools)
 ### Géolocalisation : stat, correction, attribution à l'IRIS####
 
 res_geo<-read.csv2("C:/Users/Louise/Documents/Desespoir/Bases/geocoder/iris_1500.csv")
-res_geo_95_suite<-read.csv2("C:/Users/Louise/Documents/Desespoir/Bases/geocoder/supplement_adresse_95_geocod.csv",encoding = "UTF-8")
+res_geo_95_suite<-read.csv2("C:/Users/Louise/Documents/Desespoir/Bases/geocoder/supplement_adresse_95_geocod2.csv",encoding = "UTF-8")
 #☻ 1596 adresses
 
 head(res_geo_95_suite)
@@ -60,7 +60,7 @@ dim(iris_paris_erreur)
 
 table(iris_paris_erreur$id %in% erreur_iris$id)
 
-iris_95<-merge(cas_temoins_95_help,res_geo[,!names(res_geo) %in% c("numunique")],by.x="numunique",by.y="MA___NumMalade",all.x=TRUE)
+iris_95<-merge(cas_temoins_95_help2,res_geo[,!names(res_geo) %in% c("numunique")],by.x="numunique",by.y="MA___NumMalade",all.x=TRUE)
 dim(iris_95)
 iris_95<-merge(iris_95,res_geo_95_suite[,names(res_geo_95_suite) %in% c("latitude","longitude","result_score","result_type","result_house","result_name","Référence.Enfant")],by.x="numunique",by.y="Référence.Enfant",all.x=TRUE)
 dim(iris_95)
@@ -79,7 +79,7 @@ match(iris_95_erreur$id,erreur_iris$id)
 
 iris_sp_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX" & iris_paris$iris_diff==0 & !is.na(iris_paris$iris_diff),c("numunique","IRIS")]
 
-iris_sp_95<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==0 & !is.na(iris_95$iris_diff),c("numunique","IRIS")]
+iris_sp_955<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==0 & !is.na(iris_95$iris_diff),c("numunique","IRIS")]
 
 
 ### iris 2000 trouvé mais pas de correspondance en 2012 et géoloc ok on prend l'iris_2012
@@ -112,8 +112,6 @@ coordinates(erreur_iris)=~correction_yl93 + correction_xl93
 
 proj4string(erreur_iris)<-CRS("+init=epsg:4326")
 erreur_iris <- spTransform(erreur_iris, CRS("+init=epsg:2154")) 
-
-
 
 
 

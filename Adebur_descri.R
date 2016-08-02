@@ -80,4 +80,65 @@ table(cas_temoinsexpoi$poids.f)
 
 plot(cas_temoinsexpoi$agegestationnel,cas_temoinsexpoi$poids)
 
-ggplot(cas_temoinsexpoi,aes(agegestationnel))+geom_freqpoly()
+ggplot(cas_temoinsexpoi,aes(agegestationnel))+geom_freqpoly() # l'age gesta sert plus de varaiables d'ajustement donc les classes sont peut être peu importantes
+cas_temoinsexpoi$agegestationnel.f<-cut(cas_temoinsexpoi$agegestationnel,breaks=c(22,35,38,40,45),include.lowest = T,right = F)
+table(cas_temoinsexpoi$agegestationnel.f) # voir pour 40 ou 41
+
+git commit
+
+###☺ données expositions
+
+summary(cas_temoinsexpoi$moyenne_benzene)
+cas_temoinsexpoi$moyenne_benzene.f<-cut(cas_temoinsexpoi$moyenne_benzene,breaks=c(min(cas_temoinsexpoi$moyenne_benzene),
+                                                                                  summary(cas_temoinsexpoi$moyenne_benzene)["1st Qu."], 
+                                                                                  summary(cas_temoinsexpoi$moyenne_benzene)["Median"],
+                                                                                  summary(cas_temoinsexpoi$moyenne_benzene)["3rd Qu."],
+                                                                                  max(cas_temoinsexpoi$moyenne_benzene)+1), right=F,include.lowest=T)
+table(cas_temoinsexpoi$moyenne_benzene.f,exclude = NULL)
+summary(cas_temoinsexpoi$mopb)
+cas_temoinsexpoi$mopb.f<-cut(cas_temoinsexpoi$mopb,breaks=c(min(cas_temoinsexpoi$mopb),
+                                                                                  summary(cas_temoinsexpoi$mopb)["1st Qu."], 
+                                                                                  summary(cas_temoinsexpoi$mopb)["Median"],
+                                                                                  summary(cas_temoinsexpoi$mopb)["3rd Qu."],
+                                                                                  max(cas_temoinsexpoi$mopb)+1), right=F,include.lowest=T)
+
+summary(cas_temoinsexpoi$moyenne_no2)
+cas_temoinsexpoi$moyenne_no2.f<-cut(cas_temoinsexpoi$moyenne_no2,breaks=c(min(cas_temoinsexpoi$moyenne_no2),
+                                                                       summary(cas_temoinsexpoi$moyenne_no2)["1st Qu."], 
+                                                                       summary(cas_temoinsexpoi$moyenne_no2)["Median"],
+                                                                       summary(cas_temoinsexpoi$moyenne_no2)["3rd Qu."],
+                                                                       max(cas_temoinsexpoi$moyenne_no2)+1), right=F,include.lowest=T)
+
+summary(cas_temoinsexpoi$mopn)
+cas_temoinsexpoi$mopn.f<-cut(cas_temoinsexpoi$mopn,breaks=c(min(cas_temoinsexpoi$mopn),
+                                                                          summary(cas_temoinsexpoi$mopn)["1st Qu."], 
+                                                                          summary(cas_temoinsexpoi$mopn)["Median"],
+                                                                          summary(cas_temoinsexpoi$mopn)["3rd Qu."],
+                                                                          max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
+summary(cas_temoinsexpoi$mopn.f)
+summary(cas_temoinsexpoi$moyenne_no2.f)
+summary(cas_temoinsexpoi$moyenne_benzene.f)
+summary(cas_temoinsexpoi$mopb.f)
+ ### c'est pas parfait mais c'est les problèmes d'intervalles ouverts/ fermé. 
+
+
+### création de la varaible age enfant pour ajustement car on a apparié sur l'age (le département bof ) 
+
+str(cas_temoinsexpoi$datenaissance)
+repere<-as.Date("2017-01-01")
+
+cas_temoinsexpoi$ageenf<-round(difftime(repere,cas_temoinsexpoi$datenaissance)/365,0) ## on a pris 2017 donc c'est normal d'avoir des âges sup
+
+
+### Apgar à 5 min : 2 études tendrait à montrer un surisque 
+# y a des valeur abrettantes avec les apgar à 0 : sont  à 10 à 1 min... et aucun geste technique, 3 echos, pas de prematurité poids ok 
+# y a des valeurs aberrantes avec les apagar à 1 : 1 apgar à 10 à 1 min, les deux autres accouchement voie basse ni transfert ni geste technique , pas de polymorfations, test auditif et recherche ag hbs 
+# 0 gestes techniques 
+
+### on met ça en NA 
+
+cas_temoinsexpoi$coeffapgar5mncor<-as.character(ifelse(cas_temoinsexpoi$coeffapgar5mn %in% c("0","1"),NA,as.character(cas_temoinsexpoi$coeffapgar5mn)))
+table(cas_temoinsexpoi$coeffapgar5mncor,exclude=NULL)
+cas_temoinsexpoi$coeffapgar5mncor.f <-ifelse(cas_temoinsexpoi$coeffapgar5mncor %in% c("9","10"),"9-10",cas_temoinsexpoi$coeffapgar5mncor)
+cas_temoinsexpoi$coeffapgar5mncor.f <-ifelse(!cas_temoinsexpoi$coeffapgar5mncor %in% c("9","10") & !is.na(cas_temoinsexpoi$coeffapgar5mncor)," 9<",cas_temoinsexpoi$coeffapgar5mncor.f)
+table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)

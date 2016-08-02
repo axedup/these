@@ -23,8 +23,6 @@ coordonees_cor$longitude<-as.numeric(as.character(coordonees_cor$longitude))
 
 ### maintenant 
 aconvert<-coordonees_cor[,c("id","X","Y")]
-
-
 coordinates(aconvert)=~ X + Y
 
 proj4string(aconvert)<-CRS("+init=epsg:27572") # zone II étendu 
@@ -57,7 +55,7 @@ navteq_t<-data.frame(cbind(erreur_iris@coords,erreur_iris$id))
 names(navteq_t)<-c("lat","lon","id")
 navteq_t<-navteq_t[navteq_t$id %in% geocod_faux,]
 dim(navteq_t)
-navteq_t$id<-as.character(navteq_t$id)
+navteq_t$id<-as.character(navteq_t$id) # pb de géocoadage corrigé à travers iris 
 
 
 navteq_q<-data.frame(cbind(res_geo_95_suite@coords,as.character(res_geo_95_suite$Référence.Enfant))) ### attention là c'est numunique 
@@ -67,7 +65,7 @@ navteq_q$lon<-as.numeric(as.character(navteq_q$lon))
 navteq_q$id<-as.character(navteq_q$id)
 
 
-### fichier a envoyer a qgis (Lmabert 93 )
+### fichier a envoyer a qgis (Lmabert 93 ) - a faire tourner même pour boucle 
 
  dist_qgis<-rbind(navteq,navteq_s,navteq_t,navteq_q)
 dim(dist_qgis)
@@ -168,14 +166,33 @@ expo_moy_2<-matrice_dist %>%
             mopb=weighted.mean( benzene_airp,1/D),
             mopn=weighted.mean( no2_airp,1/D))
 
-
+### 3 points sont au même endroit donc D =0 et la moyenne est NUll
 dim(expo_moy_2)
+summary(expo_moy_2)
+
 length(unique(expo_moy_2$numunique))
+distnulle<-expo_moy_2$numunique[is.na(expo_moy_2$mopb)]
+
+matrice_dist[matrice_dist$numunique %in% distnulle & matrice_dist$D==0,]
+
+
+#####CORRECTION#####
+expo_moy_2$mopb[expo_moy_2$numunique=="130988"]<-6.20
+expo_moy_2$mopn[expo_moy_2$numunique=="130988"]<-68.00
+
+expo_moy_2$mopb[expo_moy_2$numunique=="H_ENFANT110000012371"]<-1.60
+expo_moy_2$mopn[expo_moy_2$numunique=="H_ENFANT110000012371"]<-36.00
+
+expo_moy_2$mopb[expo_moy_2$numunique=="2010-21495"]<-2.57
+expo_moy_2$mopn[expo_moy_2$numunique=="2010-21495"]<-48.21
+
+#######
 
 cas_temoins_parisexpop<-merge(cas_temoins_parishbis,expo_moy_2,by="numunique")
-cas_temoins_95_expop<-merge(cas_temoins_95_help,expo_moy_2,by="numunique")
+cas_temoins_95_expop<-merge(cas_temoins_95_help2,expo_moy_2,by="numunique") # 2 pour le nouveau patients
 dim(cas_temoins_95_expop)
-dim(cas_temoins_95_help)
+dim(cas_temoins_parisexpop)
+dim(cas_temoins_95_help2)
 
 
 
@@ -200,7 +217,7 @@ c<-bind_rows(c,iris_p3_95_bn)
 c<-c[,c("numunique","moyenne_benzene","moyenne_no2","n")]
 names(c)<-c("numunique","moyenne_benzene","moyenne_no2","np")
  #data.frame(mapply(c, join_bn,  join2_bn, SIMPLIFY=FALSE))
-
+dim(c)
 
 cas_temoins_parisexpoi<-merge(cas_temoins_parisexpop,c,by="numunique",suffixes=c(".",".i"))
 dim(cas_temoins_parisexpoi)
@@ -277,6 +294,8 @@ cas_temoins_parisexpoi$num<-as.character(cas_temoins_parisexpoi$num)
 cas_temoins_95expoi$ddnest<-as.Date(cas_temoins_95expoi$ddnest)
 cas_temoins_95expoi$ddnMest<-as.Date(cas_temoins_95expoi$ddnMest)
 
+
+#### a faire tourner si raté avec le ifelse et la moyenne
 cas_temoins_95expoi_trier<-cas_temoins_95expoi
 cas_temoins_parisexpoi_trier<-cas_temoins_parisexpoi
 
@@ -286,4 +305,10 @@ cas_temoins_parisexpoi_trier<-cas_temoins_parisexpoi_trier[,order(colnames(cas_t
 
 
 cas_temoinsexpoi<-rbind(cas_temoins_parisexpoi_trier,cas_temoins_95expoi_trier)
+dim(cas_temoinsexpoi)
+ 
+
+### on vire le décès  
+
+cas_temoinsexpoi<-cas_temoinsexpoi[is.na(cas_temoinsexpoi$age_deces_hh) ,]
 dim(cas_temoinsexpoi)

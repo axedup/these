@@ -205,7 +205,7 @@ for(i in unique(ft)){
   GS<-rbind(GS,gs)
 }
 
-# je prÃ©fÃ¨re comme Ã§a 
+
 GS$Mère.Date.de.naissance<-as.character(GS$Mère.Date.de.naissance)
 table(GS$Mère.Date.de.naissance,exclude=NULL)
 GS$ddn_mater2<-ifelse(is.na(GS$Mère.Date.de.naissance) | GS$Mère.Date.de.naissance==""|GS$Mère.Date.de.naissance=="nc" ,"13/12/1913",GS$Mère.Date.de.naissance)
@@ -414,6 +414,10 @@ for(i in unique(ft)){
   GS<-rbind(GS,gs)
 }
 
+#### !!!! Faudrait pas faire ça mais y a eu gag ###########
+
+
+GS<-ds[ds$Référence.Enfant %in% c("H_ENFANT1000004650","H_ENFANT1000007396","H_ENFANT1000017685","H_ENFANT110000000859","H_ENFANT110000004910","H_ENFANT110000016667"),]
 # je prÃ©fÃ¨re comme Ã§a 
 GS$Mère.Date.de.naissance<-as.character(GS$Mère.Date.de.naissance)
 table(GS$Mère.Date.de.naissance,exclude=NULL)
@@ -447,6 +451,8 @@ dim(test_95suite)
 table(test_95suite$datenaissance)
 table(test_95suite$Référence.Enfant)
 length(test_95suite$Référence.Enfant)
+test_95suite$datenaissance<-as.character(test_95suite$datenaissance)
+test_95$datenaissance<-as.character(test_95$datenaissance)
 
 
 
@@ -473,7 +479,7 @@ table(test_95$numt %in% fait_95$numt) # pas de cas
 
 
 
-temoins_95help[,!names(temoins_95help) %in% c("X","cas","tbis")]->test_95
+temoins_95helpp[,!names(temoins_95helpp) %in% c("X","cas","tbis")]->test_95
 test_95$datenaissance<-as.Date(test_95$datenaissance,format="%Y-%m-%d")
 test_95$datenaissance_mere<-as.Date(test_95$datenaissance_mere,format="%Y-%m-%d")
 

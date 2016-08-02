@@ -6,7 +6,7 @@ head(temoins_951_2)
 temoins_952_2<-read.csv2("F:/temoins952_2.csv",header=TRUE)
 head(temoins_952_2)
 
-temoins_95gh<-rbind(temoins_951_2,temoins_952_2)
+temoins_95<-rbind(temoins_951_2,temoins_952_2)
 names(temoins_95)
 table(temoins_95$Ligne4)
 dim(temoins_95)
