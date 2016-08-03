@@ -43,7 +43,7 @@ write.csv(export,file="C:/Users/Louise/Documents/Desespoir/Bases/expo.csv")
 
 ### on fait la fusion expo/IRIS 
 join_expo<-over(wgs84PbData,aus2)
-join_expo<-cbind(join_expo,wgs84PbData@data[,c("id_inserm","benzene_airp","no2_airp")])
+join_expo<-cbind(join_expo,wgs84PbData@data[,c("id_inserm","benzene_airp","no2_airp","")])
 
 resume_expo<-join_expo %>%
   group_by(DCOMIRIS) %>%

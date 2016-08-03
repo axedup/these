@@ -2,6 +2,38 @@
 
 # boucle avec glm
 
+#summary(glm(cas~poids,data=cas_temoinsexpoi,family = binomial))
+
+
+modeltest<-glm(cas~age.f + mopb.f + agegestationnel.f ,family=binomial,data=cas_temoinsexpoi)
+modeltest2<-glm(cas~age.f + moyenne_benzene.f2 + poids.f, family=binomial,data=cas_temoinsexpoi)
+
+modeltestl<-glm(cas~age.f + moyenne_benzene+ poids.f, family=binomial,data=cas_temoinsexpoi)
+
+
+model<-function(x){
+  with(cas_temoinsexpoi,{
+    model1<-glm(cas~x,family=binomial)
+    p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)
+    return(s)
+    return(p)
+  })
+}
+
+
+apply(cas_temoinsexpoi[,c("poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f")],2,model)
+
+
+varlist<-c("poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f")
+models <- lapply(varlist, function(x) {
+  glm(substitute(cas ~ i, list(i = as.name(x))), data=cas_temoinsexpoi,family=binomial )
+})
+r<-lapply(models, summary)
+
+
+conf<-lapply(models,confint)
+lapply(conf,exp)
 
 # et ACP pourquoi pas ?
 

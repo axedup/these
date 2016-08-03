@@ -72,11 +72,17 @@ cas_temoinsexpoi$age.f<-cut(cas_temoinsexpoi$age,breaks=c(0,25,30,35,40,80),incl
 
 table(cas_temoinsexpoi$age.f,cas_temoinsexpoi$age)
 table(cas_temoinsexpoi$age.f)
-
+# class de ref 30 -35 
+cas_temoinsexpoi$age.f<-reorder(cas_temoinsexpoi$age.f,new.order=c(3,1,2,4,5))
+cas_temoinsexpoi$age.f<-relevel(cas_temoinsexpoi$age.f,ref="[30,35)")
+table(cas_temoinsexpoi$age.f)
 
 ggplot(cas_temoinsexpoi,aes(poids))+geom_freqpoly()
 cas_temoinsexpoi$poids.f<-cut(cas_temoinsexpoi$poids,breaks=c(0,2500,3000,3500,4000,8000),include.lowest = T,right = F)
 table(cas_temoinsexpoi$poids)
+table(cas_temoinsexpoi$poids.f)
+cas_temoinsexpoi$poids.f<-reorder(cas_temoinsexpoi$poids.f,new.order=c(3,1,2,4,5))
+cas_temoinsexpoi$poids.f<-relevel(cas_temoinsexpoi$poids.f,ref="[3e+03,3.5e+03)")
 table(cas_temoinsexpoi$poids.f)
 
 plot(cas_temoinsexpoi$agegestationnel,cas_temoinsexpoi$poids)
@@ -85,7 +91,10 @@ ggplot(cas_temoinsexpoi,aes(agegestationnel))+geom_freqpoly() # l'age gesta sert
 cas_temoinsexpoi$agegestationnel.f<-cut(cas_temoinsexpoi$agegestationnel,breaks=c(22,35,38,40,45),include.lowest = T,right = F)
 table(cas_temoinsexpoi$agegestationnel.f) # voir pour 40 ou 41
 
-git commit
+cas_temoinsexpoi$agegestationnel.f<-reorder(cas_temoinsexpoi$agegestationnel.f,new.order=c(3,1,2,4))
+table(cas_temoinsexpoi$agegestationnel.f)
+cas_temoinsexpoi$agegestationnel.f<-relevel(cas_temoinsexpoi$agegestationnel.f,ref="[38,40)")
+table(cas_temoinsexpoi$agegestationnel.f)
 
 ###☺ données expositions
 
@@ -97,6 +106,12 @@ cas_temoinsexpoi$moyenne_benzene.f<-cut(cas_temoinsexpoi$moyenne_benzene,breaks=
                                                                                   max(cas_temoinsexpoi$moyenne_benzene)+1), right=F,include.lowest=T)
 table(cas_temoinsexpoi$moyenne_benzene.f,exclude = NULL)
 summary(cas_temoinsexpoi$mopb)
+
+cas_temoinsexpoi$moyenne_benzene.f2<-ifelse(cas_temoinsexpoi$moyenne_benzene <1.5,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$moyenne_benzene.f3<-ifelse(cas_temoinsexpoi$moyenne_benzene <2,0,1) # le découpage précédent est trop concentré sur les petites classes
+
+
+
 cas_temoinsexpoi$mopb.f<-cut(cas_temoinsexpoi$mopb,breaks=c(min(cas_temoinsexpoi$mopb),
                                                                                   summary(cas_temoinsexpoi$mopb)["1st Qu."], 
                                                                                   summary(cas_temoinsexpoi$mopb)["Median"],
@@ -142,4 +157,7 @@ cas_temoinsexpoi$coeffapgar5mncor<-as.character(ifelse(cas_temoinsexpoi$coeffapg
 table(cas_temoinsexpoi$coeffapgar5mncor,exclude=NULL)
 cas_temoinsexpoi$coeffapgar5mncor.f <-ifelse(cas_temoinsexpoi$coeffapgar5mncor %in% c("9","10"),"9-10",cas_temoinsexpoi$coeffapgar5mncor)
 cas_temoinsexpoi$coeffapgar5mncor.f <-ifelse(!cas_temoinsexpoi$coeffapgar5mncor %in% c("9","10") & !is.na(cas_temoinsexpoi$coeffapgar5mncor)," 9<",cas_temoinsexpoi$coeffapgar5mncor.f)
+table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)
+cas_temoinsexpoi$coeffapgar5mncor.f <-as.factor(cas_temoinsexpoi$coeffapgar5mncor.f)
+cas_temoinsexpoi$coeffapgar5mncor.f <- reorder(cas_temoinsexpoi$coeffapgar5mncor.f,new.order = c(2,1))
 table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)

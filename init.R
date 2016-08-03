@@ -10,7 +10,7 @@ library(maptools)
 library(dplyr)
 library(foreign)
 library(ggplot2)
-
+library(gdata)
 # importbase
 
 # programme_paris
