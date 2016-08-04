@@ -81,7 +81,7 @@ match(iris_95_erreur$id,erreur_iris$id)
 
 iris_sp_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX" & iris_paris$iris_diff==0 & !is.na(iris_paris$iris_diff),c("numunique","IRIS")]
 
-iris_sp_955<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==0 & !is.na(iris_95$iris_diff),c("numunique","IRIS")]
+iris_sp_95<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==0 & !is.na(iris_95$iris_diff),c("numunique","IRIS")]
 
 
 ### iris 2000 trouvé mais pas de correspondance en 2012 et géoloc ok on prend l'iris_2012

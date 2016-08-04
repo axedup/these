@@ -43,7 +43,7 @@ write.csv(export,file="C:/Users/Louise/Documents/Desespoir/Bases/expo.csv")
 
 ### on fait la fusion expo/IRIS 
 join_expo<-over(wgs84PbData,aus2)
-join_expo<-cbind(join_expo,wgs84PbData@data[,c("id_inserm","benzene_airp","no2_airp","")])
+join_expo<-cbind(join_expo,wgs84PbData@data[,c("id_inserm","benzene_airp","no2_airp")],wgs84PbData@coords)
 
 resume_expo<-join_expo %>%
   group_by(DCOMIRIS) %>%
@@ -54,7 +54,7 @@ resume_expo<-join_expo %>%
 ### faisons fusionner nos patients avec la base resume_expo : c'est fait base par base ....
 join_bn<-merge(join,resume_expo,by= "DCOMIRIS",all.x=T) ### 95 les 7 adresses en sus a faire retourner 
 
-averif1<-join_bn[is.na(join_bn$moyenne_no2),"res_geo_95_suite@data[, \"Référence.Enfant\"]"]
++979averif1<-join_bn[is.na(join_bn$moyenne_no2),"res_geo_95_suite@data[, \"Référence.Enfant\"]"]
 
 join2_bn<-merge(join2,resume_expo,by= "DCOMIRIS",all.x=T)
 averif2<-join2_bn[is.na(join2_bn$moyenne_no2),"erreur_iris@data[, \"MA___NumMalade\"]"]

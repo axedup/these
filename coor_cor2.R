@@ -121,6 +121,14 @@ dist_qgis_spa <- spTransform(dist_qgis_spa, CRS("+init=epsg:4326")) # conversion
 dist_qgis$lonr<-pi*dist_qgis_spa@coords[,2]/180 
 dist_qgis$latr<-pi*dist_qgis_spa@coords[,1]/180 
 
+dist_qgis_coord<-merge(dist_qgis,res_geo[,c("id","MA___NumMalade")],by.x="id",by.y="id",all.x=T)### y a les 7 du 95 
+dim(dist_qgis_coord)
+dist_qgis_coord$numunique<-ifelse(is.na(dist_qgis_coord$MA___NumMalade),as.character(dist_qgis_coord$id),as.character(dist_qgis_coord$MA___NumMalade))
+
+
+dist_qgis_coord[duplicated(dist_qgis_coord$numunique),"numunique"]->a
+dist_qgis_coord[dist_qgis_coord$numunique %in% a,] ### les doublons viennent de doubles correction mais c'est les même coordo
+
 
 def_ra <- spTransform(def, CRS("+init=epsg:4326")) # conversion en wgs des coord des points d'expo
 def_ra$lonrexpo<-pi*def_ra@coords[,2]/180 
@@ -158,11 +166,14 @@ matrice_dist<-merge(matrice_dist,res_geo[,c("id","MA___NumMalade")],by.x="id",by
 
 matrice_dist$numunique<-ifelse(is.na(matrice_dist$MA___NumMalade),as.character(matrice_dist$id),as.character(matrice_dist$MA___NumMalade))
 
+### on suprrime les points répétés car corrigés deux fois (même coordonee)
 
+matrice_dist<-matrice_dist[!duplicated(matrice_dist$numunique),]
 
 expo_moy_2<-matrice_dist %>%
   group_by(numunique) %>%
   summarize(n=n(),
+            distance_moy_pts=mean(D),
             mopb=weighted.mean( benzene_airp,1/D),
             mopn=weighted.mean( no2_airp,1/D))
 
@@ -190,9 +201,10 @@ expo_moy_2$mopn[expo_moy_2$numunique=="2010-21495"]<-48.21
 
 cas_temoins_parisexpop<-merge(cas_temoins_parishbis,expo_moy_2,by="numunique")
 cas_temoins_95_expop<-merge(cas_temoins_95_help2,expo_moy_2,by="numunique") # 2 pour le nouveau patients
+summary(cas_temoins_95_expop$mopb)
 dim(cas_temoins_95_expop)
 dim(cas_temoins_parisexpop)
-dim(cas_temoins_95_help2)
+dim(cas_temoins_parisexpop)
 
 
 
@@ -204,20 +216,40 @@ join_bn$numunique<-as.character(join_bn[,"res_geo_95_suite@data[, \"Référence.
 join2_bn$numunique<-as.character(join2_bn[,"erreur_iris@data[, \"MA___NumMalade\"]"])
 
 c<-bind_rows(join_bn,join2_bn)
+
+iris_sp_paris_bn$DCOMIRIS<-as.character(iris_sp_paris_bn$IRIS)
 c<-bind_rows(c,iris_sp_paris_bn)
-c<-bind_rows(c,iris_p1_paris_bn)
+#c<-bind_rows(c,iris_p1_paris_bn)
+iris_p2_paris_bn$DCOMIRIS<-as.character(iris_p2_paris_bn$TOPO_IRIS)
 c<-bind_rows(c,iris_p2_paris_bn)
+iris_p3_paris_bn$DCOMIRIS<-as.character(iris_p3_paris_bn$IRIS)
 c<-bind_rows(c,iris_p3_paris_bn)
+iris_sp_95_bn$DCOMIRIS<-as.character(iris_sp_95_bn$IRIS)
 c<-bind_rows(c,iris_sp_95_bn)
+iris_p1_95_bn$DCOMIRIS<-as.character(iris_p1_95_bn$TOPO_IRIS)
 c<-bind_rows(c,iris_p1_95_bn)
+iris_p2_95_bn$DCOMIRIS<-as.character(iris_p2_95_bn$TOPO_IRIS)
 c<-bind_rows(c,iris_p2_95_bn)
+iris_p3_95_bn$DCOMIRIS<-as.character(iris_p3_95_bn$IRIS)
 c<-bind_rows(c,iris_p3_95_bn)
+
+irispar<-c[,c("numunique","moyenne_benzene","moyenne_no2","n","DCOMIRIS")]
+names(irispar)<-c("numunique","moyenne_benzene","moyenne_no2","np","DCOMIRIS")
+#data.frame(mapply(c, join_bn,  join2_bn, SIMPLIFY=FALSE))
+dim(irispar)
+head(irispar)
+
+dim(merge(irispar,dist_qgis_coord,by="numunique"))
 
 
 c<-c[,c("numunique","moyenne_benzene","moyenne_no2","n")]
 names(c)<-c("numunique","moyenne_benzene","moyenne_no2","np")
  #data.frame(mapply(c, join_bn,  join2_bn, SIMPLIFY=FALSE))
 dim(c)
+
+
+
+
 
 cas_temoins_parisexpoi<-merge(cas_temoins_parisexpop,c,by="numunique",suffixes=c(".",".i"))
 dim(cas_temoins_parisexpoi)
@@ -312,3 +344,45 @@ dim(cas_temoinsexpoi)
 
 cas_temoinsexpoi<-cas_temoinsexpoi[is.na(cas_temoinsexpoi$age_deces_hh) ,]
 dim(cas_temoinsexpoi)
+
+
+### controle de la distance 
+
+iris_par<-merge(irispar,dist_qgis_coord,by="numunique")
+dim(irispar)
+dim(iris_par) # doublons (pas grave)
+length(unique(iris_par$numunique))
+
+iris_par<-iris_par[!duplicated(irispar$numunique),]
+dim(iris_par)
+
+join_expo_sp<-join_expo
+coordinates(join_expo_sp)=~ Geo_X + Geo_Y
+proj4string(join_expo_sp)<-CRS("+init=epsg:2154") # lambert 93
+join_expo_sp <- spTransform(join_expo_sp, CRS("+init=epsg:4326")) # conversion en wgs
+join_expo_sp$lonr<-pi*join_expo_sp @coords[,2]/180 
+join_expo_sp$latr<-pi*join_expo_sp@coords[,1]/180 
+
+iris_par<-merge(iris_par,join_expo_sp,by="DCOMIRIS",suffixes=c("",".expo")) # tous les points n'ont pas un IRIS OU IL Y A EU Des mesures à l'intérieur 
+
+calcul_d_iris<-function(x){
+    lambda<-iris_par$lonr.expo-iris_par$lonr
+    d<-acos(sin(iris_par$latr)*sin(iris_par$latr.expo)+cos(iris_par$latr)*cos(iris_par$latr.expo)*cos(lambda))
+    dm<-d*6378137
+    return(dm)
+   }
+  
+jj<-apply(iris_par,MARGIN=1,calcul_d_iris)
+distance_iris_c<-jj[,1]
+distance_iris_c<-ifelse(is.na(distance_iris_c),0,distance_iris_c)
+distance_iris_c<-cbind(iris_par,distance_iris_c)
+
+#distance_iris<-distance_iris[!duplicated(distance_iris$numunique),]
+distance_iris<-distance_iris_c %>%
+  group_by(numunique) %>%
+  summarize( distance_iris=mean(distance_iris))
+
+cas_temoinsexpoi<-merge(cas_temoinsexpoi,distance_iris,by="numunique",all.x=T)
+dim(cas_temoinsexpoi)
+
+

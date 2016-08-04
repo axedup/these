@@ -118,21 +118,29 @@ cas_temoinsexpoi$mopb.f<-cut(cas_temoinsexpoi$mopb,breaks=c(min(cas_temoinsexpoi
                                                                                   summary(cas_temoinsexpoi$mopb)["3rd Qu."],
                                                                                   max(cas_temoinsexpoi$mopb)+1), right=F,include.lowest=T)
 
+cas_temoinsexpoi$mopb.f2<-ifelse(cas_temoinsexpoi$mopb <1.81,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$mopb.f3<-ifelse(cas_temoinsexpoi$mopb <2,0,1)
+
 summary(cas_temoinsexpoi$moyenne_no2)
+
 cas_temoinsexpoi$moyenne_no2.f<-cut(cas_temoinsexpoi$moyenne_no2,breaks=c(min(cas_temoinsexpoi$moyenne_no2),
                                                                        summary(cas_temoinsexpoi$moyenne_no2)["1st Qu."], 
                                                                        summary(cas_temoinsexpoi$moyenne_no2)["Median"],
                                                                        summary(cas_temoinsexpoi$moyenne_no2)["3rd Qu."],
                                                                        max(cas_temoinsexpoi$moyenne_no2)+1), right=F,include.lowest=T)
 
+
+cas_temoinsexpoi$moyenne_no2.f2<-ifelse(cas_temoinsexpoi$moyenne_no2 < 31.5,0,1)# le no2 est mieux réparti
 summary(cas_temoinsexpoi$mopn)
 cas_temoinsexpoi$mopn.f<-cut(cas_temoinsexpoi$mopn,breaks=c(min(cas_temoinsexpoi$mopn),
                                                                           summary(cas_temoinsexpoi$mopn)["1st Qu."], 
                                                                           summary(cas_temoinsexpoi$mopn)["Median"],
                                                                           summary(cas_temoinsexpoi$mopn)["3rd Qu."],
-                                                                          max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
+
+cas_temoinsexpoi$mopn.f2<-ifelse(cas_temoinsexpoi$mopn <50.1,0,1)                                                            
+                                                                                                                                      max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
 summary(cas_temoinsexpoi$mopn.f)
-summary(cas_temoinsexpoi$moyenne_no2.f)
+table(cas_temoinsexpoi$moyenne_no2.f)
 summary(cas_temoinsexpoi$moyenne_benzene.f)
 summary(cas_temoinsexpoi$mopb.f)
  ### c'est pas parfait mais c'est les problèmes d'intervalles ouverts/ fermé. 
@@ -161,3 +169,6 @@ table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)
 cas_temoinsexpoi$coeffapgar5mncor.f <-as.factor(cas_temoinsexpoi$coeffapgar5mncor.f)
 cas_temoinsexpoi$coeffapgar5mncor.f <- reorder(cas_temoinsexpoi$coeffapgar5mncor.f,new.order = c(2,1))
 table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)
+
+
+
