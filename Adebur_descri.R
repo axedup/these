@@ -36,7 +36,7 @@ affectation$codage_iris<-factor(affectation$codage_iris,labels=c("Attribution à
 table(affectation$codage_iris)
 
 
-quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
+quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=T,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
 
 
 ### caractéristiques périnatales 
@@ -136,9 +136,10 @@ cas_temoinsexpoi$mopn.f<-cut(cas_temoinsexpoi$mopn,breaks=c(min(cas_temoinsexpoi
                                                                           summary(cas_temoinsexpoi$mopn)["1st Qu."], 
                                                                           summary(cas_temoinsexpoi$mopn)["Median"],
                                                                           summary(cas_temoinsexpoi$mopn)["3rd Qu."],
+                                                            max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
 
 cas_temoinsexpoi$mopn.f2<-ifelse(cas_temoinsexpoi$mopn <50.1,0,1)                                                            
-                                                                                                                                      max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
+             
 summary(cas_temoinsexpoi$mopn.f)
 table(cas_temoinsexpoi$moyenne_no2.f)
 summary(cas_temoinsexpoi$moyenne_benzene.f)

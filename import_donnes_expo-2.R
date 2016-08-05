@@ -4,7 +4,7 @@
 
 expo<-read.sas7bdat("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\donnes_airp_geocap_2002_2007.sas7bdat")
 head(expo)
-coord<-read.sas7bdat("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\geocap_geocodage.sas7bdat")
+coord<-read.sas7bdat("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\geocap_geocodage.sas7bdat") # toute la france 
 head(coord)
 
 coord2<-read.csv2("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\coordonnees.csv",header=T)
@@ -13,21 +13,27 @@ head(coord2)
 
 
 
-def<-merge(expo,coord2,by="id_inserm",suffix=c(".nc",".c"))
+defu<-merge(expo,coord2,by="id_inserm",suffix=c(".nc",".c"))
 sec<-def$id_inserm[is.na(def$Geo_X) | is.na(def$Geo_Y)]
 str(sec)
-def<-def[!is.na(def$Geo_X) & !is.na(def$Geo_Y),]
-dim(def)
+defu<-defu[!is.na(defu$Geo_X) & !is.na(defu$Geo_Y),]
+dim(defu)
 dim(coord)
 dim(expo)
 
-def2<-merge(expo[expo$id_inserm %in% sec,],coord[,c("id_inserm","Geo_X","Geo_Y")],by="id_inserm",suffix=c(".nc",".c"))
-dim(def2)### on peut pas retrouver les 61
+#def2<-merge(expo[expo$id_inserm %in% sec,],coord[,c("id_inserm","Geo_X","Geo_Y")],by="id_inserm",suffix=c(".nc",".c"))
+#dim(def2)### on peut pas retrouver les 61
 
 
-#### nouvel import des données d'expo ###
+#### nouvel import des données d'expo manquantes des témoins ###
 
-def<-read.csv2("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\airparif.csv",header=T,stringsAsFactors = FALSE,dec=".")
+def_t<-read.csv2("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\airparif.csv",header=T,stringsAsFactors = FALSE,dec=".")
+
+def_f<-merge(expo[expo$id_inserm %in% sec,],def_t[,c("id_inserm","Geo_X","Geo_Y")],by="id_inserm",suffix=c(".nc",".c"))
+
+def<-rbind(defu,def_f)
+
+table(is.na(def$Geo_X))
 
 coordinates(def)=~ Geo_X + Geo_Y
 
@@ -38,8 +44,8 @@ wgs84PbData <- spTransform(def, CRS("+init=epsg:2154")) # lambert 93
 summary(wgs84PbData)
 
 
-export<-cbind(wgs84PbData$Geo_X,wgs84PbData$Geo_Y,wgs84PbData$benzene_airp,wgs84PbData$no2_airp,wgs84PbData$id_inserm)
-write.csv(export,file="C:/Users/Louise/Documents/Desespoir/Bases/expo.csv")
+#export<-cbind(wgs84PbData$Geo_X,wgs84PbData$Geo_Y,wgs84PbData$benzene_airp,wgs84PbData$no2_airp,wgs84PbData$id_inserm)
+#write.csv(export,file="C:/Users/Louise/Documents/Desespoir/Bases/expo.csv")
 
 ### on fait la fusion expo/IRIS 
 join_expo<-over(wgs84PbData,aus2)
@@ -54,7 +60,7 @@ resume_expo<-join_expo %>%
 ### faisons fusionner nos patients avec la base resume_expo : c'est fait base par base ....
 join_bn<-merge(join,resume_expo,by= "DCOMIRIS",all.x=T) ### 95 les 7 adresses en sus a faire retourner 
 
-+979averif1<-join_bn[is.na(join_bn$moyenne_no2),"res_geo_95_suite@data[, \"Référence.Enfant\"]"]
+averif1<-join_bn[is.na(join_bn$moyenne_no2),"res_geo_95_suite@data[, \"Référence.Enfant\"]"]
 
 join2_bn<-merge(join2,resume_expo,by= "DCOMIRIS",all.x=T)
 averif2<-join2_bn[is.na(join2_bn$moyenne_no2),"erreur_iris@data[, \"MA___NumMalade\"]"]

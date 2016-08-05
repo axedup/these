@@ -6,7 +6,13 @@
 
 
 modeltest<-glm(cas~age.f + mopb.f + agegestationnel.f ,family=binomial,data=cas_temoinsexpoi)
-modeltest2<-glm(cas~age.f + moyenne_benzene.f2 + poids.f, family=binomial,data=cas_temoinsexpoi)
+modeltest2<-glm(cas~age.f + moyenne_benzene.f2 + poids.f +  agegestationnel.f+ ageenf+parite.f2, family=binomial,data=cas_temoinsexpoi)
+summary(modeltest2)
+
+
+modeltest3<-glm(cas~age.f + moyenne_no2.f2 + poids.f +  agegestationnel.f+ ageenf+parite.f2, family=binomial,data=cas_temoinsexpoi)
+summary(modeltest3)
+
 
 modeltestl<-glm(cas~age.f + moyenne_benzene+ poids.f, family=binomial,data=cas_temoinsexpoi)
 
