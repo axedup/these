@@ -6,7 +6,7 @@
 # p1 et p2 on balance iris-p1_95/paris...
 
 
-table(res_geo$AFF %in% c("0","1","10","11"),exclude=NULL) #&135 naze
+table(res_geo$AFF %in% c("0","1","10","11"),exclude=NULL) #135 naze
 table(res_geo$AFF %in% c("0","1","10","11"), !substr(res_geo$IRIS,6,9)=="XXXX",exclude=NULL)
 
 geocod_faux<-res_geo$id[!res_geo$AFF %in% c("0","1","10","11")]
@@ -21,7 +21,7 @@ coordonees_cor$longitude<-as.numeric(as.character(coordonees_cor$longitude))
 
 
 
-### maintenant 
+### maintenant création des coordonnées finales des patients 
 aconvert<-coordonees_cor[,c("id","X","Y")]
 coordinates(aconvert)=~ X + Y
 
@@ -67,7 +67,7 @@ navteq_q$id<-as.character(navteq_q$id)
 
 ### fichier a envoyer a qgis (Lmabert 93 ) - a faire tourner même pour boucle 
 
- dist_qgis<-rbind(navteq,navteq_s,navteq_t,navteq_q)
+dist_qgis<-rbind(navteq,navteq_s,navteq_t,navteq_q)
 dim(dist_qgis)
 str(dist_qgis)
 length(unique(dist_qgis$id))
@@ -114,6 +114,7 @@ dim(cas_temoins_95_help)
 
 ### préparation autre méthodes
 
+# les patients 
 dist_qgis_spa<-dist_qgis
 coordinates(dist_qgis_spa)=~lat+lon
 proj4string(dist_qgis_spa)<-CRS("+init=epsg:2154") # lambert 93
@@ -130,13 +131,14 @@ dist_qgis_coord[duplicated(dist_qgis_coord$numunique),"numunique"]->a
 dist_qgis_coord[dist_qgis_coord$numunique %in% a,] ### les doublons viennent de doubles correction mais c'est les même coordo
 
 
+# les expos 
 def_ra <- spTransform(def, CRS("+init=epsg:4326")) # conversion en wgs des coord des points d'expo
 def_ra$lonrexpo<-pi*def_ra@coords[,2]/180 
 def_ra$latrexpo<-pi*def_ra@coords[,1]/180 
 
 
 
-### autre m?thode : formule IGN la boucle fonctionne
+### autre méthode : formule IGN la boucle fonctionne
 matrice<-NULL
 for(j in 1:dim(dist_qgis)[1]){
   D<-NULL
@@ -168,9 +170,9 @@ matrice_dist$numunique<-ifelse(is.na(matrice_dist$MA___NumMalade),as.character(m
 
 ### on suprrime les points répétés car corrigés deux fois (même coordonee)
 
-matrice_dist<-matrice_dist[!duplicated(matrice_dist$numunique),]
+matrice_distu<-matrice_dist[!duplicated(matrice_dist),]
 
-expo_moy_2<-matrice_dist %>%
+expo_moy_2<-matrice_distu %>%
   group_by(numunique) %>%
   summarize(n=n(),
             distance_moy_pts=mean(D),
@@ -212,6 +214,8 @@ dim(cas_temoins_parisexpop)
 
 # la matrice de résultats surrestime les distances car c'est l'arc de cercle 
 
+###4 réunion des expo par iris 
+
 join_bn$numunique<-as.character(join_bn[,"res_geo_95_suite@data[, \"Référence.Enfant\"]"])
 join2_bn$numunique<-as.character(join2_bn[,"erreur_iris@data[, \"MA___NumMalade\"]"])
 
@@ -245,7 +249,7 @@ dim(merge(irispar,dist_qgis_coord,by="numunique"))
 c<-c[,c("numunique","moyenne_benzene","moyenne_no2","n")]
 names(c)<-c("numunique","moyenne_benzene","moyenne_no2","np")
  #data.frame(mapply(c, join_bn,  join2_bn, SIMPLIFY=FALSE))
-dim(c)
+dim(c) #1527
 
 
 
@@ -266,8 +270,8 @@ dim(cas_temoins_95expoi)
 
 cas_temoins_parisexpoi$imp<-ifelse(is.na(cas_temoins_parisexpoi$moyenne_benzene),1,0)
 
-cas_temoins_parisexpoi$moyenne_benzene<-ifelse(is.na(cas_temoins_parisexpoi$moyenne_benzene),cas_temoins_parisexpoi$mopb,cas_temoins_95expoi$moyenne_benzene)
-cas_temoins_parisexpoi$moyenne_no2<-ifelse(is.na(cas_temoins_parisexpoi$moyenne_no2),cas_temoins_parisexpoi$mopn,cas_temoins_95expoi$moyenne_no2)
+cas_temoins_parisexpoi$moyenne_benzene<-ifelse(is.na(cas_temoins_parisexpoi$moyenne_benzene),cas_temoins_parisexpoi$mopb,cas_temoins_parisexpoi$moyenne_benzene)
+cas_temoins_parisexpoi$moyenne_no2<-ifelse(is.na(cas_temoins_parisexpoi$moyenne_no2),cas_temoins_parisexpoi$mopn,cas_temoins_parisexpoi$moyenne_no2)
 dim(cas_temoins_parisexpoi)
 
 
@@ -380,9 +384,10 @@ distance_iris_c<-cbind(iris_par,distance_iris_c)
 #distance_iris<-distance_iris[!duplicated(distance_iris$numunique),]
 distance_iris<-distance_iris_c %>%
   group_by(numunique) %>%
-  summarize( distance_iris=mean(distance_iris))
+  summarize( distance_iris=mean(distance_iris_c))
 
 cas_temoinsexpoi<-merge(cas_temoinsexpoi,distance_iris,by="numunique",all.x=T)
 dim(cas_temoinsexpoi)
 
-
+summary(cas_temoinsexpoi$distance_iris)
+summary(cas_temoinsexpoi$distance_moy_pts)
