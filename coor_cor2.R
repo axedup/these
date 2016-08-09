@@ -30,7 +30,7 @@ summary(aconvert)
 aconvert <- spTransform(aconvert, CRS("+init=epsg:2154")) # Lambert 93
 summary(aconvert)
 
-navteq<-data.frame(cbind(aconvert@coords,aconvert$id))
+navteq<-data.frame(cbind(aconvert@coords,aconvert$id)) # garde le même sens 
 names(navteq)<-c("lat","lon","id")
 navteq<-navteq[!navteq$id %in% geocod_faux,] # sans pb de géocodage 
 dim(navteq)
@@ -122,6 +122,11 @@ dist_qgis_spa <- spTransform(dist_qgis_spa, CRS("+init=epsg:4326")) # conversion
 dist_qgis$lonr<-pi*dist_qgis_spa@coords[,2]/180 
 dist_qgis$latr<-pi*dist_qgis_spa@coords[,1]/180 
 
+
+
+dist_qgis_spa_l93 <- spTransform(dist_qgis_spa, CRS("+init=epsg:2154")) #ô pour rester en lamber 93
+
+
 dist_qgis_coord<-merge(dist_qgis,res_geo[,c("id","MA___NumMalade")],by.x="id",by.y="id",all.x=T)### y a les 7 du 95 
 dim(dist_qgis_coord)
 dist_qgis_coord$numunique<-ifelse(is.na(dist_qgis_coord$MA___NumMalade),as.character(dist_qgis_coord$id),as.character(dist_qgis_coord$MA___NumMalade))
@@ -163,8 +168,6 @@ id<-rep(dist_qgis$id,each=4)
 
 matrice_dist<-cbind(id,matrice,points@data)
 matrice_dist<-merge(matrice_dist,res_geo[,c("id","MA___NumMalade")],by.x="id",by.y="id",all.x=T)
-
-
 
 matrice_dist$numunique<-ifelse(is.na(matrice_dist$MA___NumMalade),as.character(matrice_dist$id),as.character(matrice_dist$MA___NumMalade))
 
@@ -379,7 +382,7 @@ calcul_d_iris<-function(x){
 jj<-apply(iris_par,MARGIN=1,calcul_d_iris)
 distance_iris_c<-jj[,1]
 distance_iris_c<-ifelse(is.na(distance_iris_c),0,distance_iris_c)
-distance_iris_c<-cbind(iris_par,distance_iris_c)
+distance_iris_c<-cbind(iris_par,distance_iris_c) # c'est par iris_par 
 
 #distance_iris<-distance_iris[!duplicated(distance_iris$numunique),]
 distance_iris<-distance_iris_c %>%

@@ -42,7 +42,7 @@ quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=T,o
 ### caractéristiques périnatales 
 
 cas_temoinsexpoi$tailles<-cas_temoinsexpoi$tailles/10
-
+cas_temoinsexpoi$vb<-as.factor(ifelse(cas_temoinsexpoi$naissancepar.f %in% c("vbi","vbni") & !is.na(cas_temoinsexpoi$naissancepar.f2),"vb",cas_temoinsexpoi$naissancepar.f2))
 
 quantifb(xc=c("age","agegestationnel","tailles","poids","perimetre2"),nomx=c("age en an","terme","taille en cm","poids en g","perimetre en cm"), data=cas_temoinsexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="peri")
 test.quant(varquant=c("age","agegestationnel","tailles","poids","perimetre2"),nomquant=c("age en an","terme","taille en cm","poids en g","perimetre en cm"), varqual=c("cas"),nomqual=c("cas"),data=cas_temoinsexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="peric")
@@ -54,16 +54,16 @@ test.quant(varquant=c("age","agegestationnel","tailles","poids","perimetre2"),no
 #desc.qual2(x=c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2"),y=cas_temoinsexpoi$cas,nomx=c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar"), data=cas_temoins_parisexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/")
 
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar")
+nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
 j<-1
 B<-NULL
-for (i in cas_temoins_parishbis[,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2")] ){
-  b<-test.qual(x=i,y=cas_temoins_parishbis$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+  b<-test.qual(x=i,y=cas_temoinsexpoi$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
 
-write.table(B,sep="/t",file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/pericc.xls")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/pericc.xls",sep="\t")
 
 
 ### on va faire les catégories pour age mater, poids terme...;
@@ -96,6 +96,21 @@ table(cas_temoinsexpoi$agegestationnel.f)
 cas_temoinsexpoi$agegestationnel.f<-relevel(cas_temoinsexpoi$agegestationnel.f,ref="[38,40)")
 table(cas_temoinsexpoi$agegestationnel.f)
 
+
+nomx<-c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
+j<-1
+B<-NULL
+for (i in cas_temoinsexpoi[,c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
+  b<-test.qual(x=i,y=cas_temoinsexpoi$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuitec.xls",sep="\t")
+
+
+
+
 ###☺ données expositions
 
 summary(cas_temoinsexpoi$moyenne_benzene)
@@ -107,8 +122,11 @@ cas_temoinsexpoi$moyenne_benzene.f<-cut(cas_temoinsexpoi$moyenne_benzene,breaks=
 table(cas_temoinsexpoi$moyenne_benzene.f,exclude = NULL)
 summary(cas_temoinsexpoi$mopb)
 
-cas_temoinsexpoi$moyenne_benzene.f2<-ifelse(cas_temoinsexpoi$moyenne_benzene <1.5,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$moyenne_benzene.f2<-ifelse(cas_temoinsexpoi$moyenne_benzene < summary(cas_temoinsexpoi$moyenne_benzene)["Mean"],0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$moyenne_benzene.f2<-as.factor(cas_temoinsexpoi$moyenne_benzene.f2)
 cas_temoinsexpoi$moyenne_benzene.f3<-ifelse(cas_temoinsexpoi$moyenne_benzene <2,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$moyenne_benzene.f3<-as.factor(cas_temoinsexpoi$moyenne_benzene.f3)
+
 
 
 
@@ -118,8 +136,11 @@ cas_temoinsexpoi$mopb.f<-cut(cas_temoinsexpoi$mopb,breaks=c(min(cas_temoinsexpoi
                                                                                   summary(cas_temoinsexpoi$mopb)["3rd Qu."],
                                                                                   max(cas_temoinsexpoi$mopb)+1), right=F,include.lowest=T)
 
-cas_temoinsexpoi$mopb.f2<-ifelse(cas_temoinsexpoi$mopb <1.81,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$mopb.f2<-ifelse(cas_temoinsexpoi$mopb < summary(cas_temoinsexpoi$mopb)["Mean"] ,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$mopb.f2<-as.factor(cas_temoinsexpoi$mopb.f2)
 cas_temoinsexpoi$mopb.f3<-ifelse(cas_temoinsexpoi$mopb <2,0,1)
+cas_temoinsexpoi$mopb.f3<-as.factor(cas_temoinsexpoi$mopb.f3)
+
 
 summary(cas_temoinsexpoi$moyenne_no2)
 
@@ -130,7 +151,10 @@ cas_temoinsexpoi$moyenne_no2.f<-cut(cas_temoinsexpoi$moyenne_no2,breaks=c(min(ca
                                                                        max(cas_temoinsexpoi$moyenne_no2)+1), right=F,include.lowest=T)
 
 
-cas_temoinsexpoi$moyenne_no2.f2<-ifelse(cas_temoinsexpoi$moyenne_no2 < 31.5,0,1)# le no2 est mieux réparti
+cas_temoinsexpoi$moyenne_no2.f2<-ifelse(cas_temoinsexpoi$moyenne_no2 <  summary(cas_temoinsexpoi$moyenne_no2)["Mean"],0,1)# le no2 est mieux réparti
+
+
+cas_temoinsexpoi$moyenne_no2.f2<-as.factor(cas_temoinsexpoi$moyenne_no2.f2)
 summary(cas_temoinsexpoi$mopn)
 cas_temoinsexpoi$mopn.f<-cut(cas_temoinsexpoi$mopn,breaks=c(min(cas_temoinsexpoi$mopn),
                                                                           summary(cas_temoinsexpoi$mopn)["1st Qu."], 
@@ -138,13 +162,35 @@ cas_temoinsexpoi$mopn.f<-cut(cas_temoinsexpoi$mopn,breaks=c(min(cas_temoinsexpoi
                                                                           summary(cas_temoinsexpoi$mopn)["3rd Qu."],
                                                             max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
 
-cas_temoinsexpoi$mopn.f2<-ifelse(cas_temoinsexpoi$mopn <50.1,0,1)                                                            
-             
+cas_temoinsexpoi$mopn.f2<-ifelse(cas_temoinsexpoi$mopn < summary(cas_temoinsexpoi$mopn)["Mean"],0,1)                                                            
+cas_temoinsexpoi$mopn.f2<-as.factor(cas_temoinsexpoi$mopn.f2)          
+   
 summary(cas_temoinsexpoi$mopn.f)
 table(cas_temoinsexpoi$moyenne_no2.f)
 summary(cas_temoinsexpoi$moyenne_benzene.f)
 summary(cas_temoinsexpoi$mopb.f)
+
+
  ### c'est pas parfait mais c'est les problèmes d'intervalles ouverts/ fermé. 
+
+nomx<-c("moyenne_benzene.f","moyenne_benzene.f2","moyenne_benzene.f3",
+        "mopb.f","mopb.f2","mopb.f3","moyenne_no2.f","moyenne_no2.f2","mopn.f","mopn.f2")
+j<-1
+B<-NULL
+for (i in c("moyenne_benzene.f","moyenne_benzene.f2", "moyenne_benzene.f3",
+            "mopb.f","mopb.f2","mopb.f3","moyenne_no2.f","moyenne_no2.f2","mopn.f","mopn.f2"
+           )){
+  b<-test.qual(x=cas_temoinsexpoi[,i],y=cas_temoinsexpoi$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc.xls",sep="\t")
+
+
+
+
+
 
 
 ### création de la varaible age enfant pour ajustement car on a apparié sur l'age (le département bof ) 
@@ -171,5 +217,54 @@ cas_temoinsexpoi$coeffapgar5mncor.f <-as.factor(cas_temoinsexpoi$coeffapgar5mnco
 cas_temoinsexpoi$coeffapgar5mncor.f <- reorder(cas_temoinsexpoi$coeffapgar5mncor.f,new.order = c(2,1))
 table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)
 
+
+### Les Cartes 
+
+fdc<-aus2
+fdc@data <- data.frame(fdc@data,resume_expo[match(fdc@data[, "DCOMIRIS"],resume_expo[, "DCOMIRIS"]), ])
+head(comm@data)
+
+
+### moyenne benzène 
+# Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
+classTemps <- classIntervals(fdc@data$moyenne_benzene, 5, style = "quantile")
+# Choix d'une palette de couleur pour les 5 catégories
+palette <- brewer.pal(n = 5, name = "YlOrRd")
+
+fdc@data$moyenne_benzene<-as.character(cut(fdc@data$moyenne_benzene, breaks = classTemps$brks, labels = palette, include.lowest = TRUE))
+plot(fdc,col=fdc@data$moyenne_benzene)
+
+plot(dist_qgis_spa_l93,add=T,col="green")
+
+### moyenne no2
+# Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
+classTempse <- classIntervals(fdc@data$moyenne_no2, 5, style = "quantile")
+# Choix d'une palette de couleur pour les 5 catégories
+palette <- brewer.pal(n = 5, name = "Blues")
+
+fdc@data$moyenne_no2<-as.character(cut(fdc@data$moyenne_no2, breaks = classTempse$brks, labels = palette, include.lowest = TRUE))
+plot(fdc,col=fdc@data$moyenne_no2)
+
+
+
+cas_temoinsexpoi$oxygenotherapie<-as.factor(cas_temoinsexpoi$oxygenotherapie)
+cas_temoinsexpoi$intubation<-as.factor(cas_temoinsexpoi$intubation)
+cas_temoinsexpoi$antibiotherapie<-as.factor(cas_temoinsexpoi$antibiotherapie)
+cas_temoinsexpoi$neurologique<-as.factor(cas_temoinsexpoi$neurologique)
+cas_temoinsexpoi$urgence<-as.factor(cas_temoinsexpoi$urgence)
+cas_temoinsexpoi$autre_patho<-as.factor(cas_temoinsexpoi$autre_patho)
+cas_temoinsexpoi$anomalie<-as.factor(cas_temoinsexpoi$anomalie)
+cas_temoinsexpoi$polymalformation<-as.factor(cas_temoinsexpoi$polymalformation)
+cas_temoinsexpoi$spinabifida<-as.factor(cas_temoinsexpoi$spinabifida)
+cas_temoinsexpoi$fente<-as.factor(cas_temoinsexpoi$fente)
+cas_temoinsexpoi$atresie<-as.factor(cas_temoinsexpoi$atresie)
+cas_temoinsexpoi$omphalocele<-as.factor(cas_temoinsexpoi$omphalocele)
+cas_temoinsexpoi$reductionmembre<-as.factor(cas_temoinsexpoi$reductionmembre)
+cas_temoinsexpoi$malformrenale<-as.factor(cas_temoinsexpoi$malformrenale)
+cas_temoinsexpoi$hydrocephalie<-as.factor(cas_temoinsexpoi$hydrocephalie)
+cas_temoinsexpoi$malformcard<-as.factor(cas_temoinsexpoi$malformcard)
+cas_temoinsexpoi$trisomie<-as.factor(cas_temoinsexpoi$trisomie)
+cas_temoinsexpoi$autrez<-as.factor(cas_temoinsexpoi$autrez)
+cas_temoinsexpoi$gestes_techniques<-as.factor(cas_temoinsexpoi$gestes_techniques)
 
 

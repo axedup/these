@@ -158,15 +158,15 @@ aus2 <- spRbind(aus2,c_iris_93)
 aus2 <- spRbind(aus2,c_iris_94)
 aus2 <- spRbind(aus2,c_iris_77)
 aus2 <- spRbind(aus2,c_iris_78)
-aus2 <- spTransform(aus2, CRS("+init=epsg:2154")) 
+aus2 <- spTransform(aus2, CRS("+init=epsg:2154")) #lamber 93
 ### aus2 c'est le fichier geo de touttes les iris d'ilde de france 
 
 
-join<-over(res_geo_95_suite,aus2) # les 6 adresses à refaire retourner en cas de changement 
+join<-over(res_geo_95_suite,aus2) # les 6 adresses à refaire retourner en cas de changement # garde la m^me sens
 join<-cbind(join,res_geo_95_suite@data[,"Référence.Enfant"])
 
 join2<-over(erreur_iris,aus2)
-join2<-cbind(join2,erreur_iris@data[,"MA___NumMalade"])
+join2<-cbind(join2,erreur_iris@data[,"MA___NumMalade"])# gar de la même sens 
 
 
 ####
