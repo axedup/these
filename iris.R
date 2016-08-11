@@ -100,9 +100,9 @@ iris_p2_95<-iris_95[substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & ir
 
 ### iris discordant (iris 2000 existe en 2012): c'est la faute a Navteq
 
-iris_p3_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX"  & iris_paris$iris_diff=="1" & !is.na(iris_paris$IRIS_2012),c("numunique","IRIS")]
+iris_p3_paris<-iris_paris[!substr(iris_paris$IRIS,6,9)=="XXXX"  & iris_paris$iris_diff=="1" & !is.na(iris_paris$IRIS_2012),c("numunique","IRIS","TOPO_IRIS","AFF")]
 
-iris_p3_95<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==1 & !is.na(iris_95$iris_diff) &  !is.na(iris_95$IRIS_2012),c("numunique","IRIS")]
+iris_p3_95<-iris_95[!substr(iris_95$IRIS,6,9)=="XXXX" & !is.na(iris_95$IRIS) & iris_95$iris_diff==1 & !is.na(iris_95$iris_diff) &  !is.na(iris_95$IRIS_2012),c("numunique","IRIS","TOPO_IRIS")]
 
 
 ######### attribuer iris :  ça concerne les iris en erreur corrigés et les 95 en extra non géocodés par géocible 

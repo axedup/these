@@ -36,7 +36,7 @@ def<-rbind(defu,def_f)
 table(is.na(def$Geo_X))
 
 coordinates(def)=~ Geo_X + Geo_Y
-
+dim(def)
 proj4string(def)<-CRS("+init=epsg:27572") # lambert II étendu 
 summary(def)
 wgs84PbData <- spTransform(def, CRS("+init=epsg:2154")) # lambert 93

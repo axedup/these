@@ -6,7 +6,7 @@
 # p1 et p2 on balance iris-p1_95/paris...
 
 
-table(res_geo$AFF %in% c("0","1","10","11"),exclude=NULL) #135 naze
+table(res_geo$AFF %in% c("0","1","10","11"),exclude=NULL) #137 naze
 table(res_geo$AFF %in% c("0","1","10","11"), !substr(res_geo$IRIS,6,9)=="XXXX",exclude=NULL)
 
 geocod_faux<-res_geo$id[!res_geo$AFF %in% c("0","1","10","11")]

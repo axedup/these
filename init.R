@@ -11,6 +11,8 @@ library(dplyr)
 library(foreign)
 library(ggplot2)
 library(gdata)
+library(classInt)
+library(RColorBrewer)
 # importbase
 
 # programme_paris

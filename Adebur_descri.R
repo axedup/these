@@ -167,6 +167,7 @@ cas_temoinsexpoi$mopn.f2<-as.factor(cas_temoinsexpoi$mopn.f2)
    
 summary(cas_temoinsexpoi$mopn.f)
 table(cas_temoinsexpoi$moyenne_no2.f)
+table(cas_temoinsexpoi$moyenne_no2.f2)
 summary(cas_temoinsexpoi$moyenne_benzene.f)
 summary(cas_temoinsexpoi$mopb.f)
 
@@ -222,7 +223,7 @@ table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)
 
 fdc<-aus2
 fdc@data <- data.frame(fdc@data,resume_expo[match(fdc@data[, "DCOMIRIS"],resume_expo[, "DCOMIRIS"]), ])
-head(comm@data)
+#head(comm@data)
 
 
 ### moyenne benzène 
@@ -231,10 +232,22 @@ classTemps <- classIntervals(fdc@data$moyenne_benzene, 5, style = "quantile")
 # Choix d'une palette de couleur pour les 5 catégories
 palette <- brewer.pal(n = 5, name = "YlOrRd")
 
-fdc@data$moyenne_benzene<-as.character(cut(fdc@data$moyenne_benzene, breaks = classTemps$brks, labels = palette, include.lowest = TRUE))
-plot(fdc,col=fdc@data$moyenne_benzene)
+fdc@data$moyenne_benzenet<-as.character(cut(fdc@data$moyenne_benzene, breaks = classTemps$brks, labels = palette, include.lowest = TRUE))
 
-plot(dist_qgis_spa_l93,add=T,col="green")
+legende <- as.character(levels(cut(fdc@data$moyenne_benzene, breaks = classTemps$brks, include.lowest = TRUE, right = FALSE)))
+
+#iris
+plot(fdc,col=fdc@data$moyenne_benzenet)
+legend("bottomright",legend=legende,fill=palette,cex=0.3,pt.cex=5)
+
+# patientsParis
+plot(fdc[substr(fdc@data$DEPCOM,1,2) %in% c("75"),],col=fdc@data$moyenne_benzenet)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+plot(fdc[substr(fdc@data$DEPCOM,1,2) %in% c("95","93","78","92"),],col=fdc@data$moyenne_benzenet)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+
 
 ### moyenne no2
 # Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
@@ -242,8 +255,21 @@ classTempse <- classIntervals(fdc@data$moyenne_no2, 5, style = "quantile")
 # Choix d'une palette de couleur pour les 5 catégories
 palette <- brewer.pal(n = 5, name = "Blues")
 
-fdc@data$moyenne_no2<-as.character(cut(fdc@data$moyenne_no2, breaks = classTempse$brks, labels = palette, include.lowest = TRUE))
-plot(fdc,col=fdc@data$moyenne_no2)
+fdc@data$moyenne_no2t<-as.character(cut(fdc@data$moyenne_no2, breaks = classTempse$brks, labels = palette, include.lowest = TRUE))
+legenden <- as.character(levels(cut(fdc@data$moyenne_no2, breaks = classTempse$brks, include.lowest = TRUE, right = FALSE)))
+
+
+#iris
+plot(fdc,col=fdc@data$moyenne_no2t)
+legend("bottomright",legend=legenden,fill=palette,cex=0.3,pt.cex=5)
+
+
+# patientsParis
+plot(fdc[substr(fdc@data$DEPCOM,1,2) %in% c("75"),],col=fdc@data$moyenne_no2t)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+plot(fdc[substr(fdc@data$DEPCOM,1,2) %in% c("95","93","78","92"),],col=fdc@data$moyenne_no2t)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 
 

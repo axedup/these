@@ -17,30 +17,32 @@ summary(modeltest3)
 modeltestl<-glm(cas~age.f + moyenne_benzene+ poids.f, family=binomial,data=cas_temoinsexpoi)
 
 
-model<-function(x){
-  with(cas_temoinsexpoi,{
-    model1<-glm(cas~x,family=binomial)
-    p<-round(summary(model1)$coefficient[2,4],3)
-    s<-summary(model1)
-    return(s)
-    return(p)
-  })
-}
+# model<-function(x){
+#   with(cas_temoinsexpoi,{
+#     model1<-glm(cas~x,family=binomial)
+#     p<-round(summary(model1)$coefficient[2,4],3)
+#     s<-summary(model1)
+#     return(s)
+#     return(p)
+#   })
+# }
+# 
+# 
+# apply(cas_temoinsexpoi[,c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb")],2,model)
 
 
-apply(cas_temoinsexpoi[,c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb")],2,model)
-
-
-varlist<-c("poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
+varlist<-c("poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","vb","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
 models <- lapply(varlist, function(x) {
   glm(substitute(cas ~ i, list(i = as.name(x))), data=cas_temoinsexpoi,family=binomial )
 })
+
+setwd("C:/Users/Louise/Documents/Desespoir/Bases/resultats")
+sink("test-univ.txt")
 r<-lapply(models, summary)
-
-
+r
 conf<-lapply(models,confint)
 lapply(conf,exp)
-
+sink()
 
 
 
