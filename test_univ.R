@@ -17,6 +17,9 @@ summary(modeltest3)
 modeltestl<-glm(cas~age.f + moyenne_benzene+ poids.f, family=binomial,data=cas_temoinsexpoi)
 
 
+
+modelall<-glm(cas~allaitement, family=binomial,data=cas_temoinsexpoi)
+
 # model<-function(x){
 #   with(cas_temoinsexpoi,{
 #     model1<-glm(cas~x,family=binomial)

@@ -109,7 +109,22 @@ for (i in cas_temoinsexpoi[,c("age.f","poids.f","agegestationnel.f","coeffapgar5
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuitec.xls",sep="\t")
 
 
+### données distance
 
+summary(cas_temoinsexpoi$distance_iris)
+summary(cas_temoinsexpoi$distance_moy_pts)
+s<-tapply(cas_temoinsexpoi$distance_iris,INDEX=cas_temoinsexpoi$Source,FUN=summary)
+s<-do.call(rbind,s)
+
+write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/distance_dep.xls",sep="\t")
+
+### nombre de points par IRIS 
+
+summary(cas_temoinsexpoi$np)
+s<-tapply(cas_temoinsexpoi$np,INDEX=cas_temoinsexpoi$Source,FUN=summary)
+s<-do.call(rbind,s)
+
+write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/nbr_pts.xls",sep="\t")
 
 ###☺ données expositions
 
@@ -186,7 +201,7 @@ for (i in c("moyenne_benzene.f","moyenne_benzene.f2", "moyenne_benzene.f3",
   j<-j+1
 }
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc.xls",sep="\t")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc2.xls",sep="\t")
 
 
 
