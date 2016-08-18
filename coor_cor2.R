@@ -392,5 +392,4 @@ distance_iris<-distance_iris_c %>%
 cas_temoinsexpoi<-merge(cas_temoinsexpoi,distance_iris,by="numunique",all.x=T)
 dim(cas_temoinsexpoi)
 
-summary(cas_temoinsexpoi$distance_iris)
-summary(cas_temoinsexpoi$distance_moy_pts)
+

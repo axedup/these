@@ -48,21 +48,33 @@ lapply(conf,exp)
 sink()
 
 
+#nbr enfant trop de valeur NA
+# pathologie pendant grossesse pas de preuves sûres
+# tabac idem
+# poids ajusté à l'age gestationnel on pourrait l'exprimer en percentil..
 
 
 
+modeltestc<-glm(cas~age.f+ moyenne_benzene.f2 + poids.f + vb+ agegestationnel.f+ ageenf+parite.f2+sexe +coeffapgar5mncor.f,family=binomial,data=cas_temoinsexpoi)
+summary(modeltestc)
 
 
-
+modeltestcc<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +  vb+ agegestationnel.f+ ageenf+parite.f2+sexe +coeffapgar5mncor.f,family=binomial,data=cas_temoinsexpoi)
+summary(modeltestcc)
 
 # et ACP pourquoi pas ?
 
-test<-cas_temoinsexpoi[!is.na(cas_temoinsexpoi$poids)& !is.na(cas_temoinsexpoi$age),c("poids.f","agegestationnel.f","age.f","parite.f","expo")]
-test$poids.f<-as.numeric(test$poids.f)
-test$agegestationnel.f<-as.numeric(test$agegestationnel.f)
+test<-cas_temoinsexpoi[!is.na(cas_temoinsexpoi$poids)& !is.na(cas_temoinsexpoi$agegestationnel) & !is.na(cas_temoinsexpoi$coeffapgar5mncor) ,c("poids","agegestationnel","coeffapgar5mncor")]
+test$poids<-as.numeric(test$poids)
+test$coeffapgar5mncor<-as.numeric(test$coeffapgar5mncor)
+test$agegestationnel<-as.numeric(test$agegestationnel)
 
-test$age.f<-as.numeric(test$age.f)
+#test$age.f<-as.numeric(test$age.f)
 
 pca<-prcomp(test)
 100 * pca$sdev^2 / sum(pca$sdev^2)
-                       
+
+
+cor(test, method = c("pearson"))
+# le poids distingue bien les individus suivi de l'age gesta- le coeff apgar à 5 min est de trop possiblement
+#♣ pas de corrélation majeure                        

@@ -2,12 +2,12 @@
 
 libelle<-read.csv2("C:\\Users\\Louise\\Documents\\Desespoir\\Bases\\AFF_XY.csv",stringsAsFactors = FALSE)
 res_geo$MA___NumMalade<-as.character(res_geo$MA___NumMalade)
-affectation<-merge(res_geo[,c("AFF","MA___NumMalade","IRIS","IRIS_2012","iris_diff")],cas_temoinsexpoi[,c("numunique","cas")],by.x="MA___NumMalade",by.y="numunique")
+affectation<-merge(res_geo[,c("AFF","MA___NumMalade","IRIS","IRIS_2012","iris_diff","TOPO_IRIS","cp")],cas_temoinsexpoi[,c("numunique","cas")],by.x="MA___NumMalade",by.y="numunique")
 
-affectation<-affectation[,c("AFF","MA___NumMalade","IRIS","IRIS_2012","iris_diff")]
-names(affectation)<-c("AFF","Référence.Enfant","IRIS","IRIS_2012","iris_diff")
-res_geo_95_suite$IRIS<-as.factor(res_geo_95_suite$IRIS)
-affectation<-rbind(affectation,res_geo_95_suite[c("Référence.Enfant","AFF","IRIS","IRIS_2012","iris_diff")])
+affectation<-affectation[,c("AFF","MA___NumMalade","IRIS","IRIS_2012","iris_diff","cp")]
+names(affectation)<-c("AFF","Référence.Enfant","IRIS","IRIS_2012","iris_diff","result_postcode")
+res_geo_95_suite$IRIS<-as.factor(res_geo_95_suite@data$IRIS)
+affectation<-rbind(affectation,res_geo_95_suite@data[c("Référence.Enfant","AFF","IRIS","IRIS_2012","iris_diff","result_postcode")])
 
 dim(affectation)
 prop.table(table(affectation$AFF))
@@ -25,6 +25,15 @@ summary(affectation)
 ### géocoadge
 quali(x=c("lib"),nomx=c("Qualité du géocodage"), data=affectation,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="geo")
 
+###qualité du géorcodage selon la Source
+
+affectation$Source<-substr(affectation$result_postcode,1,2)
+affectation$Source<-ifelse(is.na(affectation$Source),"95",affectation$Source)
+
+geocod_dep<-affectation %>%
+  group_by(Source) %>%
+  do(data.frame(n=table(.$lib,exclude=NULL),pour=c(round(prop.table(table(.$lib))*100,1),0)))
+
 ### iris
 
 affectation$codage_iris<-ifelse( grepl("^[0-9]{9}",x=affectation$IRIS) & affectation$IRIS_2012=="-1"  & !is.na(affectation$IRIS_2012)& affectation$iris_diff==0,1,0)
@@ -37,6 +46,13 @@ table(affectation$codage_iris)
 
 
 quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=T,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
+
+### quel département 
+
+cas_temoinsexpoi$Source<-as.factor(cas_temoinsexpoi$Source)
+
+
+
 
 
 ### caractéristiques périnatales 
@@ -64,6 +80,20 @@ for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gest
 }
 
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/pericc.xls",sep="\t")
+
+nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+j<-1
+B<-NULL
+for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+  b<-test.qual(x=i,y=cas_temoinsexpoi$Source,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perics.xls",sep="\t")
+
+
+
 
 
 ### on va faire les catégories pour age mater, poids terme...;
@@ -108,8 +138,44 @@ for (i in cas_temoinsexpoi[,c("age.f","poids.f","agegestationnel.f","coeffapgar5
 
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuitec.xls",sep="\t")
 
+nomx<-c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
+j<-1
+B<-NULL
+for (i in cas_temoinsexpoi[,c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
+  b<-test.qual(x=i,y=cas_temoinsexpoi$Source,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
 
-### données distance
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuites.xls",sep="\t")
+
+
+### les patients tombent dans combien d'iris 
+
+iris_resume<-cas_temoinsexpoi %>%
+  group_by(DCOMIRIS) %>%
+  summarise (niris=n()) %>%
+  do(data.frame(.$DCOMIRIS,.$niris,Source=substr(.$DCOMIRIS,1,2)))
+
+write.table(iris_resume,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/repartition_iris.xls",sep="\t")
+length(unique(cas_temoinsexpoi$DCOMIRIS))
+
+
+long_unique<-function(x){length(unique(x))}
+
+iris_resume2<-iris_resume %>%
+  group_by(Source) %>%
+  summarise (npts=sum(..niris),
+             nbriris=long_unique(..DCOMIRIS),
+             moy_pts=mean(..niris),
+             max_pts=max(..niris))
+
+
+write.table(iris_resume2,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/repartition_iris_resume.xls",sep="\t")
+
+
+
+### données distance de l'expo
 
 summary(cas_temoinsexpoi$distance_iris)
 summary(cas_temoinsexpoi$distance_moy_pts)
@@ -118,7 +184,9 @@ s<-do.call(rbind,s)
 
 write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/distance_dep.xls",sep="\t")
 
-### nombre de points par IRIS 
+
+
+### nombre de points par IRIS pour l'expo
 
 summary(cas_temoinsexpoi$np)
 s<-tapply(cas_temoinsexpoi$np,INDEX=cas_temoinsexpoi$Source,FUN=summary)
