@@ -392,4 +392,10 @@ distance_iris<-distance_iris_c %>%
 cas_temoinsexpoi<-merge(cas_temoinsexpoi,distance_iris,by="numunique",all.x=T)
 dim(cas_temoinsexpoi)
 
+### ajout de l'affectation à l'iris 
 
+
+cas_temoinsexpoi<-merge(cas_temoinsexpoi,irispar[,c("numunique","DCOMIRIS")],by="numunique",all.x=T)
+dim(cas_temoinsexpoi)
+cas_temoinsexpoi<-unique(cas_temoinsexpoi)
+dim(cas_temoinsexpoi)

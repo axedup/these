@@ -34,6 +34,25 @@ geocod_dep<-affectation %>%
   group_by(Source) %>%
   do(data.frame(n=table(.$lib,exclude=NULL),pour=c(round(prop.table(table(.$lib))*100,1),0)))
 
+geocod_dep<-as.data.frame(geocod_dep)
+geocod_dep$Source<-as.factor(geocod_dep$Source)
+
+
+w <- reshape(geocod_dep, 
+             timevar = "Source",
+             idvar = c("n.Var1"),
+  direction = "wide")
+
+
+g<-affectation %>%
+  do(data.frame(n=table(.$lib,exclude=NULL),pour=c(round(prop.table(table(.$lib))*100,1),0)))
+
+w<-merge(w,g,by="n.Var1")
+
+
+
+write.table(w[c(7,3,4,2,5,6,8,9,15,11,12,10,13,14,16,17,1,18),],file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/geocodager.xls",sep="\t")
+
 ### iris
 
 affectation$codage_iris<-ifelse( grepl("^[0-9]{9}",x=affectation$IRIS) & affectation$IRIS_2012=="-1"  & !is.na(affectation$IRIS_2012)& affectation$iris_diff==0,1,0)
@@ -46,6 +65,27 @@ table(affectation$codage_iris)
 
 
 quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=T,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
+
+
+iris_dep<-affectation %>%
+  group_by(Source) %>%
+  do(data.frame(n=table(.$codage_iris,exclude=NULL),pour=c(round(prop.table(table(.$codage_iris))*100,1),0)))
+iris_dep<-as.data.frame(iris_dep)
+
+wt <- reshape(iris_dep, 
+             timevar = "Source",
+             idvar = c("n.Var1"),
+             direction = "wide")
+
+
+gt<-affectation %>%
+  do(data.frame(n=table(.$codage_iris,exclude=NULL),pour=c(round(prop.table(table(.$codage_iris))*100,1),0)))
+
+wt<-merge(wt,gt,by="n.Var1")
+
+
+write.table(wt[c(2,3,5,4,1,6),],file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/irisr.xls",sep="\t")
+
 
 ### quel département 
 
