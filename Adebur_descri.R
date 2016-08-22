@@ -98,6 +98,12 @@ cas_temoinsexpoi$Source<-as.factor(cas_temoinsexpoi$Source)
 ### caractéristiques périnatales 
 
 cas_temoinsexpoi$tailles<-cas_temoinsexpoi$tailles/10
+
+cas_temoinsexpoi$naissancepar<-factor(cas_temoinsexpoi$naissancepar,labels=c("vbni","vbi","cesar prog","cesar urg","cesar sp"))
+cas_temoinsexpoi$naissancepar.f2<-cas_temoinsexpoi$naissancepar
+levels(cas_temoinsexpoi$naissancepar.f2)<-c("vbni","vbi" ,"cesar" ,"cesar","cesar") 
+table(cas_temoinsexpoi$naissancepar.f2)
+
 cas_temoinsexpoi$vb<-as.factor(ifelse(cas_temoinsexpoi$naissancepar.f %in% c("vbi","vbni") & !is.na(cas_temoinsexpoi$naissancepar.f2),"vb",cas_temoinsexpoi$naissancepar.f2))
 
 quantifb(xc=c("age","agegestationnel","tailles","poids","perimetre2"),nomx=c("age en an","terme","taille en cm","poids en g","perimetre en cm"), data=cas_temoinsexpoi,RAPPORT=F,SAVEFILE=T,chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="peri")
@@ -395,6 +401,9 @@ plot(fdc[substr(fdc@data$DEPCOM,1,2) %in% c("95","93","78","92"),],col=fdc@data$
 plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 
+# EDI ()
+
+quantile(cas_temoinsexpoi$edi07,probs=c(0.20,0.40,0.60,0.80,1))
 
 cas_temoinsexpoi$oxygenotherapie<-as.factor(cas_temoinsexpoi$oxygenotherapie)
 cas_temoinsexpoi$intubation<-as.factor(cas_temoinsexpoi$intubation)
