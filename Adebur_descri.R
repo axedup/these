@@ -403,7 +403,56 @@ plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 # EDI ()
 
-quantile(cas_temoinsexpoi$edi07,probs=c(0.20,0.40,0.60,0.80,1))
+
+quantileedi<-function(x){quantile(x,probs=c(0.20,0.40,0.60,0.80,1))}
+quantileedi(cas_temoinsexpoi$edi07)
+write.table(quantileedi(cas_temoinsexpoi$edi07),file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/edi.xls",sep="\t")
+
+s<-tapply(cas_temoinsexpoi$edi07,INDEX=cas_temoinsexpoi$Source,FUN=quantileedi)
+s<-do.call(rbind,s)
+
+write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/edi_r.xls",sep="\t")
+
+
+### carte edi 
+
+fdcedi<-aus2
+fdcedi@data <- merge(fdcedi@data,cas_temoinsexpoi[,c("DCOMIRIS","edi07")],by="DCOMIRIS",all.x=T)
+#fdcedi@data<-fdcedi@data[!is.na(fdcedi@data$edi07),]
+#fdcedi@data<-unique(fdcedi@data)
+
+#head(comm@data)
+
+
+### EDI
+# Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
+classTemps <- classIntervals(fdcedi@data$edi07, 5, style = "quantile")
+# Choix d'une palette de couleur pour les 5 catégories
+palette <- brewer.pal(n = 5, name = "YlOrRd")
+
+fdcedi@data$edi07c<-as.character(cut(fdcedi@data$edi07, breaks = classTemps$brks, labels = palette, include.lowest = TRUE))
+
+legende <- as.character(levels(cut(fdcedi@data$edi07, breaks = classTemps$brks, include.lowest = TRUE, right = FALSE)))
+
+#iris toute l'idf
+plot(fdcedi,col=fdcedi@data$edi07c)
+legend("bottomright",legend=legende,fill=palette,cex=0.3,pt.cex=5)
+
+
+plot(fdcedi[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("75"),],col=fdcedi@data$edi07c)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+plot(fdcedi[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("95"),],col=fdcedi@data$edi07c)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+
+
+
+
+
+
+
+
 
 cas_temoinsexpoi$oxygenotherapie<-as.factor(cas_temoinsexpoi$oxygenotherapie)
 cas_temoinsexpoi$intubation<-as.factor(cas_temoinsexpoi$intubation)

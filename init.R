@@ -39,7 +39,7 @@ library(RColorBrewer)
 #iris
 #import_donnes_expo-2
 #corr-cor2
-
+#edi
 
 #debut descri
 # test univarié
