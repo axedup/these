@@ -9,4 +9,7 @@ edi$IRIS<-as.character(edi$IRIS)
 edi$DCOMIRIS<-ifelse(!is.na(edi$IRIS_reel),edi$IRIS_reel,edi$IRIS)
 
 base_sauv<-cas_temoinsexpoi
-cas_temoinsexpoi<-merge(cas_temoinsexpoi,edi,by="DCOMIRIS",all.x=T)
+cas_temoinsexpoi<-merge(base_sauv,edi,by="DCOMIRIS",all.x=T)
+dim(cas_temoinsexpoi)
+
+
