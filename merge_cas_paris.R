@@ -165,7 +165,7 @@ g[,c("MA___NumMalade","numt")]
 g<-g[,order(colnames(g),decreasing=TRUE)]
 names(g)<-names(test)
 fait<-rbind(test,g)
-fait<-merge(fait,data_paris[,c("numt","datenaissance","poids2")], by="numt",suffixes=c("",".c")) # pour corrige les gags d'eeureur de ddn dans le registe 
+fait<-merge(fait,data_paris[,c("numt","datenaissance","poids","poids2")], by="numt",suffixes=c("",".c")) # pour corrige les gags d'eeureur de ddn dans le registe 
 names(fait)
 dim(fait)
 
