@@ -450,7 +450,7 @@ plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 histo<- cas_temoinsexpoi[cas_temoinsexpoi$cas=="1",]%>%
   group_by(Source) %>%
-  do(data.frame(n=table(.$TU__FamilleDiag,exclude=NULL),pour=c(round(prop.table(table(.$TU__FamilleDiag))*100,1),0)))
+  do(data.frame(n=table(.$TU__FamilleDiagcor,exclude=NULL),pour=c(round(prop.table(table(.$TU__FamilleDiagcor))*100,1),0)))
 
 histo<-as.data.frame(histo)
 histo$Source<-as.factor(histo$Source)
@@ -463,7 +463,7 @@ w <- reshape(histo,
 
 
 g<-cas_temoinsexpoi[cas_temoinsexpoi$cas=="1",] %>%
-  do(data.frame(n=table(.$TU__FamilleDiag,exclude=NULL),pour=c(round(prop.table(table(.$TU__FamilleDiag))*100,1),0)))
+  do(data.frame(n=table(.$TU__FamilleDiagcor,exclude=NULL),pour=c(round(prop.table(table(.$TU__FamilleDiagcor))*100,1),0)))
 
 w<-merge(w,g,by="n.Var1")
 
@@ -475,7 +475,7 @@ write.table(w,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/type_gra
 
 histo<- cas_temoinsexpoi[cas_temoinsexpoi$cas=="1",]%>%
   group_by(Source) %>%
-  do(data.frame(n=table(.$TU__ICDO3MorphoLibelle_z,exclude=NULL),pour=c(round(prop.table(table(.$TU__ICDO3MorphoLibelle_z))*100,1),0)))
+  do(data.frame(n=table(.$TU__ICDO3MorphoLibelle_zcor,exclude=NULL),pour=c(round(prop.table(table(.$TU__ICDO3MorphoLibelle_zcor))*100,1),0)))
 
 histo<-as.data.frame(histo)
 histo$Source<-as.factor(histo$Source)
@@ -488,7 +488,7 @@ w <- reshape(histo,
 
 
 g<-cas_temoinsexpoi[cas_temoinsexpoi$cas=="1",] %>%
-  do(data.frame(n=table(.$TU__ICDO3MorphoLibelle_z,exclude=NULL),pour=c(round(prop.table(table(.$TU__ICDO3MorphoLibelle_z))*100,1),0)))
+  do(data.frame(n=table(.$TU__ICDO3MorphoLibelle_zcor,exclude=NULL),pour=c(round(prop.table(table(.$TU__ICDO3MorphoLibelle_zcor))*100,1),0)))
 
 w<-merge(w,g,by="n.Var1")
 
