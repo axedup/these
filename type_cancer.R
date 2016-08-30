@@ -49,6 +49,7 @@ anapath$TU__ICDO3MorphoLibelle_zcor<-ifelse(is.na(anapath$TU__ICDO3MorphoLibelle
 
 
 final<-NULL
+anapath$strates<-NA
 anapath$grandtype<-NA
 anapath$categories<-NA
 anapath$libelle<-NA
@@ -76,6 +77,7 @@ for (i in anapath$numunique[anapath$cas=="1"]){
   ct$libelle<-rep(ct$TU__ICDO3MorphoLibelle_z[ct$cas=="1"],11)
   ct$categoriescor<-rep(ct$TU__FamilleDiagcor[ct$cas=="1"],11)
   ct$libellecor<-rep(ct$TU__ICDO3MorphoLibelle_zcor[ct$cas=="1"],11)
+  ct$strates<-rep(ct$numunique[ct$cas=="1"],11)
   
   final<-rbind(final,ct)
 }
@@ -85,7 +87,7 @@ final$leucemie<-ifelse(final$categoriescor %in% c("LA","LAL","LAM"),1,0)
 final$tembryonnaire<-ifelse(grepl(pattern="blastome|latome",x=final$libellecor),1,0)
 final$tc<-ifelse(final$categoriescor %in% c("TC"),1,0)
 
-#sauvbaseparis95->cas_temoinsexpoi
+sauvbaseparis95->cas_temoinsexpoi
 
 
 cas_temoinsexpoi<-final

@@ -77,4 +77,37 @@ pca<-prcomp(test)
 
 cor(test, method = c("pearson"))
 # le poids distingue bien les individus suivi de l'age gesta- le coeff apgar à 5 min est de trop possiblement
-#♣ pas de corrélation majeure                        
+#♣ pas de corrélation majeure   
+
+###====Leucémie====###
+
+modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+summary(modeltestleucemie)
+
+
+
+modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+summary(modeltestleucemie)
+
+
+
+###====Calcul des OR====###
+
+
+varlist<-c("poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","vb","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
+models <- lapply(varlist, )
+
+setwd("C:/Users/Louise/Documents/Desespoir/Bases/resultats")
+sink("test-univ.txt")
+r<-lapply(models, summary)
+r
+conf<-lapply(models,confint)
+lapply(conf,exp)
+sink()
+
+
+clogit(cas ~ poids.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ age.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ parite.f2 +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ sexe +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ vb +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
