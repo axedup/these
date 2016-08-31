@@ -79,23 +79,15 @@ cor(test, method = c("pearson"))
 # le poids distingue bien les individus suivi de l'age gesta- le coeff apgar à 5 min est de trop possiblement
 #♣ pas de corrélation majeure   
 
-###====Leucémie====###
-
-modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
-summary(modeltestleucemie)
-
-
-
-modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
-summary(modeltestleucemie)
-
-
 
 ###====Calcul des OR====###
 
 
-varlist<-c("poids.f","agegestationnel.f","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","vb","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
-models <- lapply(varlist, )
+varlist<-c("poids.f","agegestationnel.f","age.f","agegestationnel.f2","age.f2","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","vb","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
+models <- lapply(varlist, function(x){
+clogit(substitute(cas ~ i+strata(strates), list(i = as.name(x))), data=cas_temoinsexpoi,method ="exact")
+})
+
 
 setwd("C:/Users/Louise/Documents/Desespoir/Bases/resultats")
 sink("test-univ.txt")
@@ -106,8 +98,94 @@ lapply(conf,exp)
 sink()
 
 
-clogit(cas ~ poids.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+ model<-function(x){
+   with(cas_temoinsexpoi,{
+     model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates),method=c("exact"))
+     #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)
+    return(s)
+   return(p)
+   })
+ }
+
+
+
+cas_temoinsexpoi$cas<-as.numeric(as.character(cas_temoinsexpoi$cas))
+
+jesaispas<-apply(cas_temoinsexpoi[,c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep")],2,model)
+conf<-lapply(jesaispas,function(x){x$conf.int})
+
+
+
+
+cas_temoinsexpoi$poids.fna<-ifelse(is.na(cas_temoinsexpoi$poids.f),"NA",cas_temoinsexpoi$poids.f)
+cas_temoinsexpoi$agegestationnel.fna<-ifelse(is.na(cas_temoinsexpoi$agegestationnel.f),"NA",cas_temoinsexpoi$agegestationnel.f)
+cas_temoinsexpoi$age.fna<-ifelse(is.na(cas_temoinsexpoi$age.f),"NA",cas_temoinsexpoi$age.f)
+cas_temoinsexpoi$parite.fna<-ifelse(is.na(cas_temoinsexpoi$parite.f2),"NA",cas_temoinsexpoi$parite.f2)
+cas_temoinsexpoi$sexe.fna<-ifelse(is.na(cas_temoinsexpoi$sexe),"NA",cas_temoinsexpoi$sexe)
+cas_temoinsexpoi$coeffapgar5mncor.fna<-ifelse(is.na(cas_temoinsexpoi$coeffapgar5mncor.f),"NA",cas_temoinsexpoi$coeffapgar5mncor.f)
+
+### modèle finaux 
+clogit(cas ~ poids.f +agegestationnel.f+ age.fna + parite.fna+sexe.fna+ coeffapgar5mncor.fna+ most_dep+mopb.f2+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+## modèle avec NA 
+clogit(cas ~ poids.f +agegestationnel.f+ age.f + parite.f2+sexe+ coeffapgar5mncor.f+ mopb.f2+ most_dep+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+
 clogit(cas ~ age.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ parite.f2 +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ sexe +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ vb +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+
+
+###====Leucémie====###
+
+model<-function(x){
+  with(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],{
+    model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"))
+    #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)
+    return(s)
+    return(p)
+  })
+}
+
+
+
+
+
+jesaispasl<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,model)
+conf<-lapply(jesaispasl,function(x){x$conf.int})
+
+modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+summary(modeltestleucemie)
+
+modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+summary(modeltestleucemie)
+
+###====TC====###
+
+model<-function(x){
+  with(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",],{
+    model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$tc=="1"]),method=c("exact"))
+    #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)
+    return(s)
+    return(p)
+  })
+}
+
+
+
+
+
+jesaispast<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,model)
+conf<-lapply(jesaispast,function(x){x$conf.int})
+
+modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+summary(modeltestleucemie)
+
+modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+summary(modeltestleucemie)
+
