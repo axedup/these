@@ -112,9 +112,20 @@ sink()
 
 cas_temoinsexpoi$cas<-as.numeric(as.character(cas_temoinsexpoi$cas))
 
-jesaispas<-apply(cas_temoinsexpoi[,c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep")],2,model)
+jesaispas<-apply(cas_temoinsexpoi[,c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,model)
 conf<-lapply(jesaispas,function(x){x$conf.int})
 
+nbr<-NULL
+for (i in c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")) {
+  c<-nlevels(cas_temoinsexpoi[,i])-1
+  nbr<-c(nbr,c)
+}
+
+
+
+legende<-rep(c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop"),nbr)
+resultor<-do.call(rbind,conf)
+resultor<-cbind(legende,resultor)
 
 
 
@@ -133,7 +144,7 @@ clogit(cas ~ poids.f +agegestationnel.f+ age.f + parite.f2+sexe+ coeffapgar5mnco
 
 
 clogit(cas ~ age.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
-clogit(cas ~ parite.f2 +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ agegestationnel.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ sexe +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ vb +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 
@@ -141,7 +152,7 @@ clogit(cas ~ vb +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c
 
 ###====Leucémie====###
 
-model<-function(x){
+modell<-function(x){
   with(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],{
     model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"))
     #p<-round(summary(model1)$coefficient[2,4],3)
@@ -155,18 +166,45 @@ model<-function(x){
 
 
 
-jesaispasl<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,model)
+jesaispasl<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,modell)
 conf<-lapply(jesaispasl,function(x){x$conf.int})
 
-modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
-summary(modeltestleucemie)
+nbr<-NULL
+for (i in c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")) {
+  c<-nlevels(cas_temoinsexpoi[,i])-1
+  nbr<-c(nbr,c)
+}
 
-modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
-summary(modeltestleucemie)
+
+
+legende<-rep(c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop"),nbr)
+resultor<-do.call(rbind,conf)
+resultor<-cbind(legende,resultor)
+
+
+
+
+
+
+model1<-clogit(cas ~ vb+age.f+most_dep+mopb.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
+summary(model1)
+
+
+
+#modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+#summary(modeltestleucemie)
+
+#modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
+#summary(modeltestleucemie)
+
+
+
+
+
 
 ###====TC====###
 
-model<-function(x){
+modeltc<-function(x){
   with(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",],{
     model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$tc=="1"]),method=c("exact"))
     #p<-round(summary(model1)$coefficient[2,4],3)
@@ -177,15 +215,53 @@ model<-function(x){
 }
 
 
-
-
-
-jesaispast<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,model)
+jesaispast<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,modeltc)
 conf<-lapply(jesaispast,function(x){x$conf.int})
 
-modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
-summary(modeltestleucemie)
+nbr<-NULL
+for (i in c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")) {
+  c<-nlevels(cas_temoinsexpoi[,i])-1
+  nbr<-c(nbr,c)
+}
 
-modeltestleucemie2<-glm(cas~age.f+ moyenne_no2.f2 + poids.f +vb+ agegestationnel.f+ ageenf+parite.f2+sexe +most_dep,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
-summary(modeltestleucemie)
+
+legende<-rep(c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop"),nbr)
+resultor<-do.call(rbind,conf)
+resultor<-cbind(legende,resultor)
+
+
+modeltestc<-clogit(cas~age.f +most_dep+ poids.f + strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+###====tembryonnaire====###
+
+modelte<-function(x){
+  with(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",],{
+    model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$tembryonnaire=="1"]),method=c("exact"))
+    #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)
+    return(s)
+    return(p)
+  })
+}
+
+
+jesaispaste<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")],2,modelte)
+conf<-lapply(jesaispaste,function(x){x$conf.int})
+
+nbr<-NULL
+for (i in c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop")) {
+  c<-nlevels(cas_temoinsexpoi[,i])-1
+  nbr<-c(nbr,c)
+}
+
+
+legende<-rep(c("mopb.f2","mopn.f2","poids.f","agegestationnel.f","age.f2","agegestationnel.f2","age.f","moyenne_benzene.f","moyenne_no2.f","gestite.f2","parite.f2","sexe","mopb.f","mopn.f","coeffapgar5mncor.f","moyenne_benzene.f2","moyenne_no2.f2","vb","most_dep","parite.f3","forte_expo","forte_expop"),nbr)
+resultor<-do.call(rbind,conf)
+resultor<-cbind(legende,resultor)
+
+
+modeltestc<-clogit(cas~age.f +most_dep+ poids.f + strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
 

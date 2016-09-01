@@ -104,6 +104,7 @@ cas_temoinsexpoi$parite.f3<-cas_temoinsexpoi$parite.f2
 cas_temoinsexpoi$parite.f3<-ifelse(cas_temoinsexpoi$parite >2,"3 et +",cas_temoinsexpoi$parite.f2)
 table(cas_temoinsexpoi$parite.f3)
 
+cas_temoinsexpoi$parite.f3<-as.factor(cas_temoinsexpoi$parite.f3)
 
 cas_temoinsexpoi$tailles<-cas_temoinsexpoi$tailles/10
 
@@ -532,7 +533,7 @@ s<-do.call(rbind,s)
 write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/edi_r.xls",sep="\t")
 
 cas_temoinsexpoi$most_dep<-ifelse(cas_temoinsexpoi$edi07 >= quantile(cas_temoinsexpoi$edi07,probs=c(0.20,0.40,0.60,0.80,1))[4],1,0)
-
+cas_temoinsexpoi$most_dep<-as.factor(cas_temoinsexpoi$most_dep)
 
 
 
