@@ -148,7 +148,22 @@ for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gest
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perics.xls",sep="\t")
 
 
+cas_temoinsexpoi$extraction<-as.factor(cas_temoinsexpoi$extraction)
 
+nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+j<-1
+B<-NULL
+for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+  b<-test.qual(x=i,y=cas_temoinsexpoi$extraction,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perice.xls",sep="\t")
+
+
+
+### par type de cancer 
 
 nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
 j<-1
@@ -278,6 +293,23 @@ write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuit
 nomx<-c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
 j<-1
 B<-NULL
+for (i in cas_temoinsexpoi[,c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
+  b<-test.qual(x=i,y=cas_temoinsexpoi$extraction,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  B<-rbind(B,b)
+  j<-j+1
+}
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuitee.xls",sep="\t")
+
+
+
+
+
+
+### type de cancer
+nomx<-c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
+j<-1
+B<-NULL
 for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$leucemie==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
@@ -344,7 +376,7 @@ cas_temoinsexpoi$moyenne_benzene.f<-cut(cas_temoinsexpoi$moyenne_benzene,breaks=
 table(cas_temoinsexpoi$moyenne_benzene.f,exclude = NULL)
 summary(cas_temoinsexpoi$mopb)
 
-cas_temoinsexpoi$moyenne_benzene.f2<-ifelse(cas_temoinsexpoi$moyenne_benzene < summary(cas_temoinsexpoi$moyenne_benzene)["Mean"],0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$moyenne_benzene.f2<-ifelse(cas_temoinsexpoi$moyenne_benzene < summary(cas_temoinsexpoi$moyenne_benzene)["Median"],0,1) # le découpage précédent est trop concentré sur les petites classes
 cas_temoinsexpoi$moyenne_benzene.f2<-as.factor(cas_temoinsexpoi$moyenne_benzene.f2)
 cas_temoinsexpoi$moyenne_benzene.f3<-ifelse(cas_temoinsexpoi$moyenne_benzene <2,0,1) # le découpage précédent est trop concentré sur les petites classes
 cas_temoinsexpoi$moyenne_benzene.f3<-as.factor(cas_temoinsexpoi$moyenne_benzene.f3)
@@ -358,7 +390,7 @@ cas_temoinsexpoi$mopb.f<-cut(cas_temoinsexpoi$mopb,breaks=c(min(cas_temoinsexpoi
                                                                                   summary(cas_temoinsexpoi$mopb)["3rd Qu."],
                                                                                   max(cas_temoinsexpoi$mopb)+1), right=F,include.lowest=T)
 
-cas_temoinsexpoi$mopb.f2<-ifelse(cas_temoinsexpoi$mopb < summary(cas_temoinsexpoi$mopb)["Mean"] ,0,1) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$mopb.f2<-ifelse(cas_temoinsexpoi$mopb < summary(cas_temoinsexpoi$mopb)["Median"] ,0,1) # le découpage précédent est trop concentré sur les petites classes
 cas_temoinsexpoi$mopb.f2<-as.factor(cas_temoinsexpoi$mopb.f2)
 cas_temoinsexpoi$mopb.f3<-ifelse(cas_temoinsexpoi$mopb <2,0,1)
 cas_temoinsexpoi$mopb.f3<-as.factor(cas_temoinsexpoi$mopb.f3)
@@ -373,7 +405,7 @@ cas_temoinsexpoi$moyenne_no2.f<-cut(cas_temoinsexpoi$moyenne_no2,breaks=c(min(ca
                                                                        max(cas_temoinsexpoi$moyenne_no2)+1), right=F,include.lowest=T)
 
 
-cas_temoinsexpoi$moyenne_no2.f2<-ifelse(cas_temoinsexpoi$moyenne_no2 <  summary(cas_temoinsexpoi$moyenne_no2)["Mean"],0,1)# le no2 est mieux réparti
+cas_temoinsexpoi$moyenne_no2.f2<-ifelse(cas_temoinsexpoi$moyenne_no2 <  summary(cas_temoinsexpoi$moyenne_no2)["Median"],0,1)# le no2 est mieux réparti
 
 
 cas_temoinsexpoi$moyenne_no2.f2<-as.factor(cas_temoinsexpoi$moyenne_no2.f2)
@@ -384,7 +416,7 @@ cas_temoinsexpoi$mopn.f<-cut(cas_temoinsexpoi$mopn,breaks=c(min(cas_temoinsexpoi
                                                                           summary(cas_temoinsexpoi$mopn)["3rd Qu."],
                                                             max(cas_temoinsexpoi$mopn)+1), right=F,include.lowest=T)
 
-cas_temoinsexpoi$mopn.f2<-ifelse(cas_temoinsexpoi$mopn < summary(cas_temoinsexpoi$mopn)["Mean"],0,1)                                                            
+cas_temoinsexpoi$mopn.f2<-ifelse(cas_temoinsexpoi$mopn < summary(cas_temoinsexpoi$mopn)["Median"],0,1)                                                            
 cas_temoinsexpoi$mopn.f2<-as.factor(cas_temoinsexpoi$mopn.f2)          
    
 summary(cas_temoinsexpoi$mopn.f)
@@ -408,18 +440,24 @@ cas_temoinsexpoi$forte_expop<-as.factor(cas_temoinsexpoi$forte_expop)
  ### c'est pas parfait mais c'est les problèmes d'intervalles ouverts/ fermé. 
 
 nomx<-c("moyenne_benzene.f","moyenne_benzene.f2","moyenne_benzene.f3",
-        "mopb.f","mopb.f2","mopb.f3","moyenne_no2.f","moyenne_no2.f2","mopn.f","mopn.f2")
+        "mopb.f","mopb.f2","mopb.f3","moyenne_no2.f","moyenne_no2.f2","mopn.f","mopn.f2","forte_expo","forte_expop")
 j<-1
 B<-NULL
 for (i in c("moyenne_benzene.f","moyenne_benzene.f2", "moyenne_benzene.f3",
-            "mopb.f","mopb.f2","mopb.f3","moyenne_no2.f","moyenne_no2.f2","mopn.f","mopn.f2"
+            "mopb.f","mopb.f2","mopb.f3","moyenne_no2.f","moyenne_no2.f2","mopn.f","mopn.f2","forte_expo","forte_expop"
            )){
   b<-test.qual(x=cas_temoinsexpoi[,i],y=cas_temoinsexpoi$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc2.xls",sep="\t")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc3.xls",sep="\t")
+
+
+
+
+
+
 
 
 
