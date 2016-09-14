@@ -174,33 +174,46 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
   j<-j+1
 }
 
+cas_temoinsexpoi$leucemie<-as.factor(cas_temoinsexpoi$leucemie)
+cas_temoinsexpoi$cas<-as.factor(cas_temoinsexpoi$cas)
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$leucemie==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_leucemie.xls",sep="\t")
+
+
+nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","parite.f3","mode d'accouchement","voie basse ou césar","voie basse")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","parite.f3","naissancepar","naissancepar.f2","vb")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tembryonnaire==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
-  
+  j<-j+1
+}  
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tembr.xls",sep="\t")
+
+
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
   j<-1
   B<-NULL
-  for (i in cas_temoinsexpoi[cas_temoinsexpoi$tc==1,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+  for (i in cas_temoinsexpoi[cas_temoinsexpoi$tc==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
     b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tc==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
     B<-rbind(B,b)
+    j<-j+1
+  }   
     
-    
-
+  write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tc.xls",sep="\t")
 
 
 
@@ -223,6 +236,8 @@ cas_temoinsexpoi$age.f<-relevel(cas_temoinsexpoi$age.f,ref="[30,35)")
 table(cas_temoinsexpoi$age.f)
 
 cas_temoinsexpoi$age.f2<-cut(cas_temoinsexpoi$age,breaks=c(0,35,80),include.lowest = T,right = F)
+cas_temoinsexpoi$age.f3<-cut(cas_temoinsexpoi$age,breaks=c(0,25,80),include.lowest = T,right = F)
+
 
 table(cas_temoinsexpoi$age.f2,cas_temoinsexpoi$age)
 table(cas_temoinsexpoi$age.f2)
@@ -243,6 +258,9 @@ table(cas_temoinsexpoi$poids.f)
 cas_temoinsexpoi$poids.f<-reorder(cas_temoinsexpoi$poids.f,new.order=c(3,1,2,4,5))
 cas_temoinsexpoi$poids.f<-relevel(cas_temoinsexpoi$poids.f,ref="[3e+03,3.5e+03)")
 table(cas_temoinsexpoi$poids.f)
+
+cas_temoinsexpoi$poids.f3<-cut(cas_temoinsexpoi$poids,breaks=c(0,2500,8000),include.lowest = T,right = F)
+table(cas_temoinsexpoi$poids.f3)
 
 plot(cas_temoinsexpoi$agegestationnel,cas_temoinsexpoi$poids)
 
@@ -306,7 +324,7 @@ write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perisuit
 
 
 
-### type de cancer
+### par type de cancer
 nomx<-c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
 j<-1
 B<-NULL
@@ -315,6 +333,10 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("age.f","poids.f","age
   B<-rbind(B,b)
   j<-j+1
 }
+
+
+
+
 
 
 
@@ -451,7 +473,7 @@ for (i in c("moyenne_benzene.f","moyenne_benzene.f2", "moyenne_benzene.f3",
   j<-j+1
 }
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc3.xls",sep="\t")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expoc4.xls",sep="\t")
 
 
 
@@ -684,4 +706,11 @@ cas_temoinsexpoi$trisomie<-as.factor(cas_temoinsexpoi$trisomie)
 cas_temoinsexpoi$autrez<-as.factor(cas_temoinsexpoi$autrez)
 cas_temoinsexpoi$gestes_techniques<-as.factor(cas_temoinsexpoi$gestes_techniques)
 
-
+nomx<-c("trisomie","malformcard","hydrocephalie","malformrenale","reductionmembre")
+j<-1
+B<-NULL
+for (i in cas_temoinsexpoi[,c("trisomie","malformcard","hydrocephalie","malformrenale","reductionmembre")] ){
+    b<-test.qual(x=i,y=cas_temoinsexpoi$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+   B<-rbind(B,b)
+   j<-j+1
+  }
