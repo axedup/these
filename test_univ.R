@@ -221,7 +221,16 @@ resultor<-cbind(legende,resultor,pro)
 write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_leucemie.xls")
 
 
+f <- function(d, i){
+  d2 <- d[i,]
+  model<-clogit(cas ~ age.fna+strata(d2$strates[d2$leucemie=="1"]),data=d2[d2$leucemie=="1",],method=c("exact"))
+  return(model$coefficients[4])
+}
 
+
+bootcorr <- boot(cas_temoinsexpoi, f, R=500)
+bootcorr
+boot.ci(bootcorr, type = "norm")
 
 model1l<-clogit(cas ~ vbna+age.f3na+mopb.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model1l)
@@ -246,7 +255,7 @@ summary(model2l)
 model3l<-clogit(cas ~ vbna+age.f3na+mopb.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model3l)
 
-model4l<-clogit(cas ~ vbna+age.f3na+forte_expop+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
+model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model4l)
 
 
@@ -299,8 +308,16 @@ resultor<-cbind(legende,resultor,pro)
 write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_tc.xls")
 
 
-modeltestc<-clogit(cas~age.f2na +agegestationnel.f2+ poids.f + strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+modeltestc<-clogit(cas~agegestationnel.f2 +age.f3na+poids.f3+ forte_expop+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
 summary(modeltestc)
+
+
+modeltestc2<-clogit(cas~agegestationnel.f2 +age.f3na+poids.f3+ mopb.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc2)
+
+modeltestc3<-clogit(cas~agegestationnel.f2 +age.f3na+poids.f3+ mopn.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc3)
+
 
 ###====tembryonnaire====###
 

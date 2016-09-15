@@ -177,15 +177,14 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
 cas_temoinsexpoi$leucemie<-as.factor(cas_temoinsexpoi$leucemie)
 cas_temoinsexpoi$cas<-as.factor(cas_temoinsexpoi$cas)
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$leucemie==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
-
 
 
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_leucemie.xls",sep="\t")
@@ -496,7 +495,7 @@ for (i in c("moyenne_benzene.f","moyenne_benzene.f2", "moyenne_benzene.f3",
   j<-j+1
 }
 
-
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/expo_leucemie.xls",sep="\t")
 
 
 
