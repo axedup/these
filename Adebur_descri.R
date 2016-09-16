@@ -177,10 +177,10 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
 cas_temoinsexpoi$leucemie<-as.factor(cas_temoinsexpoi$leucemie)
 cas_temoinsexpoi$cas<-as.factor(cas_temoinsexpoi$cas)
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$leucemie==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
@@ -190,10 +190,10 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_leucemie.xls",sep="\t")
 
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","parite.f3","mode d'accouchement","voie basse ou césar","voie basse")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","parite.f3","naissancepar","naissancepar.f2","vb")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tembryonnaire==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
@@ -203,10 +203,10 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetu
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tembr.xls",sep="\t")
 
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","age.f2","age.f3","poids.f","poids.f3","agegestationnel.f","agegestationnel.f2","coeffapgar5mncor.f")
   j<-1
   B<-NULL
-  for (i in cas_temoinsexpoi[cas_temoinsexpoi$tc==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+  for (i in cas_temoinsexpoi[cas_temoinsexpoi$tc==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","age.f2","age.f3","poids.f","poids.f3","agegestationnel.f","agegestationnel.f2","coeffapgar5mncor.f")] ){
     b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tc==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
     B<-rbind(B,b)
     j<-j+1
@@ -235,7 +235,8 @@ cas_temoinsexpoi$age.f<-relevel(cas_temoinsexpoi$age.f,ref="[30,35)")
 table(cas_temoinsexpoi$age.f)
 
 cas_temoinsexpoi$age.f2<-cut(cas_temoinsexpoi$age,breaks=c(0,35,80),include.lowest = T,right = F)
-cas_temoinsexpoi$age.f3<-cut(cas_temoinsexpoi$age,breaks=c(0,25,80),include.lowest = T,right = F)
+cas_temoinsexpoi$age.f3<-cut(cas_temoinsexpoi$age,breaks=c(0,27,80),include.lowest = T,right = F)
+cas_temoinsexpoi$age.f4<-as.factor(ifelse(cas_temoinsexpoi$age < summary(cas_temoinsexpoi$age)["Median"],0,1)) # le découpage précédent est trop concentré sur les petites classes
 
 
 table(cas_temoinsexpoi$age.f2,cas_temoinsexpoi$age)
@@ -260,6 +261,11 @@ table(cas_temoinsexpoi$poids.f)
 
 cas_temoinsexpoi$poids.f3<-cut(cas_temoinsexpoi$poids,breaks=c(0,2500,8000),include.lowest = T,right = F)
 table(cas_temoinsexpoi$poids.f3)
+cas_temoinsexpoi$poids.f4<-as.factor(ifelse(cas_temoinsexpoi$poids < summary(cas_temoinsexpoi$poids)["Median"],0,1)) # le découpage précédent est trop concentré sur les petites classes
+cas_temoinsexpoi$poids.f5<-as.factor(ifelse(cas_temoinsexpoi$poids < 3000,0,1)) # le découpage précédent est trop concentré sur les petites classes
+
+
+
 
 plot(cas_temoinsexpoi$agegestationnel,cas_temoinsexpoi$poids)
 
@@ -276,13 +282,26 @@ table(cas_temoinsexpoi$agegestationnel.f)
 cas_temoinsexpoi$agegestationnel.f2<-cut(cas_temoinsexpoi$agegestationnel,breaks=c(22,38,40,45),include.lowest = T,right = F)
 table(cas_temoinsexpoi$agegestationnel.f2) # voir pour 40 ou 41
 
+cas_temoinsexpoi$agegestationnel.f3<-cut(cas_temoinsexpoi$agegestationnel,breaks=c(22,40,45),include.lowest = T,right = F)
+table(cas_temoinsexpoi$agegestationnel.f3) # voir pour 40 ou 41
+
+cas_temoinsexpoi$agegestationnel.f4<-cut(cas_temoinsexpoi$agegestationnel,breaks=c(22,38,45),include.lowest = T,right = F)
+table(cas_temoinsexpoi$agegestationnel.f4) 
+
 #cas_temoinsexpoi$agegestationnel.f<-reorder(cas_temoinsexpoi$agegestationnel.f,new.order=c(3,1,2,4))
 table(cas_temoinsexpoi$agegestationnel.f)
-cas_temoinsexpoi$agegestationnel.f2<-relevel(cas_temoinsexpoi$agegestationnel.f2,ref="[38,40)")
 table(cas_temoinsexpoi$agegestationnel.f2)
 
 
+cas_temoinsexpoi$taille.f<-cut(cas_temoinsexpoi$tailles,breaks=c(min(cas_temoinsexpoi$tailles,na.rm=T),
+                                                                                  summary(cas_temoinsexpoi$tailles)["1st Qu."], 
+                                                                                  summary(cas_temoinsexpoi$tailles)["Median"],
+                                                                                  summary(cas_temoinsexpoi$tailles)["3rd Qu."],
+                                                                                  max(cas_temoinsexpoi$tailles,na.rm=T)+1), right=F,include.lowest=T)
 
+
+cas_temoinsexpoi$taille.f2<-as.factor(ifelse(cas_temoinsexpoi$tailles < summary(cas_temoinsexpoi$tailles)["Median"],0,1))
+cas_temoinsexpoi$nbfoetus.f<-as.factor(cas_temoinsexpoi$nbfoetus)
 
 
 nomx<-c("age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
