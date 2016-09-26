@@ -1,11 +1,11 @@
 ### import Stata ###
 
-#library(foreign)
+library(foreign)
 
 data_2010 <- read.dta("C:/Users/Louise/Documents/Desespoir/Bases/CS8/ORS/bases pour cancer enfant/base PCS 2010.dta") 
 data_2011 <- read.dta("C:/Users/Louise/Documents/Desespoir/Bases/CS8/ORS/bases pour cancer enfant/base PCS 2011.dta") 
 data_2012 <- read.dta("C:/Users/Louise/Documents/Desespoir/Bases/CS8/ORS/bases pour cancer enfant/base PCS 2012.dta") 
-data_2013 <- read.dta("C:/Users/Louise/Documents/Desespoir/BasesCS8/ORS/bases pour cancer enfant/base PCS 2013.dta") 
+data_2013 <- read.dta("C:/Users/Louise/Documents/Desespoir/Bases/CS8/ORS/bases pour cancer enfant/base PCS 2013.dta") 
 ### les dates sont importés directement en date. 
 
 

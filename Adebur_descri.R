@@ -177,10 +177,15 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
 cas_temoinsexpoi$leucemie<-as.factor(cas_temoinsexpoi$leucemie)
 cas_temoinsexpoi$cas<-as.factor(cas_temoinsexpoi$cas)
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar",
+        "voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4",
+        "agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
+                                                          "naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f",
+                                                          "coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2",
+                                                          "agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$leucemie==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
@@ -190,10 +195,15 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_leucemie.xls",sep="\t")
 
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar",
+        "voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4",
+        "agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
+                                                               "naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f",
+                                                               "coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2",
+                                                               "agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tembryonnaire==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1

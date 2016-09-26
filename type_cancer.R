@@ -1,4 +1,14 @@
 type_cancer<-read.csv2(file = "L:/20160825_Liste_cas_IDF_1013.csv",na.strings ="")
+type_cancer$datenaissance<-as.character(type_cancer$MA__DateNaissance)
+type_cancer$datenaissance<-as.Date(type_cancer$datenaissance,format="%d/%m/%Y")
+
+
+type_cancer$datediag<-as.character(type_cancer$TU__DateDiag)
+type_cancer$datediag<-as.Date(type_cancer$datediag,format="%d/%m/%Y")
+
+type_cancer$sexe<-type_cancer$MA__Sexe
+type_cancer$cp_naissance<-type_cancer$Departement
+
 cor_cas_paris<-read.csv(file="C:/Users/Louise/Documents/Desespoir/Bases/correspondance_cas_paris.csv")
 
 #cas_temoinsexpoi$extraction<-ifelse(cas_temoinsexpoi$Source=="75",75,95)
