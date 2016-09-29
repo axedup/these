@@ -301,11 +301,21 @@ puissance(0.28,1.5)
 puissance(0.32,1.5)
 puissance(0.15,1.5)
 
-puissance_bis()
+puissance_bis<-function(p,or){
+  odds2 <- p/(1-p) 
+  odds1 <- or*odds2 
+  p1 <- odds1/(1+odds1);  p1  
+  var<-p*(1-p)
+  teta<-(p-p1)/(p*(1-p))
+  
+  return(((1.960+0.8416)/(teta*sqrt(var)))^2*(11/10))
+  
+}
 
-
-
-
+puissance_bis(0.15,1.5)
+puissance_bis(0.28,1.5)
+puissance_bis(0.30,1.5)
+puissance_bis(0.32,1.5)
 
 model2l<-clogit(cas ~ vbna+age.f3na+moyenne_no2.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model2l)
