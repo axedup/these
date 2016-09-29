@@ -13,6 +13,7 @@ library(ggplot2)
 library(gdata)
 library(classInt)
 library(RColorBrewer)
+library(epiDisplay)
 # importbase
 
 # programme_paris
@@ -43,3 +44,5 @@ library(RColorBrewer)
 
 #debut descri
 # test univarié
+
+#cohorte

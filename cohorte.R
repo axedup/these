@@ -97,7 +97,7 @@ cohorte$gestite.f<-as.factor(as.character(cohorte$gestite))
 cohorte$gestite.f2<-ifelse(cohorte$gestite >= 4,"4 et +", cohorte$gestite) 
 cohorte$gestite.f2<-as.factor(cohorte$gestite.f2) 
 
-
+cohorte$parite<-ifelse(cohorte$parite > 25,NA,cohorte$parite)
 cohorte$parite.f<-as.factor(as.character(cohorte$parite)) 
 cohorte$parite.f2<-ifelse(cohorte$parite >= 4,"4 et +", cohorte$parite) 
 cohorte$parite.f2<-as.factor(cohorte$parite.f2) 
@@ -127,8 +127,7 @@ summary(cohorte$age)
 
 cohorte$cas<-as.factor(cohorte$cas)
 
-cohorte$coeffapgar1mn<-as.factor(cohorte$coeffapgar1mn)
-cohorte$coeffapgar5mn<-as.factor(cohorte$coeffapgar5mn)
+
 
 dim(cohorte)
 table(cohorte$cas)
@@ -253,6 +252,7 @@ cohorte$gestite.fna<-as.factor(ifelse(is.na(cohorte$gestite.f2),"NA",cohorte$ges
 
 cohorte$sexe.fna<-as.factor(ifelse(is.na(cohorte$sexe),"NA",cohorte$sexe))
 cohorte$coeffapgar5mncor.fna<-as.factor(ifelse(is.na(cohorte$coeffapgar5mncor.f),"NA",cohorte$coeffapgar5mncor.f))
+
 cohorte$vbna<-as.factor(ifelse(is.na(cohorte$vb),"NA",cohorte$vb))
 
 cohorte$poids.fna<-as.factor(ifelse(is.na(cohorte$poids.f),"NA",cohorte$poids.f))
@@ -278,14 +278,59 @@ cohorte$parite.f3na<-as.factor(ifelse(is.na(cohorte$parite.f3),"NA",cohorte$pari
 
 
 cohorte$sexe.fna<-as.factor(ifelse(is.na(cohorte$sexe),"NA",cohorte$sexe))
-cohorte$coeffapgar5mn.fna<-as.factor(ifelse(is.na(cohorte$coeffapgar5mn),"NA",cohorte$coeffapgar5mn))
+
+
+
+cohorte$coeffapgar5mn.f2<-ifelse(cohorte$coeffapgar5mn %in% c("9","10") ,"9-10","<9")
+cohorte$coeffapgar5mn.f2<-ifelse(is.na(cohorte$coeffapgar5mn) ,NA,cohorte$coeffapgar5mn.f2na)
+cohorte$coeffapgar5mn.f2<-as.factor(cohorte$coeffapgar5mn.f2)
+table(cohorte$coeffapgar5mn.f2)
+
+cohorte$coeffapgar5mn.f2na<-ifelse(cohorte$coeffapgar5mn %in% c("9","10") ,"9-10","<9")
+cohorte$coeffapgar5mn.f2na<-ifelse(is.na(cohorte$coeffapgar5mn) ,"NA",cohorte$coeffapgar5mn.f2na)
+
+cohorte$coeffapgar5mn.fna<-as.factor(cohorte$coeffapgar5mn.f2na)
+table(cohorte$coeffapgar5mn.f2na)
+
+cohorte$coeffapgar1mn<-as.factor(cohorte$coeffapgar1mn)
+cohorte$coeffapgar5mn<-as.factor(cohorte$coeffapgar5mn)
+table(cohorte$coeffapgar5mn,exclude = NULL)
+
+
 cohorte$vbna<-as.factor(ifelse(is.na(cohorte$vb),"NA",cohorte$vb))
 cohorte$taille.f2na<-as.factor(ifelse(is.na(cohorte$taille.f2),"NA",cohorte$taille.f2))
 cohorte$taille.fna<-as.factor(ifelse(is.na(cohorte$taille.f),"NA",cohorte$taille.f))
 
 cohorte$nbfoetus.fna<-as.factor(ifelse(is.na(cohorte$nbfoetus.f),"NA",cohorte$nbfoetus.f))
 
+cohorte$oxygenotherapie<-as.factor(cohorte$oxygenotherapie)
+cohorte$intubation<-as.factor(cohorte$intubation)
+cohorte$antibiotherapie<-as.factor(cohorte$antibiotherapie)
+cohorte$neurologique<-as.factor(cohorte$neurologique)
+cohorte$urgence<-as.factor(cohorte$urgence)
+cohorte$autre_patho<-as.factor(cohorte$autre_patho)
+cohorte$anomalie<-as.factor(cohorte$anomalie)
+cohorte$polymalformation<-as.factor(cohorte$polymalformation)
+cohorte$spinabifida<-as.factor(cohorte$spinabifida)
+cohorte$fente<-as.factor(cohorte$fente)
+cohorte$atresie<-as.factor(cohorte$atresie)
+cohorte$omphalocele<-as.factor(cohorte$omphalocele)
+cohorte$reductionmembre<-as.factor(cohorte$reductionmembre)
+cohorte$malformrenale<-as.factor(cohorte$malformrenale)
+cohorte$hydrocephalie<-as.factor(cohorte$hydrocephalie)
+cohorte$malformcard<-as.factor(cohorte$malformcard)
+cohorte$trisomie<-as.factor(cohorte$trisomie)
+cohorte$autrez<-as.factor(cohorte$autrez)
+cohorte$gestes_techniques<-as.factor(cohorte$gestes_techniques)
 
+
+
+
+
+
+quali(x=c("parite.f2","gestite.f2","nbfoetus.f","agegestationnel.f","naissancepar.f2","vb","poids.f","taille.f","coeffapgar5mn","coeffapgar5mn.f2","age.f","trisomie","malformcard","hydrocephalie","malformrenale","reductionmembre"),nomx=c("parite.f2","gestite.f2","nbfoetus.f","agegestationnel.f","naissancepar.f2","vb","poids.f","taille.f","coeffapgar5mn","coeffapgar5mn.f","age.f","trisomie","malformcard","hydrocephalie","malformrenale","reductionmembre"), data=cohorte,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE,FALSE,FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+                                                                                                                                                                                                                                                                                                                                                                                                        FALSE, FALSE, FALSE, FALSE, FALSE), numerique=c(FALSE,FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        FALSE, FALSE, FALSE, FALSE, FALSE,FALSE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
 
 
 
