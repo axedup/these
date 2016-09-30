@@ -23,7 +23,7 @@ affectation$lib<-as.factor(affectation$Lib_Affectation)
 summary(affectation)
 
 ### géocoadge
-quali(x=c("lib"),nomx=c("Qualité du géocodage"), data=affectation,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="geo")
+quali(x=c("lib"),nomx=c("Qualité du géocodage"), data=affectation,RAPPORT=F,SAVEFILE=T,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="geo")
 
 ###qualité du géorcodage selon la Source
 
@@ -64,7 +64,7 @@ affectation$codage_iris<-factor(affectation$codage_iris,labels=c("Attribution à
 table(affectation$codage_iris)
 
 
-quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=T,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
+quali(x=c("codage_iris"),nomx=c("IRIS"), data=affectation,RAPPORT=F,SAVEFILE=F,ordonner=c(FALSE), numerique=c(TRUE), seq=list(c(19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1)),chemin="C:/Users/Louise/Documents/Desespoir/Bases/resultats/",fichier="IRIS")
 
 
 iris_dep<-affectation %>%
@@ -417,7 +417,39 @@ write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/nbr_pts.
 
 ###☺ données expositions
 
-summary(cas_temoinsexpoi$moyenne_benzene)
+total<-summary(cas_temoinsexpoi$moyenne_benzene[cas_temoinsexpoi$imp==1])
+s<-tapply(cas_temoinsexpoi$moyenne_benzene[cas_temoinsexpoi$imp==1],INDEX=cas_temoinsexpoi$Source[cas_temoinsexpoi$imp==1],FUN=summary)
+s<-do.call(rbind,s)
+s<-rbind(s,total)
+
+
+write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/benzene_r_si.xls",sep="\t")
+
+total<-summary(cas_temoinsexpoi$mopb)
+s<-tapply(cas_temoinsexpoi$mopb,INDEX=cas_temoinsexpoi$Source,FUN=summary)
+s<-do.call(rbind,s)
+s<-rbind(s,total)
+
+
+write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/benzene_r_p.xls",sep="\t")
+
+
+
+
+
+total<-summary(cas_temoinsexpoi$moyenne_no2[cas_temoinsexpoi$imp==1])
+s<-tapply(cas_temoinsexpoi$moyenne_no2[cas_temoinsexpoi$imp==1],INDEX=cas_temoinsexpoi$Source[cas_temoinsexpoi$imp==1],FUN=summary)
+s<-do.call(rbind,s)
+s<-rbind(s,total)
+
+
+write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/no2_r_si.xls",sep="\t")
+
+
+
+
+
+
 cas_temoinsexpoi$moyenne_benzene.f<-cut(cas_temoinsexpoi$moyenne_benzene,breaks=c(min(cas_temoinsexpoi$moyenne_benzene),
                                                                                   summary(cas_temoinsexpoi$moyenne_benzene)["1st Qu."], 
                                                                                   summary(cas_temoinsexpoi$moyenne_benzene)["Median"],
@@ -611,7 +643,7 @@ plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 # EDI ()
 
 
-quantileedi<-function(x){quantile(x,probs=c(0.20,0.40,0.60,0.80,1))}
+quantileedi<-function(x){quantile(x,probs=c(0,0.20,0.40,0.60,0.80,1))}
 quantileedi(cas_temoinsexpoi$edi07)
 write.table(quantileedi(cas_temoinsexpoi$edi07),file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/edi.xls",sep="\t")
 
@@ -620,10 +652,13 @@ s<-do.call(rbind,s)
 
 write.table(s,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/edi_r.xls",sep="\t")
 
-cas_temoinsexpoi$most_dep<-ifelse(cas_temoinsexpoi$edi07 >= quantile(cas_temoinsexpoi$edi07,probs=c(0.20,0.40,0.60,0.80,1))[4],1,0)
+cas_temoinsexpoi$most_dep<-ifelse(cas_temoinsexpoi$edi07 >= quantile(cas_temoinsexpoi$edi07,probs=c(0,0.20,0.40,0.60,0.80,1))[4],1,0)
 cas_temoinsexpoi$most_dep<-as.factor(cas_temoinsexpoi$most_dep)
 
 
+edit<-cas_temoinsexpoi %>%
+  group_by(Source) %>%
+  do(data.frame(n=table(.$most_dep,exclude=NULL),pour=c(round(prop.table(table(.$most_dep))*100,1),0)))
 
 
 
