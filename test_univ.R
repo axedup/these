@@ -317,10 +317,16 @@ puissance_bis(0.28,1.5)
 puissance_bis(0.30,1.5)
 puissance_bis(0.32,1.5)
 
-model2l<-clogit(cas ~ vbna+age.f3na+moyenne_no2.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
+model2l<-clogit(cas ~ vbna+age.f3na+poids.f4+moyenne_benzene.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model2l)
 
+model2lb<-clogit(cas ~ vbna+age.f3na+poids.f4+moyenne_no2.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
+summary(model2lb)
 
+
+
+model2l<-clogit(cas ~ vbna+age.f3na+poids.f4+moyenne_benzene.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
+summary(model2l)
 model3l<-clogit(cas ~ vbna+age.f3na+mopb.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model3l)
 
@@ -410,8 +416,15 @@ boot.ci(bootcorr, type = "norm")
 
 
 
-modeltestc<-clogit(cas~agegestationnel.f4 +age.f3+poids.f5+ forte_expop+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+modeltestc<-clogit(cas~agegestationnel.f4 +age.f3+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
 summary(modeltestc)
+
+
+modeltestc<-clogit(cas~ age.f3+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+
+
 
 
 modeltestc2<-clogit(cas~agegestationnel.f2 +age.f3na+poids.f+ mopb.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
@@ -419,6 +432,11 @@ summary(modeltestc2)
 
 modeltestc3<-clogit(cas~agegestationnel.f2 +age.f3na+poids.f3+ mopn.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
 summary(modeltestc3)
+
+
+
+
+
 
 
 ###====tembryonnaire====###

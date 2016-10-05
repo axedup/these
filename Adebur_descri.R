@@ -136,16 +136,23 @@ for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gest
 
 write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/pericc.xls",sep="\t")
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar",
+"voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4",
+"agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")
+
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
+for (i in cas_temoinsexpoi[,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
+                             "naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f",
+                             "coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2",
+                             "agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")
+  ] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$Source,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perics.xls",sep="\t")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/pericssuite.xls",sep="\t")
 
 
 cas_temoinsexpoi$extraction<-as.factor(cas_temoinsexpoi$extraction)
