@@ -1,4 +1,7 @@
 type_cancer<-read.csv2(file = "L:/20160825_Liste_cas_IDF_1013.csv",na.strings ="")
+#on vire cl qui est est en double dans le registre
+type_cancer<-type_cancer[!type_cancer$MA___NumMalade=="202495",]
+
 type_cancer$datenaissance<-as.character(type_cancer$MA__DateNaissance)
 type_cancer$datenaissance<-as.Date(type_cancer$datenaissance,format="%d/%m/%Y")
 

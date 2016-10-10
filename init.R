@@ -14,6 +14,7 @@ library(gdata)
 library(classInt)
 library(RColorBrewer)
 library(epiDisplay)
+library(lubridate)
 # importbase
 
 # programme_paris
@@ -42,7 +43,9 @@ library(epiDisplay)
 #corr-cor2
 #edi
 
+# type_cancer
 #debut descri
 # test univarié
 
+#mer_cas_95_cohorte 
 #cohorte
