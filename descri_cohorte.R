@@ -207,6 +207,7 @@ pro<-unlist(p)
 resultor<-cbind(legende,resultor,pro)
 
 write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_toutc.xls")
++vbna+agegestationnel.f4na+age.f2na
 
-
-glm(cas ~poids.f5na+vbna+agegestationnel.f4na+age.f2na,family=binomial(logit),data=cohorte_sd_leucemie)
+glm(cas ~sexe,family=binomial(logit),data=cohorte_sd_leucemie)
+bigglm(cas ~poids.f5,family=binomial(),data=cohorte_sd_leucemie,chuncksize=100,maxit=10)
