@@ -269,6 +269,9 @@ cohorte$taille.f2<-as.factor(ifelse(cohorte$tailles < summary(cohorte$tailles)["
 cohorte$nbfoetus<-as.numeric(as.character(cohorte$nbfoetus))
 cohorte$nbfoetus<-ifelse(is.na(cohorte$nbfoetus),0,cohorte$nbfoetus)
 cohorte$nbfoetus.f<-as.factor(cohorte$nbfoetus)
+cohorte$nbfoetus.f2<-ifelse(!is.na(cohorte$nbfoetus) & cohorte$nbfoetus>1,2,cohorte$nbfoetus)
+cohorte$nbfoetus.f2<-as.factor(cohorte$nbfoetus.f2)
+
 
 cohorte$poids.fna<-as.factor(ifelse(is.na(cohorte$poids.f),"NA",cohorte$poids.f))
 cohorte$agegestationnel.fna<-as.factor(ifelse(is.na(cohorte$agegestationnel.f),"NA",cohorte$agegestationnel.f))
@@ -291,6 +294,10 @@ cohorte$poids.f5na<-as.factor(ifelse(is.na(cohorte$poids.f5),"NA",cohorte$poids.
 
 cohorte$agegestationnel.fna<-as.factor(ifelse(is.na(cohorte$agegestationnel.f),"NA",cohorte$agegestationnel.f))
 cohorte$agegestationnel.f2na<-as.factor(ifelse(is.na(cohorte$agegestationnel.f2),"NA",cohorte$agegestationnel.f2))
+cohorte$agegestationnel.f3na<-as.factor(ifelse(is.na(cohorte$agegestationnel.f3),"NA",cohorte$agegestationnel.f3))
+cohorte$agegestationnel.f4na<-as.factor(ifelse(is.na(cohorte$agegestationnel.f4),"NA",cohorte$agegestationnel.f4))
+
+
 
 cohorte$age.fna<-as.factor(ifelse(is.na(cohorte$age.f),"NA",cohorte$age.f))
 cohorte$age.f2na<-as.factor(ifelse(is.na(cohorte$age.f2),"NA",cohorte$age.f2))
@@ -334,7 +341,7 @@ cohorte$taille.f2na<-as.factor(ifelse(is.na(cohorte$taille.f2),"NA",cohorte$tail
 cohorte$taille.fna<-as.factor(ifelse(is.na(cohorte$taille.f),"NA",cohorte$taille.f))
 
 cohorte$nbfoetus.fna<-as.factor(ifelse(is.na(cohorte$nbfoetus.f),"NA",cohorte$nbfoetus.f))
-
+cohorte$nbfoetus.f2na<-as.factor(ifelse(is.na(cohorte$nbfoetus.f2),"NA",cohorte$nbfoetus.f2))
 
 cohorte$oxygenotherapie<-ifelse(is.na(cohorte$oxygenotherapie),0,cohorte$oxygenotherapie)
 cohorte$oxygenotherapie<-as.factor(cohorte$oxygenotherapie)
