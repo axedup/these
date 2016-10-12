@@ -5,8 +5,10 @@ cohorte$mprofession<-as.factor(cohorte$mprofession)
 cohorte$pprofession<-as.factor(cohorte$pprofession)
 cohorte$annee<-year(cohorte$datenaissance)
 
+# après réflexion on ne garde que ceux nés en Ilde France ! 
 
-cohorte_sd<-cohorte[is.na(cohorte$age_deces_jj) & is.na(cohorte$age_deces_hh),]
+
+cohorte_sd<-cohorte[is.na(cohorte$age_deces_jj) & is.na(cohorte$age_deces_hh) & substr(cohorte$commune_nais_code,1,2) %in% c("75","78","95") ,]
 dim(cohorte)
 dim(cohorte_sd)
 
@@ -111,7 +113,7 @@ for (i in cohorte[,c("oxygenotherapie",
 
 ###====================== leucémie===========================
 
-cohorte_sd_leucemie<-cohorte_sd[cohorte_sd$leucemie==1| (cohorte_sd$cas==0),]
+cohorte_sd_leucemie<-u[u$leucemie==1| (u$cas==0),]
 
 
 nomx<-c("sexe","niveauetudes","mprofession","pprofession","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
@@ -135,7 +137,7 @@ for (i in cohorte_sd_leucemie[,c("sexe","niveauetudes","mprofession","pprofessio
   j<-j+1
 }
 
-
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/cohorte_leucemie.xls",sep="\t")
 test.quant(varquant = c("tailles","poids","perimetre2"),varqual = "cas",nomquant = c("tailles","poids","perimetre"),nomqual = "cas",data=cohorte,savefile=T,
            fichier=)
 
@@ -210,4 +212,5 @@ write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/t
 +vbna+agegestationnel.f4na+age.f2na
 
 glm(cas ~sexe,family=binomial(logit),data=cohorte_sd_leucemie)
-bigglm(cas ~poids.f5,family=binomial(),data=cohorte_sd_leucemie,chuncksize=100,maxit=10)
+glm(cas_n ~sexe.fna+agegestationnel.f2na+poids.f3na, ,family="poisson",data=cohorte_sd_leucemie)
+test<-bigglm(cas_n ~sexe.fna+agegestationnel.f2na+poids.f3na,family=poisson(),data=cohorte_sd_leucemie,chuncksize=1000,maxit=1000)
