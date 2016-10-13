@@ -5,12 +5,16 @@ cohorte$mprofession<-as.factor(cohorte$mprofession)
 cohorte$pprofession<-as.factor(cohorte$pprofession)
 cohorte$annee<-year(cohorte$datenaissance)
 
-# après réflexion on ne garde que ceux nés en Ilde France ! 
+# après réflexion on ne garde que ceux nés en Ilde France et ceux qui sont nés et résident dans le m département  ! 
 
 
 cohorte_sd<-cohorte[is.na(cohorte$age_deces_jj) & is.na(cohorte$age_deces_hh) & substr(cohorte$commune_nais_code,1,2) %in% c("75","78","95") ,]
 dim(cohorte)
 dim(cohorte_sd)
+
+cohorte_sd<-cohorte_sd[substr(cohorte$commune_nais_code,1,2)==substr(cohorte$commune_famille_code,1,2),]
+dim(cohorte_sd)
+
 
 cohorte$Source<-as.factor(cohorte$Source)
 

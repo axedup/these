@@ -228,38 +228,53 @@ modell<-function(x){
 
 
 
-jesaispasl<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-                                                                    "gestite.fna","parite.fna","sexe.fna","mopb.f",
-                                                                    "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-                                                                    "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-                                                                    "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-                                                                    "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")],2,modell)
+jesaispasl<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+                                                                    "niveauetudes","most_dep","parite.fna","parite.f2",
+                                                                    "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+                                                                    "agegestationnel.fna","agegestationnel.f2na",
+                                                                    "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+                                                                    "vbna",
+                                                                    "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+                                                                    "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                                    "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,modell)
 conf<-lapply(jesaispasl,function(x){x$conf.int})
 p<-lapply(jesaispasl,function(x){x$coefficients[,5]})
 
 
 
 nbr<-NULL
-for (i in c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f",
-            "moyenne_no2.f","gestite.fna","parite.fna","sexe.fna","mopb.f","mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2",
-            "moyenne_no2.f2","vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na","age.f4na","poids.f3na",
-            "poids.f4na","agegestationnel.f2na","agegestationnel.f3","agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")) {
+for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+            "niveauetudes","most_dep","parite.fna","parite.f2",
+            "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+            "agegestationnel.fna","agegestationnel.f2na",
+            "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+            "vbna",
+            "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+            "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
   c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",i])))-1
   nbr<-c(nbr,c)
 }
 
 
 
-legende<-rep(c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f",
-               "moyenne_no2.f","gestite.fna","parite.fna","sexe.fna","mopb.f","mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2",
-               "moyenne_no2.f2","vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na","age.f4na","poids.f3na","poids.f4na",
-               "agegestationnel.f2na","agegestationnel.f3","agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna"),nbr)
+legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+               "niveauetudes","most_dep","parite.fna","parite.f2",
+               "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+               "agegestationnel.fna","agegestationnel.f2na",
+               "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+               "vbna",
+               "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
 #resultor<-cbind(legende,resultor)
 pro<-unlist(p)
-resultor<-cbind(legende,resultor,pro)
+resultor<-cbind(resultor,pro)
+resultor<-round(resultor,2)
+resultor<-cbind(legende,resultor)
 
-write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_leucemie.xls",sep="\t")
+write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_leucemie2.xls",sep="\t")
 
 
 f <- function(d, i){
@@ -351,6 +366,9 @@ summary(model4l)
 
 ###====TC====###
 
+
+
+cas_temoinsexpoi$cas<-as.numeric(as.character(cas_temoinsexpoi$cas))
 modeltc<-function(x){
   with(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",],{
     model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$tc=="1"]),method=c("exact"))
@@ -362,40 +380,51 @@ modeltc<-function(x){
 }
 
 
-jesaispast<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-                                                              "gestite.fna","parite.fna","sexe.fna","mopb.f",
-                                                              "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-                                                              "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-                                                              "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-                                                              "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")],2,modeltc)
+jesaispast<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+                                                               "niveauetudes","most_dep","parite.fna","parite.f2",
+                                                               "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+                                                               "agegestationnel.fna","agegestationnel.f2na",
+                                                               "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+                                                               "vbna",
+                                                               "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+                                                               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                               "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,modeltc)
 conf<-lapply(jesaispast,function(x){x$conf.int})
 p<-lapply(jesaispast,function(x){x$coefficients[,5]})
 
 
 nbr<-NULL
-for (i in c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-            "gestite.fna","parite.fna","sexe.fna","mopb.f",
-            "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-            "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-            "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-            "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")) {
-  c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",i])))-1
+for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+            "niveauetudes","most_dep","parite.fna","parite.f2",
+            "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+            "agegestationnel.fna","agegestationnel.f2na",
+            "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+            "vbna",
+            "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+            "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
+  c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",i])))-1
   nbr<-c(nbr,c)
 }
 
 
-legende<-rep(c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-               "gestite.fna","parite.fna","sexe.fna","mopb.f",
-               "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-               "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-               "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-               "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna"),nbr)
+legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+               "niveauetudes","most_dep","parite.fna","parite.f2",
+               "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+               "agegestationnel.fna","agegestationnel.f2na",
+               "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+               "vbna",
+               "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
 #resultor<-cbind(legende,resultor)
 pro<-unlist(p)
-resultor<-cbind(legende,resultor,pro)
+resultor<-cbind(resultor,pro)
+resultor<-round(resultor,2)
+resultor<-cbind(legende,resultor)
 
-write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_tc.xls")
+write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_tc_2.xls")
 
 
 f <- function(d, i){
@@ -440,7 +469,7 @@ summary(modeltestc3)
 
 
 ###====tembryonnaire====###
-
+cas_temoinsexpoi$cas<-as.numeric(as.character(cas_temoinsexpoi$cas))
 modelte<-function(x){
   with(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",],{
     model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$tembryonnaire=="1"]),method=c("exact"))
@@ -452,40 +481,51 @@ modelte<-function(x){
 }
 
 
-jesaispaste<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-                                                                          "gestite.fna","parite.fna","sexe.fna","mopb.f",
-                                                                          "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-                                                                          "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-                                                                          "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-                                                                          "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")],2,modelte)
+jesaispaste<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+                                                                          "niveauetudes","most_dep","parite.fna","parite.f2",
+                                                                          "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+                                                                          "agegestationnel.fna","agegestationnel.f2na",
+                                                                          "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+                                                                          "vbna",
+                                                                          "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+                                                                          "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                                          "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,modelte)
 conf<-lapply(jesaispaste,function(x){x$conf.int})
 p<-lapply(jesaispaste,function(x){x$coefficients[,5]})
 
 nbr<-NULL
-for (i in c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-            "gestite.fna","parite.fna","sexe.fna","mopb.f",
-            "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-            "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-            "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-            "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")) {
+for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+            "niveauetudes","most_dep","parite.fna","parite.f2",
+            "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+            "agegestationnel.fna","agegestationnel.f2na",
+            "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+            "vbna",
+            "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+            "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
   c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",i])))-1
   nbr<-c(nbr,c)
 }
 
 
-legende<-rep(c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-               "gestite.fna","parite.fna","sexe.fna","mopb.f",
-               "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-               "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-               "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-               "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna"),nbr)
+legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+               "niveauetudes","most_dep","parite.fna","parite.f2",
+               "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+               "agegestationnel.fna","agegestationnel.f2na",
+               "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+               "vbna",
+               "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
 #resultor<-cbind(legende,resultor)
 pro<-unlist(p)
-resultor<-cbind(legende,resultor,pro)
 
+resultor<-cbind(resultor,pro)
+resultor<-round(resultor,2)
+resultor<-cbind(legende,resultor)
 
-write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_te.xls")
+write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_te_2.xls")
 
 
 modeltestc<-clogit(cas~sexe+agegestationnel.f2na+poids.f4+mopb.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))

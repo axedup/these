@@ -172,7 +172,7 @@ write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/perice.x
 
 ### par type de cancer 
 
-nomx<-c("sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
+nomx<-c("mprofession","sexe","etudes","parite","parite.f2","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse")
 j<-1
 B<-NULL
 for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb")] ){
@@ -183,53 +183,79 @@ for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes",
 
 cas_temoinsexpoi$leucemie<-as.factor(cas_temoinsexpoi$leucemie)
 cas_temoinsexpoi$cas<-as.factor(cas_temoinsexpoi$cas)
+cas_temoinsexpoi$mprofession<-as.factor(cas_temoinsexpoi$mprofession)
+cas_temoinsexpoi$pprofession<-as.factor(cas_temoinsexpoi$pprofession)
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar",
-        "voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4",
-        "agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")
+nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","most_dep","parite.f","parite.f2",
+"parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+        "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f",
+        "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+        "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-                                                          "naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f",
-                                                          "coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2",
-                                                          "agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","most_dep","parite.f","parite.f2",
+                                                          "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+                                                          "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+                                                          "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f",
+                                                          "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                          "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$leucemie==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
 
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_leucemie.xls",sep="\t")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_leucemie2.xls",sep="\t")
 
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar",
-        "voie basse","age.f","poids.f","agegestationnel.f","coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4",
-        "agegestationnel.f2","agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")
+nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","most_dep","parite.f","parite.f2",
+        "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+        "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f",
+        "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+        "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
 j<-1
 B<-NULL
-for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-                                                               "naissancepar","naissancepar.f2","vb","age.f","poids.f","agegestationnel.f",
-                                                               "coeffapgar5mncor.f","age.f3","age.f4","poids.f3","age.f2","poids.f4","agegestationnel.f2",
-                                                               "agegestationnel.f3","agegestationnel.f4","poids.f5","taille.f","taille.f2","nbfoetus.f")] ){
+for (i in cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","most_dep","parite.f","parite.f2",
+                                                               "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+                                                               "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+                                                               "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f",
+                                                               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                               "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")] ){
   b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tembryonnaire==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }  
 
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tembr.xls",sep="\t")
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tembr_2.xls",sep="\t")
 
 
-nomx<-c("sexe","etudes","parite","parite.f2","parite.f3","gestite","gestite.f","mode d'accouchement","voie basse ou césar","voie basse","age.f","age.f2","age.f3","poids.f","poids.f3","agegestationnel.f","agegestationnel.f2","coeffapgar5mncor.f")
+
+
+cas_temoinsexpoi$cas<-as.factor(cas_temoinsexpoi$cas)
+
+nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","most_dep","parite.f","parite.f2",
+        "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+        "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f",
+        "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+        "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")
   j<-1
   B<-NULL
-  for (i in cas_temoinsexpoi[cas_temoinsexpoi$tc==1,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2","naissancepar","naissancepar.f2","vb","age.f","age.f2","age.f3","poids.f","poids.f3","agegestationnel.f","agegestationnel.f2","coeffapgar5mncor.f")] ){
+  for (i in cas_temoinsexpoi[cas_temoinsexpoi$tc==1,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","most_dep","parite.f","parite.f2",
+                                                      "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+                                                      "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+                                                      "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f",
+                                                      "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                      "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")] ){
     b<-test.qual(x=i,y=cas_temoinsexpoi$cas[cas_temoinsexpoi$tc==1],nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
     B<-rbind(B,b)
     j<-j+1
   }   
     
-  write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tc.xls",sep="\t")
+  write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/peri_tc_2.xls",sep="\t")
 
 
 
