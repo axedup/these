@@ -12,27 +12,27 @@ cohorte_sd<-cohorte[is.na(cohorte$age_deces_jj) & is.na(cohorte$age_deces_hh) & 
 dim(cohorte)
 dim(cohorte_sd)
 
-cohorte_sd<-cohorte_sd[substr(cohorte$commune_nais_code,1,2)==substr(cohorte$commune_famille_code,1,2),]
+cohorte_sd<-cohorte_sd[!cohorte_sd$commune_nais_code %in% ("") & !cohorte_sd$commune_famille_code  %in% (""),]
+
+cohorte_sd<-cohorte_sd[substr(cohorte_sd$commune_nais_code,1,2)==substr(cohorte_sd$commune_famille_code,1,2),]
 dim(cohorte_sd)
 
 
 cohorte$Source<-as.factor(cohorte$Source)
 
-nomx<-c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-        "naissancepar","naissancepar.f2","vb","presentation","debuttravail","age.f","age.f2","age.f3","age.f4",
-        
-        "agegestationnel.f","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4",
-        "coeffapgar5mncor.f", "coeffapgar5mn.f2", "poids.f","poids.f3","poids.f4",
-        "poids.f5","taille.f","taille.f2","nbfoetus.f")
+nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+        "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+        "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+)
 
 j<-1
 B<-NULL
-for (i in cohorte[,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-                              "naissancepar","naissancepar.f2","vb","presentation","debuttravail","age.f","age.f2","age.f3","age.f4",
-                     
-                  "agegestationnel.f","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4",
-                              "coeffapgar5mncor.f","coeffapgar5mn.f2", "poids.f","poids.f3","poids.f4",
-                              "poids.f5","taille.f","taille.f2","nbfoetus.f")
+for (i in cohorte[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+                     "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+                     "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+                     "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f"
+                     ,"coeffapgar5mn.f2")
                            ] ){
   b<-test.qual(x=i,y=cohorte$Source,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
@@ -40,22 +40,23 @@ for (i in cohorte[,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","g
 }
 
 
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/cohorte_descript_source.xls",sep="\t")
 
-nomx<-c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-        "naissancepar","naissancepar.f2","vb","presentation","debuttravail","age.f","age.f2","age.f3","age.f4",
-        
-        "agegestationnel.f","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4",
-        "coeffapgar5mncor.f", "coeffapgar5mn.f2", "poids.f","poids.f3","poids.f4",
-        "poids.f5","taille.f","taille.f2","nbfoetus.f")
+
+
+nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+        "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+        "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+       )
 
 j<-1
 B<-NULL
-for (i in cohorte[,c("sexe","niveauetudes","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-                     "naissancepar","naissancepar.f2","vb","presentation","debuttravail","age.f","age.f2","age.f3","age.f4",
-                     
-                     "agegestationnel.f","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4",
-                     "coeffapgar5mncor.f","coeffapgar5mn.f2", "poids.f","poids.f3","poids.f4",
-                     "poids.f5","taille.f","taille.f2","nbfoetus.f")
+for (i in cohorte[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+                     "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+                     "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+                     "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f"
+                     ,"coeffapgar5mn.f2")
                   ] ){
   b<-test.qual(x=i,y=cohorte$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
@@ -91,6 +92,7 @@ for (i in cohorte[,c("oxygenotherapie",
   j<-j+1
 }
 
+write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/cohorte_descript_source_suite.xls",sep="\t")
 
 
 nomx<-c("oxygenotherapie", 
@@ -117,24 +119,22 @@ for (i in cohorte[,c("oxygenotherapie",
 
 ###====================== leucémie===========================
 
-cohorte_sd_leucemie<-u[u$leucemie==1| (u$cas==0),]
+cohorte_sd_leucemie<-cohorte_sd[cohorte_sd$leucemie==1| (cohorte_sd$cas==0),]
 
 
-nomx<-c("sexe","niveauetudes","mprofession","pprofession","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-        "naissancepar","naissancepar.f2","vb","presentation","debuttravail","age.f","age.f2","age.f3","age.f4",
-        
-        "agegestationnel.f","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4",
-        "coeffapgar5mncor.f", "coeffapgar5mn.f2", "poids.f","poids.f3","poids.f4",
-        "poids.f5","taille.f","taille.f2","nbfoetus.f")
+nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+        "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+        "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+)
 
 j<-1
 B<-NULL
-for (i in cohorte_sd_leucemie[,c("sexe","niveauetudes","mprofession","pprofession","parite.f","parite.f2","parite.f3","gestite.f","gestite.f2",
-                     "naissancepar","naissancepar.f2","vb","presentation","debuttravail","age.f","age.f2","age.f3","age.f4",
-                     
-                     "agegestationnel.f","agegestationnel.f2","agegestationnel.f3","agegestationnel.f4",
-                     "coeffapgar5mncor.f","coeffapgar5mn.f2", "poids.f","poids.f3","poids.f4",
-                     "poids.f5","taille.f","taille.f2","nbfoetus.f")
+for (i in cohorte_sd_leucemie[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+                                 "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
+                                 "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
+                                 "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+)
                   ] ){
   b<-test.qual(x=i,y=cohorte_sd_leucemie$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
@@ -150,7 +150,7 @@ test.quant(varquant = c("tailles","poids","perimetre2"),varqual = "cas",nomquant
 
 model<-function(x){
   with(cohorte_sd_leucemie,{
-    model1<-glm(cas ~x,family=binomial(logit))
+    model1<-glm(cas ~x,family="poisson")
     #p<-round(summary(model1)$coefficient[2,4],3)
     s<-summary(model1)$coefficients
     hr<-exp(s[,1])
@@ -166,12 +166,21 @@ model<-function(x){
 
 cohorte_sd_leucemie$cas<-as.numeric(as.character(cohorte_sd_leucemie$cas))
 
-jesaispas<-apply(cohorte_sd_leucemie[,c("poids.fna","agegestationnel.fna","age.fna",
-                                        "parite.f3na","sexe.fna",
-                                        "coeffapgar5mncor.f2na",
-                                        "vbna","age.f3na",
-                                        "age.f4na","poids.f3na","poids.f4na"
-                                        ,"poids.f5na","taille.f2na","nbfoetus.f2na","taille.fna")],2,model)
+
+c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession","niveauetudes","parite.f2","parite.fna",
+  "parite.f3na","gestite.fna","gestite.f2na","sexe.fna","nbfoetus.fna","agegestationnel.fna",
+  "agegestationnel.f2na",
+  "agegestationnel.f3na","agegestationnel.f4na","naissancepar","naissancepar.f2","vbna",
+  "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna","coeffapgar5mn.f2na"
+
+  
+  
+  jesaispas<-apply(cohorte_sd_leucemie[,c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession","niveauetudes","parite.f2","parite.fna",
+                                          "parite.f3na","gestite.fna","gestite.fna","sexe.fna","nbfoetus.fna","agegestationnel.fna",
+                                          "agegestationnel.f2na",
+                                          "agegestationnel.f3na","agegestationnel.f4na","naissancepar","naissancepar.f2","vbna",
+                                          "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna","coeffapgar5mn.f2na")
+                                          ],2,model)
 #conf<-lapply(jesaispas,function(x){x$conf.int})
 p<-lapply(jesaispas,function(x){x$coefficients[,5]})
 

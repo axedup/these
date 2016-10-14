@@ -276,6 +276,10 @@ cohorte$nbfoetus.f2<-as.factor(cohorte$nbfoetus.f2)
 cohorte$poids.fna<-as.factor(ifelse(is.na(cohorte$poids.f),"NA",cohorte$poids.f))
 cohorte$agegestationnel.fna<-as.factor(ifelse(is.na(cohorte$agegestationnel.f),"NA",cohorte$agegestationnel.f))
 cohorte$agegestationnel.f2na<-as.factor(ifelse(is.na(cohorte$agegestationnel.f2),"NA",cohorte$agegestationnel.f2))
+cohorte$agegestationnel.f3na<-as.factor(ifelse(is.na(cohorte$agegestationnel.f3),"NA",cohorte$agegestationnel.f3))
+cohorte$agegestationnel.f4na<-as.factor(ifelse(is.na(cohorte$agegestationnel.f4),"NA",cohorte$agegestationnel.f4))
+
+
 cohorte$age.fna<-as.factor(ifelse(is.na(cohorte$age.f),"NA",cohorte$age.f))
 cohorte$age.f2na<-as.factor(ifelse(is.na(cohorte$age.f2),"NA",cohorte$age.f2))
 cohorte$parite.fna<-as.factor(ifelse(is.na(cohorte$parite.f2),"NA",cohorte$parite.f2))
