@@ -266,6 +266,11 @@ cohorte$taille.f2<-as.factor(ifelse(cohorte$tailles < summary(cohorte$tailles)["
 
 #remplacement valeurs manquantes
 
+
+cohorte$allaitementna<-ifelse(is.na(cohorte$allaitement),"NA",cohorte$allaitement)
+cohorte$allaitement<-as.factor(cohorte$allaitement)
+cohorte$allaitementna<-as.factor(cohorte$allaitementna)
+
 cohorte$nbfoetus<-as.numeric(as.character(cohorte$nbfoetus))
 cohorte$nbfoetus<-ifelse(is.na(cohorte$nbfoetus),0,cohorte$nbfoetus)
 cohorte$nbfoetus.f<-as.factor(cohorte$nbfoetus)
@@ -332,7 +337,7 @@ table(cohorte$coeffapgar5mn.f2)
 cohorte$coeffapgar5mn.f2na<-ifelse(cohorte$coeffapgar5mn %in% c("9","10") ,"9-10","<9")
 cohorte$coeffapgar5mn.f2na<-ifelse(is.na(cohorte$coeffapgar5mn) ,"NA",cohorte$coeffapgar5mn.f2na)
 
-cohorte$coeffapgar5mn.fna<-as.factor(cohorte$coeffapgar5mn.f2na)
+cohorte$coeffapgar5mn.f2na<-as.factor(cohorte$coeffapgar5mn.f2na)
 table(cohorte$coeffapgar5mn.f2na)
 
 cohorte$coeffapgar1mn<-as.factor(cohorte$coeffapgar1mn)
@@ -472,12 +477,16 @@ cohorte$date_deces<-cohorte$datenaissance+cohorte$age_deces_jj
 cohorte$ddp<-ifelse(!is.na(cohorte$age_deces_jj),as.character(cohorte$date_deces),cohorte$ddp)
 cohorte$ddp<-ifelse(!is.na(cohorte$age_deces_hh),as.character(cohorte$datenaissance),cohorte$ddp)
 cohorte$date_suivi<-ymd(cohorte$datenaissance)+ years(5)
+cohorte$date_suivi<-as.character(cohorte$date_suivi)
+cohorte$date_suivi<-ifelse(!is.na(cohorte$date_suivi),cohorte$date_suivi,"2017-03-01")
+cohorte$date_suivi<-as.Date(cohorte$date_suivi,format="%Y-%m-%d")
+table(cohorte$date_suivi,exclude=NULL)
 cohorte$ddp<-ifelse(is.na(cohorte$age_deces_hh) & is.na(cohorte$age_deces_jj),
                     as.character(cohorte$date_suivi),cohorte$ddp)
 cohorte$ddp<-as.Date(cohorte$ddp)
 cohorte$ddp<-ifelse(cohorte$ddp>="2016-10-04",17077.96,cohorte$ddp )
 table(cohorte$ddp)
 cohorte$ddp<-as.Date(cohorte$ddp,origin="1970-01-01")
-table(cohorte$ddp)
+table(cohorte$ddp,exclude=NULL)
 
 

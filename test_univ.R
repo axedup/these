@@ -284,9 +284,22 @@ f <- function(d, i){
 }
 
 
+
+
 bootcorr <- boot(cas_temoinsexpoi, f, R=500)
 bootcorr
 boot.ci(bootcorr, type = "norm")
+
+f <- function(d, i){
+  d2 <- d[i,]
+model<-glm(cas~agegestationnel.f2na+ ageenf,family=binomial,data=d2[d2$leucemie=="1",])
+  return(model$coefficients[3])
+}
+
+bootcorr <- boot(cas_temoinsexpoi, f, R=500)
+bootcorr
+boot.ci(bootcorr, type = "norm")
+
 
 model1l<-clogit(cas ~ vbna+mopb.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model1l)

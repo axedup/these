@@ -97,7 +97,7 @@ cas_temoinsexpoi$Source<-as.factor(cas_temoinsexpoi$Source)
 
 ### caractéristiques périnatales 
 
-
+cas_temoinsexpoi$allaitement<-as.factor(cas_temoinsexpoi$allaitement)
 
 
 cas_temoinsexpoi$parite.f3<-cas_temoinsexpoi$parite.f2
