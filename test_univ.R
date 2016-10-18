@@ -111,6 +111,7 @@ cas_temoinsexpoi$sexe.fna<-as.factor(ifelse(is.na(cas_temoinsexpoi$sexe),"NA",ca
 cas_temoinsexpoi$coeffapgar5mncor.fna<-as.factor(ifelse(is.na(cas_temoinsexpoi$coeffapgar5mncor.f),"NA",cas_temoinsexpoi$coeffapgar5mncor.f))
 cas_temoinsexpoi$vbna<-as.factor(ifelse(is.na(cas_temoinsexpoi$vb),"NA",cas_temoinsexpoi$vb))
 
+cas_temoinsexpoi$allaitementna<-as.factor(ifelse(is.na(cas_temoinsexpoi$allaitement),"NA",cas_temoinsexpoi$allaitement))
 
 
 
@@ -235,6 +236,7 @@ jesaispasl<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("age.fna","a
                                                                     "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
                                                                     "vbna",
                                                                     "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+                                                                    "allaitementna",
                                                                     "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
                                                                     "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,modell)
 conf<-lapply(jesaispasl,function(x){x$conf.int})
@@ -250,7 +252,7 @@ for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofessio
             "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
             "vbna",
             "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-            "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
             "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
   c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",i])))-1
   nbr<-c(nbr,c)
@@ -265,7 +267,7 @@ legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofes
                "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
                "vbna",
                "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
                "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
 #resultor<-cbind(legende,resultor)
@@ -345,6 +347,8 @@ puissance_bis(0.28,1.5)
 puissance_bis(0.30,1.5)
 puissance_bis(0.32,1.5)
 
+
+
 model2l<-clogit(cas ~ vbna+age.f3na+poids.f4+moyenne_benzene.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model2l)
 
@@ -361,9 +365,17 @@ summary(model3l)
 model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model4l)
 
+### tableaux croisés
 
+prop.table(table(cas_temoinsexpoi$moyenne_benzene.f[cas_temoinsexpoi$leucemie=="1"],cas_temoinsexpoi$age.f[cas_temoinsexpoi$leucemie=="1"]),1)
+prop.table(table(cas_temoinsexpoi$moyenne_benzene.f2[cas_temoinsexpoi$leucemie=="1"],cas_temoinsexpoi$age.f[cas_temoinsexpoi$leucemie=="1"]),1)
+                      
 
+prop.table(table(cas_temoinsexpoi$moyenne_benzene.f2[cas_temoinsexpoi$leucemie=="1"],cas_temoinsexpoi$agegestationnel.f[cas_temoinsexpoi$leucemie=="1"]),1)
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$leucemie=="1"],cas_temoinsexpoi$agegestationnel.f2[cas_temoinsexpoi$leucemie=="1"]),2)
 
+prop.table(table(cas_temoinsexpoi$poids.f[cas_temoinsexpoi$leucemie=="1"],cas_temoinsexpoi$age.f2[cas_temoinsexpoi$leucemie=="1"]),2)
+prop.table(table(cas_temoinsexpoi$poids.f[cas_temoinsexpoi$leucemie=="1"],cas_temoinsexpoi$moyenne_benzene.f2[cas_temoinsexpoi$leucemie=="1"]),2)
 
 
 #modeltestleucemie<-glm(cas~age.f2+ forte_expo + poids.f +vb+ agegestationnel.f2+parite.f3+sexe+most_dep ,family=binomial,data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie==1,])
@@ -400,7 +412,7 @@ jesaispast<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",c("age.fna","age.f2n
                                                                "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
                                                                "vbna",
                                                                "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-                                                               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                              "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
                                                                "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,modeltc)
 conf<-lapply(jesaispast,function(x){x$conf.int})
 p<-lapply(jesaispast,function(x){x$coefficients[,5]})
@@ -414,7 +426,7 @@ for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofessio
             "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
             "vbna",
             "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-            "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
             "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
   c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$tc=="1",i])))-1
   nbr<-c(nbr,c)
@@ -428,7 +440,7 @@ legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofes
                "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
                "vbna",
                "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
                "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
 #resultor<-cbind(legende,resultor)
@@ -462,10 +474,18 @@ modeltestc<-clogit(cas~agegestationnel.f4 +age.f3+poids.f3+strata(strates),data=
 summary(modeltestc)
 
 
+modeltestc<-clogit(cas~ age.f3na+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
 modeltestc<-clogit(cas~ age.f3+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
 summary(modeltestc)
 
 
+
+
+
+modeltestcv<-clogit(cas~moyenne_no2.f +strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestcv)
 
 
 
@@ -475,7 +495,74 @@ summary(modeltestc2)
 modeltestc3<-clogit(cas~agegestationnel.f2 +age.f3na+poids.f3+ mopn.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
 summary(modeltestc3)
 
+### tableaux croisés
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$agegestationnel.f2[cas_temoinsexpoi$tc=="1"])
 
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$agegestationnel.f2[cas_temoinsexpoi$tc=="1"]),2)
+
+
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$agegestationnel.f2[cas_temoinsexpoi$tc=="1"])
+
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$agegestationnel.f2[cas_temoinsexpoi$tc=="1"]),2)
+
+
+
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$sexe.f[cas_temoinsexpoi$tc=="1"])
+
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$sexe.f[cas_temoinsexpoi$tc=="1"]),2)
+
+
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$most_dep[cas_temoinsexpoi$tc=="1"])
+
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$most_dep[cas_temoinsexpoi$tc=="1"]),2)
+
+
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$moyenne_no2.f[cas_temoinsexpoi$tc=="1"])
+
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$moyenne_no2.f[cas_temoinsexpoi$tc=="1"]),2)
+
+
+
+prop.table(table(cas_temoinsexpoi$poids.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$age.f2[cas_temoinsexpoi$tc=="1"]),2)
+prop.table(table(cas_temoinsexpoi$poids.f[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$moyenne_benzene.f2[cas_temoinsexpoi$tc=="1"]),2)
+
+
+# testons l'age avec la parite, et le niveau socio démo
+
+
+modeltestc<-clogit(cas~ age.f3na+parite.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+modeltestc<-clogit(cas~ age.f3na+most_dep+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+# testons le poids avec l'age gesta, voie d'accouchement
+
+modeltestc<-clogit(cas~ poids.f3+agegestationnel.f2na+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+
+modeltestc<-clogit(cas~ poids.f3+naissancepar.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+
+modeltestc<-clogit(cas~ poids.f3+taille.f+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+
+table(cas_temoinsexpoi$poids.f3[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$taille.f[cas_temoinsexpoi$tc=="1"])
+
+prop.table(table(cas_temoinsexpoi$poids.f3[cas_temoinsexpoi$tc=="1"],cas_temoinsexpoi$taille.f[cas_temoinsexpoi$tc=="1"]),2)
+
+
+### expo et poids et gae 
+
+
+modeltestc<-clogit(cas~ poids.f3+age.f3na+moyenne_no2.f2 +strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
+
+modeltestc<-clogit(cas~ poids.f3+age.f3na+moyenne_benzene.f2 +strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tc==1,],method = c("exact"))
+summary(modeltestc)
 
 
 
@@ -501,7 +588,7 @@ jesaispaste<-apply(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",c("age.f
                                                                           "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
                                                                           "vbna",
                                                                           "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-                                                                          "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                                                          "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
                                                                           "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,modelte)
 conf<-lapply(jesaispaste,function(x){x$conf.int})
 p<-lapply(jesaispaste,function(x){x$coefficients[,5]})
@@ -514,7 +601,7 @@ for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofessio
             "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
             "vbna",
             "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-            "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
             "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
   c<-length(levels(droplevels(cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire=="1",i])))-1
   nbr<-c(nbr,c)
@@ -528,7 +615,7 @@ legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofes
                "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
                "vbna",
                "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
-               "moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
                "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
 #resultor<-cbind(legende,resultor)
@@ -547,5 +634,44 @@ summary(modeltestc)
 modeltest2<-clogit(cas~sexe+agegestationnel.f2na+poids.f4+mopn.f2+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
 summary(modeltest2)
 
-modeltest3<-clogit(cas~sexe+agegestationnel.f2na+poids.f4+forte_expop+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
+modeltest3<-clogit(cas~sexe+parite.f3na+agema+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
 summary(modeltest3)
+
+### tableau croisé 
+
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$poids.f[cas_temoinsexpoi$tembryonnaire=="1"])
+
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$poids.f[cas_temoinsexpoi$tembryonnaire=="1"]),2)
+
+
+modeltestc<-clogit(cas~age.f2na+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
+summary(modeltestc)
+
+
+modeltestc<-clogit(cas~agegestationnel.f4+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
+summary(modeltestc)
+modeltestc<-clogit(cas~taille.fna+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
+summary(modeltestc)
+
+
+modeltestc<-clogit(cas~naissancepar.f2+poids.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
+summary(modeltestc)
+
+
+table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$sexe[cas_temoinsexpoi$tembryonnaire=="1"])
+
+prop.table(table(cas_temoinsexpoi$age.f[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$sexe[cas_temoinsexpoi$tembryonnaire=="1"]),2)
+
+table(cas_temoinsexpoi$parite.f3na[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$sexe[cas_temoinsexpoi$tembryonnaire=="1"])
+
+prop.table(table(cas_temoinsexpoi$parite.f3na[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$sexe[cas_temoinsexpoi$tembryonnaire=="1"]),2)
+
+table(cas_temoinsexpoi$parite.f3na[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$poids.f[cas_temoinsexpoi$tembryonnaire=="1"])
+prop.table(table(cas_temoinsexpoi$parite.f3na[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$poids.f[cas_temoinsexpoi$tembryonnaire=="1"]),2)
+
+
+table(cas_temoinsexpoi$agegestationnel.f4[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$poids.f3[cas_temoinsexpoi$tembryonnaire=="1"])
+prop.table(table(cas_temoinsexpoi$agegestationnel.f4[cas_temoinsexpoi$tembryonnaire=="1"],cas_temoinsexpoi$poids.f3[cas_temoinsexpoi$tembryonnaire=="1"]),2)
+
+modeltest2<-clogit(cas~sexe+age.f4na+parite.f3+strata(strates),data=cas_temoinsexpoi[cas_temoinsexpoi$tembryonnaire==1,],method = c("exact"))
+summary(modeltest2)
