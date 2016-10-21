@@ -489,4 +489,30 @@ table(cohorte$ddp)
 cohorte$ddp<-as.Date(cohorte$ddp,origin="1970-01-01")
 table(cohorte$ddp,exclude=NULL)
 
+#### 
 
+
+cohorte$agegestationnel.cl<-cut(cohorte$agegestationnel,unique(quantile(cohorte$agegestationnel, probs = seq(0, 1, 0.10), na.rm = TRUE,
+                                     names = TRUE, type = 7)),include.lowest = T)
+
+
+frt<-cohorte %>%
+  group_by(agegestationnel.cl) %>%
+  do(data.frame(moy=mean(.$poids,na.rm=T),v=var(.$poids,na.rm=T)))
+            
+frt<-cohorte %>%
+     group_by(agegestationnel.cl) %>%
+    summarise(moy=mean(poids,na.rm=T),
+              v=var(poids,na.rm=T))
+
+cohorte<-merge(cohorte,frt,by="agegestationnel.cl")
+cohorte$poids_age<-(cohorte$poids-cohorte$moy)/sqrt(cohorte$v)
+cohorte$poids_age<-ifelse(is.na(cohorte$poids),NA,cohorte$poids_age)
+cohorte$poids_age<-ifelse(is.na(cohorte$agegestationnel),NA,cohorte$poids_age)
+
+summary(cohorte$poids_age)
+var(cohorte$poids_age,na.rm=T)
+
+
+cohorte$poids_age.f<-cut(cohorte$poids_age,c(-10,-2,2,10),include.lowest=T)
+table(cohorte$poids_age.f)

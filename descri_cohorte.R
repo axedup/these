@@ -4,6 +4,24 @@
 cohorte$mprofession<-as.factor(cohorte$mprofession)
 cohorte$pprofession<-as.factor(cohorte$pprofession)
 cohorte$annee<-year(cohorte$datenaissance)
+cohorte$alcool.f<-ifelse(cohorte$alcool==0 & !is.na(cohorte$alcool),0,NA )
+cohorte$alcool.f<-ifelse(!cohorte$alcool==0 & !is.na(cohorte$alcool),1,cohorte$alcool.f )
+
+cohorte$alcool.fna<-ifelse(is.na(cohorte$alcool.f),"NA",cohorte$alcool.f )
+cohorte$alcool.fna<-as.factor(cohorte$alcool.fna)
+cohorte$alcool.f<-as.factor(cohorte$alcool.f)
+
+
+
+cohorte$tabac.f<-ifelse(cohorte$tabac==0 & !is.na(cohorte$tabac),0,NA )
+cohorte$tabac.f<-ifelse(!cohorte$tabac==0 & !is.na(cohorte$tabac),1,cohorte$tabac.f )
+
+cohorte$tabac.fna<-ifelse(is.na(cohorte$tabac.f),"NA",cohorte$tabac.f )
+cohorte$tabac.fna<-as.factor(cohorte$tabac.fna)
+cohorte$tabac.f<-as.factor(cohorte$tabac.f)
+
+cohorte$poids_age.fna<-ifelse(is.na(cohorte$poids_age.f),"NA",cohorte$poids_age.f )
+
 
 # après réflexion on ne garde que ceux nés en Ilde France et ceux qui sont nés et résident dans le m département  ! 
 
@@ -23,7 +41,7 @@ cohorte$Source<-as.factor(cohorte$Source)
 nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
         "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
         "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
-        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+        "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
 )
 
 j<-1
@@ -31,7 +49,7 @@ B<-NULL
 for (i in cohorte[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
                      "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
                      "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
-                     "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f"
+                     "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f"
                      ,"coeffapgar5mn.f2")
                            ] ){
   b<-test.qual(x=i,y=cohorte$Source,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
@@ -47,7 +65,7 @@ write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/cohorte_
 nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
         "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
         "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
-        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+        "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
        )
 
 j<-1
@@ -55,7 +73,7 @@ B<-NULL
 for (i in cohorte[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
                      "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
                      "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
-                     "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f"
+                     "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f"
                      ,"coeffapgar5mn.f2")
                   ] ){
   b<-test.qual(x=i,y=cohorte$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
@@ -125,7 +143,7 @@ cohorte_sd_leucemie<-cohorte_sd[cohorte_sd$leucemie==1| (cohorte_sd$cas==0),]
 nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
         "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
         "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
-        "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+        "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
 )
 
 j<-1
@@ -133,7 +151,7 @@ B<-NULL
 for (i in cohorte_sd_leucemie[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
                                  "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
                                  "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
-                                 "poids.f","poids.f3","poids.f4","poids.f5","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
+                                 "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f","coeffapgar5mn.f2"
 )
                   ] ){
   b<-test.qual(x=i,y=cohorte_sd_leucemie$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
@@ -171,7 +189,7 @@ c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession","niveau
   "parite.f3na","gestite.fna","gestite.f2na","sexe.fna","nbfoetus.fna","agegestationnel.fna",
   "agegestationnel.f2na",
   "agegestationnel.f3na","agegestationnel.f4na","naissancepar","naissancepar.f2","vbna",
-  "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna","coeffapgar5mn.f2na"
+  "poids.fna","poids.f3na","poids.f4na","poids.f5na","poids_age.fna","taille.fna","taille.f2na","coeffapgar5mncor.fna","coeffapgar5mn.f2na"
 
   
   
@@ -179,7 +197,8 @@ c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession","niveau
                                           "parite.f3na","gestite.fna","gestite.fna","sexe.fna","nbfoetus.fna","agegestationnel.fna",
                                           "agegestationnel.f2na",
                                           "agegestationnel.f3na","agegestationnel.f4na","naissancepar","naissancepar.f2","vbna",
-                                          "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna","coeffapgar5mn.f2na")
+                                          "poids.fna","poids.f3na","poids.f4na","poids.f5na","poids_age.fna",
+                                          "taille.fna","taille.f2na","coeffapgar5mncor.fna","coeffapgar5mn.f2na")
                                           ],2,model)
 #conf<-lapply(jesaispas,function(x){x$conf.int})
 p<-lapply(jesaispas,function(x){x$coefficients[,5]})
