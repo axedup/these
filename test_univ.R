@@ -319,17 +319,24 @@ z=log(OR)*sqrt(nB)/sqrt(1/(kappa*pA*(1-pA))+1/(pB*(1-pB)))
 
 
 puissance<-function(p2,or){
- 
+  alpha=0.05
+  beta=0.20 
 odds2 <- p2/(1-p2) 
 odds1 <- or*odds2 
-p1 <- odds1/(1+odds1);  p1 
-
-n.for.2p(p1,p2,ratio=10) }
+p1 <- odds1/(1+odds1) 
+n<-(11/10)*((((qnorm(1-alpha/2)+qnorm(1-beta)))^2)/(4*(asin(sqrt(p2))-asin(sqrt(p1)))^2))
+return(n)
+#n.for.2p(p1,p2,ratio=10)# 
+}
 
 puissance(0.3,1.5)
 puissance(0.28,1.5)
 puissance(0.32,1.5)
 puissance(0.15,1.5)
+
+p2=0.05
+or=2.9
+
 
 puissance_bis<-function(p,or){
   odds2 <- p/(1-p) 
