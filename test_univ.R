@@ -325,17 +325,35 @@ odds2 <- p2/(1-p2)
 odds1 <- or*odds2 
 p1 <- odds1/(1+odds1) 
 n<-(11/10)*((((qnorm(1-alpha/2)+qnorm(1-beta)))^2)/(4*(asin(sqrt(p2))-asin(sqrt(p1)))^2))
+
+#n.for.2p(p1,p2,ratio=10)
 return(n)
-#n.for.2p(p1,p2,ratio=10)# 
 }
 
-puissance(0.3,1.5)
-puissance(0.28,1.5)
-puissance(0.32,1.5)
+puissance(0.5,1.5)
+puissance(0.25,1.5)
+puissance(0.20,1.5)
 puissance(0.15,1.5)
+puissance(0.10,1.5)
 
-p2=0.05
-or=2.9
+puissance(0.5,0.90)
+puissance(0.25,1.1)
+puissance(0.20,1.05)
+puissance(0.15,1.1)
+puissance(0.10,1.1)
+
+N<-NULL
+seq<-seq(0,100,by=1)
+for (i in seq){
+  p2<-0.01*i
+  n<-puissance(p2=p2,1.1)
+  n<-ceiling(n)
+  N<-c(N,n)
+}
+
+cbind(seq,N,rep(1.1,101))
+
+
 
 
 puissance_bis<-function(p,or){
