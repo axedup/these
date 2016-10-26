@@ -351,7 +351,27 @@ for (i in seq){
   N<-c(N,n)
 }
 
-cbind(seq,N,rep(1.1,101))
+rr_11<-cbind(seq,N,rep(1.1,101))
+
+or<-c(1,1,1,2)
+
+for (j in c(0.7,0.9,1.1,1.2,1.5) ){
+N<-NULL
+seq<-seq(0,100,by=1)
+for (i in seq){
+  p2<-0.01*i
+  n<-puissance(p2=p2,j)
+  n<-ceiling(n)
+  N<-c(N,n)
+}
+
+
+assign(paste("rr",j,sep=""),cbind(seq,N,rep(j,101)))
+
+}
+
+graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
+
 
 
 
@@ -373,6 +393,35 @@ puissance_bis(0.30,1.5)
 puissance_bis(0.32,1.5)
 
 
+for (j in c(0.7,0.9,1.1,1.2,1.5) ){
+  N<-NULL
+  seq<-seq(0,100,by=1)
+  for (i in seq){
+    p2<-0.01*i
+    n<-puissance_bis(p=p2,j)
+    n<-ceiling(n)
+    N<-c(N,n)
+  }
+  
+  
+  assign(paste("rrcondi",j,sep=""),cbind(seq,N,rep(j,101)))
+  
+}
+
+graph_porcondi<-cbind(rrcondi0.7,rrcondi0.9,rrcondi1.1,rrcondi1.2,rrcondi1.5)
+
+
+p<-(1-B)*p1+B*p2
+num<-((qnorm(1-alpha/2)*(p*(1-p)/B)^(1/2))+(qnorm(1-beta)*(p1*(1-p1)+p2*(1-p2)*(1-B)/B)^(1/2)))^(2)
+denom<-((p1-p2)^(2)*(1-B))
+n<-num/denom
+
+
+num<-p*(1+10)
+z<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
+z*num
+
+denom<-((p1-p2)^2*(1-B)*B)
 
 model2l<-clogit(cas ~ vbna+age.f3na+poids.f4+moyenne_benzene.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model2l)

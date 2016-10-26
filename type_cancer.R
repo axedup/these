@@ -1,4 +1,5 @@
-type_cancer<-read.csv2(file = "L:/20160825_Liste_cas_IDF_1013.csv",na.strings ="")
+type_cancer<-read.csv2(file = "L:/20160825_Liste_cas_IDF_1013.csv",na.strings ="")# autre nom fichier
+# mainteneant c'est liste_cas_idf_20160825
 #on vire cl qui est est en double dans le registre
 type_cancer<-type_cancer[!type_cancer$MA___NumMalade=="202495",]
 

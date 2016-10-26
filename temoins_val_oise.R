@@ -1,6 +1,6 @@
 library(gdata)
 
-temoins_951_2<-read.csv2("F:/temoins951_2.csv",header=TRUE)
+temoins_951_2<-read.csv2("F:/temoins951_2.csv",header=TRUE) # c'est le fichier temoins.95.xls qu'il faut séparer en 2 fichiers csv car deux onglets 
 head(temoins_951_2)
 
 temoins_952_2<-read.csv2("F:/temoins952_2.csv",header=TRUE)
