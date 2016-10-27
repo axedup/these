@@ -334,7 +334,7 @@ puissance(0.5,1.5)
 puissance(0.25,1.5)
 puissance(0.20,1.5)
 puissance(0.15,1.5)
-puissance(0.10,1.5)
+puissance(0.30,1.3)
 
 puissance(0.5,0.90)
 puissance(0.25,1.1)
@@ -342,18 +342,18 @@ puissance(0.20,1.05)
 puissance(0.15,1.1)
 puissance(0.10,1.1)
 
-N<-NULL
-seq<-seq(0,100,by=1)
-for (i in seq){
-  p2<-0.01*i
-  n<-puissance(p2=p2,1.1)
-  n<-ceiling(n)
-  N<-c(N,n)
-}
-
-rr_11<-cbind(seq,N,rep(1.1,101))
-
-or<-c(1,1,1,2)
+# N<-NULL
+# seq<-seq(0,100,by=1)
+# for (i in seq){
+#   p2<-0.01*i
+#   n<-puissance(p2=p2,1.1)
+#   n<-ceiling(n)
+#   N<-c(N,n)
+# }
+# 
+# rr_11<-cbind(seq,N,rep(1.1,101))
+# 
+# or<-c(1,1,1,2)
 
 for (j in c(0.7,0.9,1.1,1.2,1.5) ){
 N<-NULL
@@ -374,7 +374,7 @@ graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
 
 
 
-
+# tenir compte que c'est condi
 
 puissance_bis<-function(p,or){
   odds2 <- p/(1-p) 
@@ -411,17 +411,90 @@ for (j in c(0.7,0.9,1.1,1.2,1.5) ){
 graph_porcondi<-cbind(rrcondi0.7,rrcondi0.9,rrcondi1.1,rrcondi1.2,rrcondi1.5)
 
 
-p<-(1-B)*p1+B*p2
-num<-((qnorm(1-alpha/2)*(p*(1-p)/B)^(1/2))+(qnorm(1-beta)*(p1*(1-p1)+p2*(1-p2)*(1-B)/B)^(1/2)))^(2)
-denom<-((p1-p2)^(2)*(1-B))
-n<-num/denom
+# p<-(1-B)*p1+B*p2
+# num<-((qnorm(1-alpha/2)*(p*(1-p)/B)^(1/2))+(qnorm(1-beta)*(p1*(1-p1)+p2*(1-p2)*(1-B)/B)^(1/2)))^(2)
+# denom<-((p1-p2)^(2)*(1-B))
+# n<-num/denom
+# 
+# 
+# num<-p*(1+10)
+# z<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
+# z*num
+# 
+# denom<-((p1-p2)^2*(1-B)*B)
 
 
-num<-p*(1+10)
-z<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
-z*num
 
-denom<-((p1-p2)^2*(1-B)*B)
+####
+
+or_corr<-function(ratio,or,p,alpha,beta,cor){
+num<-p*(1+ratio)^(2)*or+(1-p)*(1+ratio*or)^(2)
+den<-p*(1-p)*ratio*or*log(or)^2
+phi<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
+n<-phi*num/den
+#ncas<-n/(1/ratio+1)
+
+ncor=n/(1-cor)
+ncas<-ncor/(1/ratio+1)
+return(ncas)
+}
+
+
+# pour calculer coeff multiples de corrélation
+cohorte$poids.f5n<-as.numeric(cohorte$poids.f5)
+cohorte$poids.f4n<-as.numeric(cohorte$poids.f4)
+cohorte$agegestationnel.f4n<-as.numeric(cohorte$agegestationnel.f4)
+cohorte$agegestationnel.f3n<-as.numeric(cohorte$agegestationnel.f3)
+
+
+# boucle
+
+puissance_cor<-function(p2,or,k,cor){
+  alpha=0.05
+  beta=0.20 
+  odds2 <- p2/(1-p2) 
+  odds1 <- or*odds2 
+  p1 <- odds1/(1+odds1) 
+  n<-((k+1)/k)*((((qnorm(1-alpha/2)+qnorm(1-beta)))^2)/(4*(asin(sqrt(p2))-asin(sqrt(p1)))^2))
+  nt<-n + k*n
+  ntcor<-nt/(1-cor)
+  nccor<-ntcor/(k+1)
+  #n.for.2p(p1,p2,ratio=10)
+  return(nccor)
+}
+
+  
+puissance_cor(0.3,or=1.316,k=10,cor=0.11)  
+
+
+for(c in c(0.10,0.15,0.20,0.30)){
+for (j in c(0.7,0.9,1.1,1.2,1.5) ){
+  N<-NULL
+  seq<-seq(0,100,by=1)
+  for (i in seq){
+    p2<-0.01*i
+    n<-puissance_cor(p2=p2,or=j,k=10,cor=c)
+    n<-ceiling(n)
+    N<-c(N,n)
+  }
+  
+  
+  assign(paste("rr",j,c,sep=""),cbind(seq,N,rep(j,101),rep(c,101)))
+  
+}
+
+}
+
+
+
+graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
+
+
+
+
+
+
+
 
 model2l<-clogit(cas ~ vbna+age.f3na+poids.f4+moyenne_benzene.f2+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model2l)
@@ -437,6 +510,10 @@ model3l<-clogit(cas ~ vbna+age.f3na+mopb.f2+strata(cas_temoinsexpoi$strates[cas_
 summary(model3l)
 
 model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
+summary(model4l)
+
+
+model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+,method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model4l)
 
 ### tableaux croisés
