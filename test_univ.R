@@ -318,6 +318,9 @@ z=log(OR)*sqrt(nB)/sqrt(1/(kappa*pA*(1-pA))+1/(pB*(1-pB)))
 (Power=pnorm(z-qnorm(1-alpha/2))+pnorm(-z-qnorm(1-alpha/2)))
 
 
+
+### ===================Calcul des effectifs nécessaires============
+# formule Bouyer 
 puissance<-function(p2,or){
   alpha=0.05
   beta=0.20 
@@ -355,7 +358,8 @@ puissance(0.10,1.1)
 # 
 # or<-c(1,1,1,2)
 
-for (j in c(0.7,0.9,1.1,1.2,1.5) ){
+# on la boucle pour calcul avec tout les pourcentages d'expo
+for (j in c(0.7,0.9,1.1,1.2,1.5) ){   # choix des OR 
 N<-NULL
 seq<-seq(0,100,by=1)
 for (i in seq){
@@ -370,7 +374,7 @@ assign(paste("rr",j,sep=""),cbind(seq,N,rep(j,101)))
 
 }
 
-graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
+graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5) # ce graphique est a à ggploter 
 
 
 
@@ -392,7 +396,7 @@ puissance_bis(0.28,1.5)
 puissance_bis(0.30,1.5)
 puissance_bis(0.32,1.5)
 
-
+# idem on la boucle 
 for (j in c(0.7,0.9,1.1,1.2,1.5) ){
   N<-NULL
   seq<-seq(0,100,by=1)
@@ -408,7 +412,7 @@ for (j in c(0.7,0.9,1.1,1.2,1.5) ){
   
 }
 
-graph_porcondi<-cbind(rrcondi0.7,rrcondi0.9,rrcondi1.1,rrcondi1.2,rrcondi1.5)
+graph_porcondi<-cbind(rrcondi0.7,rrcondi0.9,rrcondi1.1,rrcondi1.2,rrcondi1.5) # a ggploter 
 
 
 # p<-(1-B)*p1+B*p2
@@ -425,7 +429,7 @@ graph_porcondi<-cbind(rrcondi0.7,rrcondi0.9,rrcondi1.1,rrcondi1.2,rrcondi1.5)
 
 
 
-####
+#### Calcul des effectifs nécessaires avec des corrélations 
 
 or_corr<-function(ratio,or,p,alpha,beta,cor){
 num<-p*(1+ratio)^(2)*or+(1-p)*(1+ratio*or)^(2)
@@ -440,14 +444,17 @@ return(ncas)
 }
 
 
-# pour calculer coeff multiples de corrélation
+# pour calculer coeff multiples de corrélation : on met tou les variables en binaire 0/1 mais à remettre en numeric 
 cohorte$poids.f5n<-as.numeric(cohorte$poids.f5)
 cohorte$poids.f4n<-as.numeric(cohorte$poids.f4)
 cohorte$agegestationnel.f4n<-as.numeric(cohorte$agegestationnel.f4)
 cohorte$agegestationnel.f3n<-as.numeric(cohorte$agegestationnel.f3)
+# +  edi
 
 
-# boucle
+
+
+# on reprend la fonction avec les arc sin et opn multpile avec le coeff de coor
 
 puissance_cor<-function(p2,or,k,cor){
   alpha=0.05
@@ -466,6 +473,7 @@ puissance_cor<-function(p2,or,k,cor){
   
 puissance_cor(0.3,or=1.316,k=10,cor=0.11)  
 
+# on boucle 
 
 for(c in c(0.10,0.15,0.20,0.30)){
 for (j in c(0.7,0.9,1.1,1.2,1.5) ){
@@ -487,7 +495,7 @@ for (j in c(0.7,0.9,1.1,1.2,1.5) ){
 
 
 
-graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
+graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5) # a ggploter 
 
 
 
