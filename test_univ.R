@@ -321,7 +321,11 @@ z=log(OR)*sqrt(nB)/sqrt(1/(kappa*pA*(1-pA))+1/(pB*(1-pB)))
 
 ### ===================Calcul des effectifs nécessaires============
 # formule Bouyer 
+
+#
 puissance<-function(p2,or){
+ #p2 % d'exposition grp T 
+ # or  
   alpha=0.05
   beta=0.20 
 odds2 <- p2/(1-p2) 
@@ -377,10 +381,13 @@ assign(paste("rr",j,sep=""),cbind(seq,N,rep(j,101)))
 graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5) # ce graphique est a à ggploter 
 
 
+ggplot(graph_por, aes(seq, N, colour = j)) + geom_line()
+
 
 # tenir compte que c'est condi
 
 puissance_bis<-function(p,or){
+ #p % groupe T 
   odds2 <- p/(1-p) 
   odds1 <- or*odds2 
   p1 <- odds1/(1+odds1);  p1  
@@ -457,6 +464,7 @@ cohorte$agegestationnel.f3n<-as.numeric(cohorte$agegestationnel.f3)
 # on reprend la fonction avec les arc sin et opn multpile avec le coeff de coor
 
 puissance_cor<-function(p2,or,k,cor){
+  
   alpha=0.05
   beta=0.20 
   odds2 <- p2/(1-p2) 
