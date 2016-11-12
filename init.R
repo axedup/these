@@ -44,8 +44,9 @@ library(lubridate)
 #edi
 
 # type_cancer
-#debut descri
+#Adebur descri
 # test univarié
 
 #mer_cas_95_cohorte 
 #cohorte
+#survie

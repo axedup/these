@@ -145,8 +145,11 @@ cas_temoinsexpoi$taille.fna<-as.factor(ifelse(is.na(cas_temoinsexpoi$taille.f),"
 
 cas_temoinsexpoi$nbfoetus.fna<-as.factor(ifelse(is.na(cas_temoinsexpoi$nbfoetus.f),"NA",cas_temoinsexpoi$nbfoetus.f))
 
+cas_temoinsexpoi$mprofession<-as.factor(cas_temoinsexpoi$mprofession)
+cas_temoinsexpoi$pprofession<-as.factor(cas_temoinsexpoi$pprofession)
 
-model<-function(x){
+
+  model<-function(x){
   with(cas_temoinsexpoi,{
     model1<-clogit(cas ~ x+strata(cas_temoinsexpoi$strates),method=c("exact"))
     #p<-round(summary(model1)$coefficient[2,4],3)
@@ -160,40 +163,52 @@ model<-function(x){
 
 cas_temoinsexpoi$cas<-as.numeric(as.character(cas_temoinsexpoi$cas))
 
-jesaispas<-apply(cas_temoinsexpoi[,c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-                                     "gestite.fna","parite.fna","sexe.fna","mopb.f",
-                                     "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-                                     "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-                                     "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-                                     "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")],2,model)
+jesaispas<-apply(cas_temoinsexpoi[,c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+                                     "niveauetudes","most_dep","parite.fna","parite.f2",
+                                     "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+                                     "agegestationnel.fna","agegestationnel.f2na",
+                                     "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+                                     "vbna",
+                                     "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+                                     "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                     "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,model)
 conf<-lapply(jesaispas,function(x){x$conf.int})
 p<-lapply(jesaispas,function(x){x$coefficients[,5]})
 
 
 nbr<-NULL
-for (i in c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-            "gestite.fna","parite.fna","sexe.fna","mopb.f",
-            "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-            "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-            "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-            "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna")) {
+for (i in c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+            "niveauetudes","most_dep","parite.fna","parite.f2",
+            "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+            "agegestationnel.fna","agegestationnel.f2na",
+            "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+            "vbna",
+            "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+            "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+            "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")) {
   c<-nlevels(cas_temoinsexpoi[,i])-1
   nbr<-c(nbr,c)
 }
 
 
 
-legende<-rep(c("mopb.f2","mopn.f2","poids.fna","agegestationnel.fna","age.f2na","agegestationnel.f2na","age.fna","moyenne_benzene.f","moyenne_no2.f",
-               "gestite.fna","parite.fna","sexe.fna","mopb.f",
-               "mopn.f","coeffapgar5mncor.fna","moyenne_benzene.f2","moyenne_no2.f2",
-               "vbna","most_dep","parite.f3na","forte_expo","forte_expop","age.f3na",
-               "age.f4na","poids.f3na","poids.f4na","agegestationnel.f2na","agegestationnel.f3",
-               "agegestationnel.f4","poids.f5na","taille.f2na","nbfoetus.fna","taille.fna"),nbr)
+legende<-rep(c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession",
+               "niveauetudes","most_dep","parite.fna","parite.f2",
+               "parite.f3na","gestite.fna","gestite.f2","sexe.fna","nbfoetus.f",
+               "agegestationnel.fna","agegestationnel.f2na",
+               "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2",
+               "vbna",
+               "poids.fna","poids.f3na","poids.f4na","poids.f5na","taille.fna","taille.f2na","coeffapgar5mncor.fna",
+               "allaitementna","moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+               "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2"),nbr)
 resultor<-do.call(rbind,conf)
+#resultor<-cbind(legende,resultor)
 pro<-unlist(p)
-resultor<-cbind(legende,resultor,pro)
+resultor<-cbind(resultor,pro)
+resultor<-round(resultor,2)
+resultor<-cbind(legende,resultor)
 
-write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_toutc.xls")
+write.table(resultor,file="G:/test_univarie_toutc.xls")
 
 
 
@@ -334,7 +349,7 @@ puissance(0.5,1.5)
 puissance(0.25,1.5)
 puissance(0.20,1.5)
 puissance(0.15,1.5)
-puissance(0.30,1.3)
+puissance(0.10,1.5)
 
 puissance(0.5,0.90)
 puissance(0.25,1.1)
@@ -342,18 +357,18 @@ puissance(0.20,1.05)
 puissance(0.15,1.1)
 puissance(0.10,1.1)
 
-# N<-NULL
-# seq<-seq(0,100,by=1)
-# for (i in seq){
-#   p2<-0.01*i
-#   n<-puissance(p2=p2,1.1)
-#   n<-ceiling(n)
-#   N<-c(N,n)
-# }
-# 
-# rr_11<-cbind(seq,N,rep(1.1,101))
-# 
-# or<-c(1,1,1,2)
+N<-NULL
+seq<-seq(0,100,by=1)
+for (i in seq){
+  p2<-0.01*i
+  n<-puissance(p2=p2,1.1)
+  n<-ceiling(n)
+  N<-c(N,n)
+}
+
+rr_11<-cbind(seq,N,rep(1.1,101))
+
+or<-c(1,1,1,2)
 
 for (j in c(0.7,0.9,1.1,1.2,1.5) ){
 N<-NULL
@@ -371,10 +386,25 @@ assign(paste("rr",j,sep=""),cbind(seq,N,rep(j,101)))
 }
 
 graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
+graph_por<-as.data.frame(graph_por)
+names(graph_por)<-c("seq", "N07", "V3", "seq2", "N09", "V6", "seq3", "N11", "V9", "seq4", 
+                    "N12", "V12", "seq5", "N15", "V15")
+long_por<-reshape(graph_por, varying=c("N07","N09","N11","N12","N15"),v.names="eff",timevar="rr",
+                  times=c("V3",'V6',"V9","V12","V15"),direction="long"
+                  )
+long_por$eff<-as.numeric(as.character(long_por$eff))
+long_por$rr<-ifelse(long_por$rr=="V3","0.7",long_por$rr)
+long_por$rr<-ifelse(long_por$rr=="V6","0.9",long_por$rr)
+long_por$rr<-ifelse(long_por$rr=="V9","1.1",long_por$rr)
+long_por$rr<-ifelse(long_por$rr=="V12","1.2",long_por$rr)
+long_por$rr<-ifelse(long_por$rr=="V15","1.5",long_por$rr)
+long_por$or<-long_por$rr
+
+ggplot(long_por,aes(seq,eff,colour=rr))+geom_line()+scale_x_continuous(name='pourcentage', limits=c(0,50),breaks=seq(0,50,2))+scale_y_continuous(name='effectifs', breaks=seq(0,25000,750),limits=c(0,25000))
+ggplot(long_por,aes(seq,eff,colour=or))+geom_line()+scale_x_continuous(name='pourcentage', limits=c(10,50),breaks=seq(10,50,2))+scale_y_continuous(name='effectifs', breaks=seq(0,25000,750),limits=c(0,12000))+theme(axis.text=element_text(size=14),axis.title=element_text(size=14,face="bold"))
+                                                                                                                                                                                                              
 
 
-
-# tenir compte que c'est condi
 
 puissance_bis<-function(p,or){
   odds2 <- p/(1-p) 
@@ -411,85 +441,17 @@ for (j in c(0.7,0.9,1.1,1.2,1.5) ){
 graph_porcondi<-cbind(rrcondi0.7,rrcondi0.9,rrcondi1.1,rrcondi1.2,rrcondi1.5)
 
 
-# p<-(1-B)*p1+B*p2
-# num<-((qnorm(1-alpha/2)*(p*(1-p)/B)^(1/2))+(qnorm(1-beta)*(p1*(1-p1)+p2*(1-p2)*(1-B)/B)^(1/2)))^(2)
-# denom<-((p1-p2)^(2)*(1-B))
-# n<-num/denom
-# 
-# 
-# num<-p*(1+10)
-# z<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
-# z*num
-# 
-# denom<-((p1-p2)^2*(1-B)*B)
+p<-(1-B)*p1+B*p2
+num<-((qnorm(1-alpha/2)*(p*(1-p)/B)^(1/2))+(qnorm(1-beta)*(p1*(1-p1)+p2*(1-p2)*(1-B)/B)^(1/2)))^(2)
+denom<-((p1-p2)^(2)*(1-B))
+n<-num/denom
 
 
+num<-p*(1+10)
+z<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
+z*num
 
-####
-
-or_corr<-function(ratio,or,p,alpha,beta,cor){
-num<-p*(1+ratio)^(2)*or+(1-p)*(1+ratio*or)^(2)
-den<-p*(1-p)*ratio*or*log(or)^2
-phi<-(qnorm(1-alpha/2)+qnorm(1-beta))^2
-n<-phi*num/den
-#ncas<-n/(1/ratio+1)
-
-ncor=n/(1-cor)
-ncas<-ncor/(1/ratio+1)
-return(ncas)
-}
-
-
-# pour calculer coeff multiples de corrélation
-cohorte$poids.f5n<-as.numeric(cohorte$poids.f5)
-cohorte$poids.f4n<-as.numeric(cohorte$poids.f4)
-cohorte$agegestationnel.f4n<-as.numeric(cohorte$agegestationnel.f4)
-cohorte$agegestationnel.f3n<-as.numeric(cohorte$agegestationnel.f3)
-
-
-# boucle
-
-puissance_cor<-function(p2,or,k,cor){
-  alpha=0.05
-  beta=0.20 
-  odds2 <- p2/(1-p2) 
-  odds1 <- or*odds2 
-  p1 <- odds1/(1+odds1) 
-  n<-((k+1)/k)*((((qnorm(1-alpha/2)+qnorm(1-beta)))^2)/(4*(asin(sqrt(p2))-asin(sqrt(p1)))^2))
-  nt<-n + k*n
-  ntcor<-nt/(1-cor)
-  nccor<-ntcor/(k+1)
-  #n.for.2p(p1,p2,ratio=10)
-  return(nccor)
-}
-
-  
-puissance_cor(0.3,or=1.316,k=10,cor=0.11)  
-
-
-for(c in c(0.10,0.15,0.20,0.30)){
-for (j in c(0.7,0.9,1.1,1.2,1.5) ){
-  N<-NULL
-  seq<-seq(0,100,by=1)
-  for (i in seq){
-    p2<-0.01*i
-    n<-puissance_cor(p2=p2,or=j,k=10,cor=c)
-    n<-ceiling(n)
-    N<-c(N,n)
-  }
-  
-  
-  assign(paste("rr",j,c,sep=""),cbind(seq,N,rep(j,101),rep(c,101)))
-  
-}
-
-}
-
-
-
-graph_por<-cbind(rr0.7,rr0.9,rr1.1,rr1.2,rr1.5)
-
-
+denom<-((p1-p2)^2*(1-B)*B)
 
 
 
@@ -510,10 +472,6 @@ model3l<-clogit(cas ~ vbna+age.f3na+mopb.f2+strata(cas_temoinsexpoi$strates[cas_
 summary(model3l)
 
 model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
-summary(model4l)
-
-
-model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+,method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model4l)
 
 ### tableaux croisés

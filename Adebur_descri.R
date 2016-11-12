@@ -652,7 +652,7 @@ plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 ### moyenne no2
 # Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
-classTempse <- classIntervals(fdc@data$moyenne_no2, 5, style = "quantile")
+classTemps <- classIntervals(fdc@data$moyenne_no2, 5, style = "quantile")
 # Choix d'une palette de couleur pour les 5 catégories
 palette <- brewer.pal(n = 5, name = "Blues")
 

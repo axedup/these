@@ -471,23 +471,36 @@ quali(x=c("parite.f2","gestite.f2","nbfoetus.f","agegestationnel.f","naissancepa
 
 ### création date de point ###
 
+
+cohorte$TU__DateDiag<-as.Date(as.character(cohorte$TU__DateDiag),format="%d/%m/%Y")
+
 cohorte$ddp<-NA
 cohorte$ddp<-ifelse(cohorte$cas==1 & !is.na(cohorte$cas),as.character(cohorte$TU__DateDiag),cohorte$ddp)
 cohorte$date_deces<-cohorte$datenaissance+cohorte$age_deces_jj
 cohorte$ddp<-ifelse(!is.na(cohorte$age_deces_jj),as.character(cohorte$date_deces),cohorte$ddp)
 cohorte$ddp<-ifelse(!is.na(cohorte$age_deces_hh),as.character(cohorte$datenaissance),cohorte$ddp)
+table(cohorte$ddp,exclude=NULL)
+
 cohorte$date_suivi<-ymd(cohorte$datenaissance)+ years(5)
 cohorte$date_suivi<-as.character(cohorte$date_suivi)
 cohorte$date_suivi<-ifelse(!is.na(cohorte$date_suivi),cohorte$date_suivi,"2017-03-01")
 cohorte$date_suivi<-as.Date(cohorte$date_suivi,format="%Y-%m-%d")
 table(cohorte$date_suivi,exclude=NULL)
-cohorte$ddp<-ifelse(is.na(cohorte$age_deces_hh) & is.na(cohorte$age_deces_jj),
-                    as.character(cohorte$date_suivi),cohorte$ddp)
+
+cohorte$ddp<-ifelse(!is.na(cohorte$age_deces_hh) | !is.na(cohorte$age_deces_jj)|
+                        (cohorte$cas==1 & !is.na(cohorte$cas)),cohorte$ddp,as.character(cohorte$date_suivi))
+table(cohorte$ddp,exclude=NULL)
+
 cohorte$ddp<-as.Date(cohorte$ddp)
 cohorte$ddp<-ifelse(cohorte$ddp>="2016-10-04",17077.96,cohorte$ddp )
 table(cohorte$ddp)
 cohorte$ddp<-as.Date(cohorte$ddp,origin="1970-01-01")
 table(cohorte$ddp,exclude=NULL)
+
+
+cohorte$delai<-difftime(cohorte$ddp,cohorte$datenaissance,units="days")
+cohorte$delai<-as.numeric(cohorte$delai)/365
+
 
 #### 
 

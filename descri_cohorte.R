@@ -30,6 +30,8 @@ cohorte_sd<-cohorte[is.na(cohorte$age_deces_jj) & is.na(cohorte$age_deces_hh) & 
 dim(cohorte)
 dim(cohorte_sd)
 
+cohorte_sd<-cohorte_sd[!(cohorte_sd$cas==1 & cohorte_sd$delai>=5),]
+
 cohorte_sd<-cohorte_sd[!cohorte_sd$commune_nais_code %in% ("") & !cohorte_sd$commune_famille_code  %in% (""),]
 
 cohorte_sd<-cohorte_sd[substr(cohorte_sd$commune_nais_code,1,2)==substr(cohorte_sd$commune_famille_code,1,2),]
@@ -70,17 +72,18 @@ nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauet
 
 j<-1
 B<-NULL
-for (i in cohorte[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
+for (i in cohorte_sd[,c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
                      "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
                      "agegestationnel.f3","agegestationnel.f4","naissancepar","naissancepar.f2","vb",
                      "poids.f","poids.f3","poids.f4","poids.f5","poids_age.f","taille.f","taille.f2","coeffapgar5mncor.f"
                      ,"coeffapgar5mn.f2")
                   ] ){
-  b<-test.qual(x=i,y=cohorte$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
+  b<-test.qual(x=i,y=cohorte_sd$cas,nomx[j],test=T,RAPPORT=F,SAVEFILE=F,chemin=NULL)
   B<-rbind(B,b)
   j<-j+1
 }
 
+write.table(B,file="G:/cohorte_descript_cas.xls",sep="\t")
 
 test.quant(varquant = c("tailles","poids","perimetre2"),varqual = "cas",nomquant = c("tailles","poids","perimetre"),nomqual = "cas",data=cohorte,savefile=T,
            fichier=)
@@ -137,8 +140,9 @@ for (i in cohorte[,c("oxygenotherapie",
 
 ###====================== leucémie===========================
 
-cohorte_sd_leucemie<-cohorte_sd[cohorte_sd$leucemie==1| (cohorte_sd$cas==0),]
 
+cohorte_sd_leucemie<-cohorte_sd[cohorte_sd$leucemie==1| (cohorte_sd$cas==0),]
+cohorte_sd_leucemie<-cohorte_sd_leucemie[!(cohorte_sd_leucemie$cas==1 & cohorte_sd_leucemie$delai>=5),]
 
 nomx<-c("age.f","age.f2","age.f3","age.f4","mprofession","pprofession","niveauetudes","parite.f","parite.f2",
         "parite.f3","gestite.f","gestite.f2","sexe","nbfoetus.f","agegestationnel.f","agegestationnel.f2",
@@ -159,7 +163,7 @@ for (i in cohorte_sd_leucemie[,c("age.f","age.f2","age.f3","age.f4","mprofession
   j<-j+1
 }
 
-write.table(B,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/cohorte_leucemie.xls",sep="\t")
+write.table(B,file="G:/cohorte_leucemie_cor.xls",sep="\t")
 test.quant(varquant = c("tailles","poids","perimetre2"),varqual = "cas",nomquant = c("tailles","poids","perimetre"),nomqual = "cas",data=cohorte,savefile=T,
            fichier=)
 
