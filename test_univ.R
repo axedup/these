@@ -242,6 +242,9 @@ clogit(cas ~ poids.f +agegestationnel.f+ age.f + parite.f2+sexe+ coeffapgar5mnco
 
 clogit(cas ~ age.fna +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ age.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+summary(clogit(cas ~ age.f2na +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+)
+
 clogit(cas ~ agegestationnel.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ sexe +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ vb +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
