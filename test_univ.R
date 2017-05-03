@@ -77,7 +77,7 @@ pca<-prcomp(test)
 
 cor(test, method = c("pearson"))
 # le poids distingue bien les individus suivi de l'age gesta- le coeff apgar à 5 min est de trop possiblement
-#♣ pas de corrélation majeure   
+#♣ pas de corrélation majeure 0  
 
 
 ###====Calcul des OR====###
