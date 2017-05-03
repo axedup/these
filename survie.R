@@ -828,7 +828,10 @@ cohorte_sd$delai<-difftime(cohorte_sd$ddp,cohorte_sd$datenaissance)
 cohorte_sd$delai<-as.numeric(cohorte_sd$delai)/365
 cohorte_sd$cas<-as.numeric(as.character(cohorte_sd$cas))
 
-cohorte_sd$poids_age.fna<-as.factor(as.character(cohorte_sd$poids_age.fna))
+cohorte_sd$poids_age.fna<-as.factor(as.character(cohorte_sd$poids_age.fna), levels = c("2","1","3","NA"))
+cohorte_sd$poids_age.f2na<- relevel(cohorte_sd$poids_age.fna, ref = 2)
+
+cohorte_sd$coeffapgar5mn.f2na<- relevel(cohorte_sd$coeffapgar5mn.f2na, ref = 2)
 
 par(mfrow=c(1,1))
 
@@ -847,8 +850,18 @@ modelsurvie<-function(x){
   })
 }
 
+modelsurview<-function(x){
+  with(cohorte_sd,{
+    model1<-coxph( Surv(cohorte_sd$delai,cohorte_sd$cas)~x,cohorte_sd)
+    #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)$waldtest
 
-jesaispass<-apply(cohorte_sd[,c("age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession","niveauetudes","parite.f2","parite.fna",
+    
+    return(s)
+    return(p)
+  })
+}
+jesaispass<-apply(cohorte_sd[,c("coeffapgar5mn.f2na","poids_age.f2na","age.fna","age.f2na","age.f3na","age.f4na","mprofession","pprofession","niveauetudes","parite.f2","parite.fna",
                                          "parite.f3na","gestite.fna","gestite.fna","sexe.fna","tabac.f","alcool.f",
                                          "nbfoetus.fna","agegestationnel.fna",
                                          "agegestationnel.f2na",
@@ -897,3 +910,216 @@ resultor<-cbind(legende,resultor[,c("rr","conf_sup","conf_inf","Pr(>|z|)")])
 write.table(resultor,file="G:/test_univarie_tc_surviec2.xls")
 
 
+
+
+cohorte_sd$poids.f5<-as.factor(ifelse(cohorte_sd$poids < 4000,0,1))
+
+cohorte_sd$poids.f5na<-ifelse(is.na(ccohorte_sd$poids.f5),"NA",cohorte_sd$poids.f5)
+s<- Surv(cohorte_sd$delai,cohorte_sd$cas)
+
+jesaispass<-apply(cohorte_sd[,c("poids.f5na","poids.f5",'agegestationnel.f4','agegestationnel.f4na',
+                                'age.f2',"age.f2na")
+                             ],2,modelsurvie)
+
+jesaispassw<-apply(cohorte_sd[,c("poids.f5na","poids.f5",'agegestationnel.f4','agegestationnel.f4na',
+                                'age.f2',"age.f2na")
+                             ],2,modelsurview)
+
+
+su<-coxph(s ~ sexe.fna,cohorte_sd)
+plot(cox.zph(su))
+su
+coxph(s ~ sexe,cohorte_sd)
+
+
+sut<-coxph(s ~poids.fna,cohorte_sd)
+plot(cox.zph(sut))
+plot(cox.zph(sut)[2])
+plot(cox.zph(sut)[1])
+plot(cox.zph(sut)[3])
+plot(cox.zph(sut)[4])
+sut
+
+sut<-coxph(s ~poids.f,cohorte_sd)
+
+sut<-coxph(s ~poids.f5na,cohorte_sd)
+plot(cox.zph(sut))
+plot(cox.zph(sut)[2])
+plot(cox.zph(sut)[1])
+plot(cox.zph(sut)[3])
+plot(cox.zph(sut)[4])
+sut
+
+
+
+
+
+
+
+su<-coxph(s ~ agegestationnel.fna,cohorte_sd)
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+
+
+coxph(s ~ agegestationnel.f,cohorte_sd)
+su<-coxph(s ~ age.fna,cohorte_sd)
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+coxph(s ~ age.f,cohorte_sd)
+
+
+
+su<-coxph(s ~ parite.f3na,cohorte_sd)
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+
+coxph(s ~ parite.f3,cohorte_sd)
+
+
+
+su<-coxph(s ~ poids_age.f2na,cohorte_sd)
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+coxph(s ~ poids_age.f,cohorte_sd)
+
+
+
+su<-coxph(s ~ vbna,cohorte_sd)
+plot(cox.zph(su)[1])
+su
+
+coxph(s ~ vb,cohorte_sd)
+
+
+
+su<-coxph(s ~ coeffapgar5mn.f2na,cohorte_sd)
+plot(cox.zph(su))
+su
+coxph(s ~ coeffapgar5mn.f2,cohorte_sd)
+modelsurvie<-function(x){
+  with(cohorte_sd_leucemie,{
+    model1<-coxph( Surv(cohorte_sd_leucemie$delai,cohorte_sd_leucemie$cas)~x,cohorte_sd_leucemie)
+    #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)$coefficients
+    rr<-exp(s[,1])
+    conf_inf<-exp(s[,1]+1.960*s[,2])
+    conf_sup<-exp(s[,1]-1.960*s[,2])
+    s<-cbind(s,rr,conf_sup,conf_inf)
+    
+    return(s)
+    return(p)
+  })
+}
+
+modelsurview<-function(x){
+  with(cohorte_sd_leucemie,{
+    model1<-coxph( Surv(cohorte_sd_leucemie$delai,cohorte_sd_leucemie$cas)~x,cohorte_sd_leucemie)
+    #p<-round(summary(model1)$coefficient[2,4],3)
+    s<-summary(model1)$waldtest
+    
+    
+    return(s)
+    return(p)
+  })
+}
+
+
+cohorte_sd_leucemie$poids.f5<-as.factor(ifelse(cohorte_sd_leucemie$poids < 4000,0,1))
+cohorte_sd_leucemie$poids.f5na<-ifelse(is.na(ccohorte_sd_leucemie$poids.f5),"NA",cohorte_sd_leucemie$poids.f5)
+
+table(cohorte_sd_leucemie$poids.f5,cohorte_sd_leucemie$cas)
+
+
+
+
+jesaispass<-apply(cohorte_sd_leucemie[,c("poids.f5na","poids.f5",'agegestationnel.f4','agegestationnel.f4na',
+                                'age.f2',"age.f2na")
+                             ],2,modelsurvie)
+
+jesaispassw<-apply(cohorte_sd_leucemie[,c("poids.f5na","poids.f5",'agegestationnel.f4','agegestationnel.f4na',
+                                 'age.f2',"age.f2na")
+                              ],2,modelsurview)
+par(mfrow=c(2,2))
+s<- Surv(cohorte_sd_leucemie$delai,cohorte_sd_leucemie$cas)
+
+
+su<-coxph(s ~ sexe.fna,cohorte_sd_leucemie)
+plot(cox.zph(su))
+su
+coxph(s ~ sexe,cohorte_sd_leucemie)
+
+
+sut<-coxph(s ~poids.f5na,cohorte_sd_leucemie)
+
+sut<-coxph(s ~poids.fna,cohorte_sd_leucemie)
+plot(cox.zph(sut)[2])
+plot(cox.zph(sut)[1])
+plot(cox.zph(sut)[3])
+plot(cox.zph(sut)[4])
+sut
+coxph(s ~poids.f,cohorte_sd_leucemie)
+
+
+su<-coxph(s ~ agegestationnel.fna,cohorte_sd_leucemie)
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+coxph(s ~ agegestationnel.f,cohorte_sd_leucemie)
+
+
+su<-coxph(s ~ age.fna,cohorte_sd_leucemie)
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+coxph(s ~ age.f,cohorte_sd_leucemie)
+su<-coxph(s ~ parite.f3na,cohorte_sd_leucemie)
+plot(cox.zph(su))
+plot(cox.zph(su))
+plot(cox.zph(su)[2])
+plot(cox.zph(su)[1])
+plot(cox.zph(su)[3])
+plot(cox.zph(su)[4])
+su
+coxph(s ~ parite.f3,cohorte_sd_leucemie)
+
+
+su<-coxph(s ~ poids_age.f2na,cohorte_sd_leucemie)
+plot(cox.zph(su))
+su
+coxph(s ~ poids_age.f,cohorte_sd_leucemie)
+
+
+
+su<-coxph(s ~ vbna,cohorte_sd_leucemie)
+plot(cox.zph(su))
+su
+
+coxph(s ~ vb,cohorte_sd_leucemie)
+
+
+su<-coxph(s ~ coeffapgar5mn.f2na,cohorte_sd_leucemie)
+plot(cox.zph(su))
+su
+coxph(s ~ coeffapgar5mn.f2,cohorte_sd_leucemie)

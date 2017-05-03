@@ -147,6 +147,7 @@ cas_temoinsexpoi$nbfoetus.fna<-as.factor(ifelse(is.na(cas_temoinsexpoi$nbfoetus.
 
 cas_temoinsexpoi$mprofession<-as.factor(cas_temoinsexpoi$mprofession)
 cas_temoinsexpoi$pprofession<-as.factor(cas_temoinsexpoi$pprofession)
+cas_temoinsexpoi$niveauetudes.fna<-as.factor(ifelse(is.na(cas_temoinsexpoi$niveauetudes),"NA",cas_temoinsexpoi$niveauetudes))
 
 
   model<-function(x){
@@ -174,6 +175,21 @@ jesaispas<-apply(cas_temoinsexpoi[,c("age.fna","age.f2na","age.f3na","age.f4na",
                                      "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2")],2,model)
 conf<-lapply(jesaispas,function(x){x$conf.int})
 p<-lapply(jesaispas,function(x){x$coefficients[,5]})
+
+
+cas_temoinsexpoi$cas<-as.numeric(as.character(cas_temoinsexpoi$cas))
+cas_temoinsexpoi$poids.f5<-as.factor(ifelse(cas_temoinsexpoi$poids < 4000,0,1))
+cas_temoinsexpoi$poids.f5na<-ifelse(is.na(cas_temoinsexpoi$poids.f5),"NA",cas_temoinsexpoi$poids.f5)
+
+
+jesaispas<-apply(cas_temoinsexpoi[,c("moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                     "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2","poids.f5",
+                                     "poids.f5na","age.f2na","agegestationnel.f4na","age.f2","agegestationnel.f4")],2,model)
+
+
+
+
+
 
 
 nbr<-NULL
@@ -211,6 +227,10 @@ resultor<-cbind(legende,resultor)
 write.table(resultor,file="G:/test_univarie_toutc.xls")
 
 
+clogit(cas ~ vbna+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+clogit(cas ~ mostdep+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
 
 
 ### modèle finaux 
@@ -220,13 +240,28 @@ clogit(cas ~ poids.f +agegestationnel.f+ age.fna + parite.fna+sexe.fna+ coeffapg
 clogit(cas ~ poids.f +agegestationnel.f+ age.f + parite.f2+sexe+ coeffapgar5mncor.f+ mopb.f2+ most_dep+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 
 
+clogit(cas ~ age.fna +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ age.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ agegestationnel.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ sexe +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 clogit(cas ~ vb +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ poids.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ parite.f3 +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 
-clogit(cas ~ moyenne_benzene.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ coeffapgar5mncor.fna +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
 
+clogit(cas ~ moyenne_benzene.f2 +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ most_dep+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+clogit(cas ~ niveauetudes.fna+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+
+cas_temoinsexpoi$poids.f3na<- relevel(cas_temoinsexpoi$poids.f3na, ref = 2)
+cas_temoinsexpoi$agegestationnel.f4<- relevel(cas_temoinsexpoi$agegestationnel.f4, ref = 2)
+a<-clogit(cas ~ poids.f3na+agegestationnel.f4+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+a<-clogit(cas ~ coeffapgar5mncor.fna+poids.f3na+agegestationnel.f4+strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+confint(a)
 
 ###====Leucémie====###
 
@@ -292,6 +327,16 @@ resultor<-round(resultor,2)
 resultor<-cbind(legende,resultor)
 
 write.table(resultor,file="C:/Users/Louise/Documents/Desespoir/Bases/resultats/test_univarie_leucemie2.xls",sep="\t")
+
+
+model<-clogit(cas ~ vbna+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+model<-clogit(cas ~ vbna+ agegestationnel.f4+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+model<-clogit(cas ~ vbna+ poids.f4+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+model<-clogit(cas ~ vbna+ poids.f4+age.f4na+ strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+esaispas<-apply(cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",c("moyenne_benzene.f","moyenne_no2.f","mopb.f","mopn.f","forte_expo","forte_expop",
+                                    "moyenne_benzene.f2","moyenne_no2.f2","mopb.f2","mopn.f2""poids.f5",
+                                    "poids.f5na","age.f2na","agegestationnel.f4na","age.f2","agegestationnel.f4"))],2,modell)
 
 
 f <- function(d, i){
@@ -473,6 +518,42 @@ summary(model3l)
 
 model4l<-clogit(cas ~ vbna+age.f3na+forte_expo+strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),method=c("exact"),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",])
 summary(model4l)
+
+clogit(cas ~ age.fna +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+clogit(cas ~ age.f +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+i<-clogit(cas ~ age.f2na +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+
+clogit(cas ~ agegestationnel.f +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+i<-clogit(cas ~ agegestationnel.f4 +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+
+
+clogit(cas ~ sexe +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+clogit(cas ~ vbna +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+clogit(cas ~ poids.f +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+clogit(cas ~ poids.f51na +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+clogit(cas ~ vb +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+
+
+clogit(cas ~ parite.f3na +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+clogit(cas ~ parite.f3 +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+
+clogit(cas ~ coeffapgar5mncor.fna +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+clogit(cas ~ coeffapgar5mncor.f +strata(cas_temoinsexpoi$strates[cas_temoinsexpoi$leucemie=="1"]),data=cas_temoinsexpoi[cas_temoinsexpoi$leucemie=="1",],method=c("exact"))
+
+clogit(cas ~ moyenne_benzene.f +strata(cas_temoinsexpoi$strates),data=cas_temoinsexpoi,method=c("exact"))
+
+cas_temoinsexpoi$poids.f51<-as.factor(ifelse(cas_temoinsexpoi$poids < 4000,0,1))
+cas_temoinsexpoi$poids.f51na<-ifelse(is.na(cas_temoinsexpoi$poids.f51),"NA",cas_temoinsexpoi$poids.f51)
+
+
+
+
 
 ### tableaux croisés
 
