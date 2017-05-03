@@ -629,11 +629,11 @@ table(cas_temoinsexpoi$coeffapgar5mncor.f,exclude=NULL)
 ### Les Cartes 
 
 fdc<-aus2
-fdc@data <- data.frame(fdc@data,resume_expo[match(fdc@data[, "DCOMIRIS"],resume_expo[, "DCOMIRIS"]), ])
+fdc@data <- data.frame(fdc@data,resume_expo[match(fdc@data[, "DCOMIRIS"],resume_expo$DCOMIRIS), ])
 #head(comm@data)
 
 
-### moyenne benzène 
+### moyenne benzène (airparif)
 # Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
 classTemps <- classIntervals(fdc@data$moyenne_benzene, 5, style = "quantile")
 # Choix d'une palette de couleur pour les 5 catégories
@@ -656,7 +656,7 @@ plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 
 
-### moyenne no2
+### moyenne no2 (airparif)
 # Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
 classTemps <- classIntervals(fdc@data$moyenne_no2, 5, style = "quantile")
 # Choix d'une palette de couleur pour les 5 catégories
@@ -731,6 +731,61 @@ plot(dist_qgis_spa_l93,add=T,col="green",type="p")
 
 plot(fdcedi[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("95"),],col=fdcedi@data$edi07c)
 plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+
+
+### Carte benzene 
+fdcedi<-aus2 #fond de carte des Iris
+fdcedi@data <- merge(fdcedi@data,cas_temoinsexpoi[,c("DCOMIRIS","mopb","mopn")],by="DCOMIRIS",all.x=T)
+#fdcedi@data<-fdcedi@data[!is.na(fdcedi@data$edi07),]
+#fdcedi@data<-unique(fdcedi@data)
+
+#head(comm@data)
+
+
+### Benzene 
+# Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
+classTemps <- classIntervals(fdcedi@data$mopb, 4, style = "quantile")
+# Choix d'une palette de couleur pour les 5 catégories
+palette <- brewer.pal(n = 4, name = "Reds")
+
+fdcedi@data$mopbc<-as.character(cut(fdcedi@data$mopb, breaks = classTemps$brks, labels = palette, include.lowest = TRUE))
+
+legende <- as.character(levels(cut(fdcedi@data$mopb, breaks = classTemps$brks, include.lowest = TRUE, right = FALSE)))
+
+#iris toute l'idf
+plot(fdcedi,col=fdcedi@data$mopbc)
+legend("bottomright",legend=legende,fill=palette,cex=0.8,pt.cex=5)
+
+
+plot(fdcedi[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("75"),],col=fdcedi@data$mopbc[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("75")])
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+plot(fdcedi[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("95"),],col=fdcedi@data$mopbc)
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+### No2
+# Découpage du temps de trajet en 5 classes via la méthodes des quantiles : idenfication des bornes (breaks, ou brks)
+classTemps <- classIntervals(fdcedi@data$mopn, 4, style = "quantile")
+# Choix d'une palette de couleur pour les 5 catégories
+palette <- brewer.pal(n = 4, name = "PuRd")
+
+fdcedi@data$mopnc<-as.character(cut(fdcedi@data$mopn, breaks = classTemps$brks, labels = palette, include.lowest = TRUE))
+
+legende <- as.character(levels(cut(fdcedi@data$mopn, breaks = classTemps$brks, include.lowest = TRUE, right = FALSE)))
+
+#iris toute l'idf
+plot(fdcedi,col=fdcedi@data$mopnc)
+legend("bottomright",legend=legende,fill=palette,cex=0.7,pt.cex=5)
+
+
+plot(fdcedi[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("75"),],col=fdcedi@data$mopnc[substr(fdcedi@data$DCOMIRIS,1,2) %in% c("75")])
+plot(dist_qgis_spa_l93,add=T,col="green",type="p")
+
+
+
+
+
 
 
 ### type histologiques
